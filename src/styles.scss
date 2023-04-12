@@ -1,0 +1,153 @@
+@import 'src/app/variables.scss';
+
+body {
+  background: $bg-secondary !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.text-primary {
+  color: $text-primary !important;
+}
+
+.text-secondary {
+  color: $text-secondary !important;
+}
+
+h1{
+  color: $text-secondary !important;
+}
+
+.h64 {
+  min-height: 4rem;
+  padding: 0.5rem 0;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.border-secondary {
+  border-color: $primary-color !important;
+}
+
+.btn {
+  border-radius: 0.25rem !important;
+}
+
+.btn-primary {
+  background-color: $bg-primary;
+  color: $text-primary;
+  border-color: $primary-color;
+  &:hover, &:focus, &:focus-visible, &:active, .active {
+    background-color: $primary-color-hover !important;
+    border-color: transparent !important;
+  }
+  &:focus, &:focus-visible, &:active {
+    outline: $primary-color-hover;
+    outline: 2px solid $text-dark !important;
+    outline-offset:1px;
+    box-shadow: unset !important;
+    color:$text-primary !important;
+  }
+}
+
+.btn-outline-primary {
+  background-color: $bg-secondary;
+  color: $text-secondary;
+  border-color: $primary-color;
+  &:hover, &:focus, &:focus-visible, &:active, .active {
+    background-color: $primary-color-hover !important;
+    border-color: transparent !important;
+  }
+  &:focus, &:focus-visible, &:active {
+    outline: $primary-color-hover;
+    outline: 2px solid $text-dark !important;
+    outline-offset:1px;
+    box-shadow: unset !important;
+    color:$text-primary !important;
+  }
+}
+
+.form-label {
+  margin-bottom: 0.25rem !important;
+}
+
+.form-control {
+  background-color: $bg-secondary;
+  border-color: #BDBDBD;
+  border-radius: 0.25rem;
+}
+
+.form-outline {
+  position: relative;
+  .form-label{
+    position: absolute;
+    top: 0;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    left: 0.75rem;
+    padding-top: 0.37rem;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: all .15s ease-out;
+    color: rgba(0,0,0,.6);
+    margin-bottom: 0;
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    border-color: $dark-color;
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+
+  input.form-control:valid {
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+
+  textarea.form-control.active {
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+  .form-control[type="date" i], .form-control[type="time" i] {
+    color: $text-primary;
+    transition: all .2s ease-out;
+  }
+  .form-control[type="date" i]:focus, .form-control[type="date" i]:valid, .form-control[type="time" i]:focus, .form-control[type="time" i]:valid {
+    color: $text-dark;
+    transition: all .2s ease-out;
+  }
+}
+
+.form-control:required {
+  + .form-label {
+    padding-right: 0.625rem;
+    &::after {
+      position: absolute;
+      right: 0;
+      top: 0.25rem;
+      content: '*';
+      color: red;
+    }
+  }
+}

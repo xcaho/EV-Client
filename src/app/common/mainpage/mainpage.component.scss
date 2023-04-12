@@ -1,0 +1,60 @@
+@import 'src/app/variables.scss';
+
+.main-content {
+  margin-top: 4rem;
+}
+
+.dp-hidden {
+  width: 0;
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+.custom-day.focused {
+  color: $text-primary;
+  background-color: $bg-primary;
+}
+
+.custom-day.range,
+.custom-day:hover {
+  background-color: $bg-primary;
+  color: $text-primary;
+}
+
+.custom-day.faded {
+  background-color: #362569de;
+}
+
+::ng-deep div.ngb-dp-arrow > button {
+  color: $primary-color;
+}
+
+::ng-deep div.ngb-dp-weekdays {
+  border-color: $primary-color;
+}
+
+::ng-deep div.ngb-dp-weekday {
+  color: $primary-color;
+}
+
+::ng-deep div.ngb-dp-header, ::ng-deep .dropdown-menu {
+  background-color: $bg-secondary;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  color: $text-secondary;
+}
+
+textarea {
+  min-height: 2.375rem;
+}
