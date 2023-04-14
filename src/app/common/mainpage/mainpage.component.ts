@@ -21,13 +21,14 @@ export class MainpageComponent {
       formContent.opisSpotkania,
       formContent.odData,
       formContent.doData,
-      formContent.maxUsers,
-      formContent.duration,
-      formContent.breakTime)
+      15,
+      60,
+      15)
 
-    let headers = new HttpHeaders().set('Access-Control-Allow-Origin', "http://localhost:8080/");
+    const headers = { "Content-Type": "application/json" }
+    const options = { "headers": headers }
     this.http.post<any>('http://localhost:8080/events',
-      { newEvent }, { headers })
+       newEvent, options)
       .subscribe(
         response => {
           console.log("Successfully added: " + JSON.stringify(response));
