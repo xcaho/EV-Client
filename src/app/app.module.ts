@@ -9,6 +9,7 @@ import { MainpageComponent } from './common/mainpage/mainpage.component';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { CreateEventComponent } from './recruiter/create-event/create-event.component';
+import { YourAppointmentsComponent } from './recruiter/your-appointments/your-appointments.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { CreateEventComponent } from './recruiter/create-event/create-event.comp
     HeaderComponent,
     FooterComponent,
     MainpageComponent,
-    CreateEventComponent
+    CreateEventComponent,
+    YourAppointmentsComponent
   ],
   imports: [
     BrowserModule,
