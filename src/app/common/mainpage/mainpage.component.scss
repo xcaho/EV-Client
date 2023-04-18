@@ -1,4 +1,4 @@
-@import 'src/app/variables.scss';
+@import '../../styles/variables';
 
 .main-content {
   margin-top: 4rem;
@@ -48,13 +48,4 @@
 
 ::ng-deep div.ngb-dp-header, ::ng-deep .dropdown-menu {
   background-color: $bg-secondary;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  color: $text-secondary;
-}
-
-textarea {
-  min-height: 2.375rem;
 }
