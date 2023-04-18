@@ -9,18 +9,36 @@ import {EventDto} from "../../common/mainpage/EventDto";
   styleUrls: ['./create-event.component.scss']
 })
 export class CreateEventComponent {
-  
+
+  public errorsMapVar = {
+    name: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    maxUsers: '',
+    duration: '',
+    breakTime: ''
+  };
   constructor(private http: HttpClient) {
   }
 
   onSubmit(f: NgForm) {
+    this.errorsMapVar = {
+      name: '',
+      description: '',
+      startDate: '',
+      endDate: '',
+      maxUsers: '',
+      duration: '',
+      breakTime: ''
+    };
 
     let formContent = f.value
     let newEvent = new EventDto(
-      formContent.nazwaSpotkania,
-      formContent.opisSpotkania,
-      formContent.odData,
-      formContent.doData,
+      formContent.name,
+      formContent.description,
+      formContent.startDate,
+      formContent.endDate,
       15,
       60,
       15)
@@ -33,8 +51,9 @@ export class CreateEventComponent {
         response => {
           console.log("Successfully added: " + JSON.stringify(response));
         }, exception => {
-          let errorsMap = exception.error.errorsMap
-          console.log(errorsMap)
+          let errorsMap = exception.error.errorsMap;
+          this.errorsMapVar = errorsMap;
+          console.log(errorsMap);
         });
   }
 }
