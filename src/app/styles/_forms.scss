@@ -1,0 +1,82 @@
+.form-label {
+  margin-bottom: 0.25rem !important;
+}
+
+.form-control {
+  background-color: $bg-secondary;
+  border-color: #BDBDBD;
+  border-radius: 0.25rem;
+}
+
+.form-outline {
+  position: relative;
+  .form-label{
+    position: absolute;
+    top: 0;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    left: 0.75rem;
+    padding-top: 0.37rem;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: all .15s ease-out;
+    color: rgba(0,0,0,.6);
+    margin-bottom: 0;
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    border-color: $dark-color;
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+
+  input.form-control:valid {
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+
+  textarea.form-control.active {
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+  .form-control[type="date" i], .form-control[type="time" i] {
+    color: $text-primary;
+    transition: all .2s ease-out;
+  }
+  .form-control[type="date" i]:focus, .form-control[type="date" i]:valid, .form-control[type="time" i]:focus, .form-control[type="time" i]:valid {
+    color: $text-dark;
+    transition: all .2s ease-out;
+  }
+}
+
+.form-control:required {
+  + .form-label {
+    padding-right: 0.625rem;
+    &::after {
+      position: absolute;
+      right: 0;
+      top: 0.25rem;
+      content: '*';
+      color: red;
+    }
+  }
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  color: $text-secondary;
+}
+
+textarea {
+  min-height: 2.375rem;
+}
