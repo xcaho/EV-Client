@@ -8,61 +8,52 @@
     <div class="col-12 col-md-8 col-lg-6">
       <form #f="ngForm" novalidate>
         <div class="mb-3 form-outline">
-          <input type="text" id="nazwaSpotkania" class="form-control" value aria-labelledby="nazwaSpotkaniaHelper"
-                 required name="nazwaSpotkania" ngModel #nazwaSpotkania="ngModel">
-          <label for="nazwaSpotkania" class="form-label">Nazwa spotkania</label>
-          <div id="nazwaSpotkaniaHelper" class="form-text">
-            np. Szybkie spotkanie
-          </div>
+          <input type="text" id="name" class="form-control" value aria-labelledby="nameHelper"
+                 required name="name" ngModel #name="ngModel">
+          <label for="name" class="form-label">Nazwa spotkania</label>
+          <p *ngIf="errorsMapVar.name" class="form-text error mb-0 text-danger">{{this.errorsMapVar.name}}</p>
+          <p id="nameHelper" class="form-text">np. Szybkie spotkanie</p>
         </div>
         <div class="mb-3 form-outline">
-              <textarea class="form-control" id="opisSpotkania" rows="3"
-                        aria-labelledby="opisSpotkaniaHelper" name="opisSpotkania" ngModel
-                        #opisSpotkania="ngModel"></textarea>
-          <label for="opisSpotkania" class="form-label">Opis spotkania</label>
-          <div id="opisSpotkaniaHelper" class="form-text">
-            Krótki opis
-          </div>
+              <textarea class="form-control" id="description" rows="3"
+                        aria-labelledby="descriptionHelper" name="description" ngModel
+                        #description="ngModel"></textarea>
+          <label for="description" class="form-label">Opis spotkania</label>
+          <p id="descriptionHelper" class="form-text">Krótki opis</p>
         </div>
         <div class="row">
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="date" id="odData" class="form-control" required aria-describedby="odDataHelper"
-                     name="odData" ngModel #odData="ngModel">
-              <label for="odData" class="form-label">Data rozpoczęcia</label>
-              <div id="odDataHelper" class="form-text">
-                Format dd.mm.yyyy
-              </div>
+              <input type="date" id="startDate" class="form-control" required aria-describedby="startDateHelper"
+                     name="startDate" ngModel #startDate="ngModel">
+              <label for="startDate" class="form-label">Data rozpoczęcia</label>
+              <p *ngIf="errorsMapVar.startDate" class="form-text error mb-0 text-danger">{{this.errorsMapVar.startDate}}</p>
+              <p id="startDateHelper" class="form-text">Format dd.mm.yyyy</p>
             </div>
           </div>
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="time" id="odCzas" class="form-control" required aria-describedby="odCzasHelper"
-                     name="odCzas" ngModel #odCzas="ngModel">
-              <label for="odCzas" class="form-label">Godzina rozpoczęcia</label>
-              <div id="odCzasHelper" class="form-text">
-                Format hh-mm
-              </div>
+              <input type="time" id="startHour" class="form-control" required aria-describedby="startHourHelper"
+                     name="startHour" ngModel #startHour="ngModel">
+              <label for="startHour" class="form-label">Godzina rozpoczęcia</label>
+              <p id="startHourHelper" class="form-text">Format hh-mm</p>
             </div>
           </div>
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="date" id="doData" class="form-control" required aria-describedby="doDataHelper"
-                     name="doData" ngModel #doData="ngModel">
-              <label for="doData" class="form-label">Data zakończenia</label>
-              <div id="doDataHelper" class="form-text">
-                Format dd.mm.yyyy
-              </div>
+              <input type="date" id="endDate" class="form-control" required aria-describedby="endDateHelper"
+                     name="endDate" ngModel #endDate="ngModel">
+              <label for="endDate" class="form-label">Data zakończenia</label>
+              <p *ngIf="errorsMapVar.endDate" class="form-text error mb-0 text-danger">{{this.errorsMapVar.endDate}}</p>
+              <p id="endDateHelper" class="form-text">Format dd.mm.yyyy</p>
             </div>
           </div>
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="time" id="doCzas" class="form-control" required aria-describedby="doCzasHelper"
-                     name="doCzas" ngModel #doCzas="ngModel">
-              <label for="doCzas" class="form-label">Godzina zakończenia</label>
-              <div id="doCzasHelper" class="form-text">
-                Format hh-mm
-              </div>
+              <input type="time" id="endHour" class="form-control" required aria-describedby="endHourHelper"
+                     name="endHour" ngModel #endHour="ngModel">
+              <label for="endHour" class="form-label">Godzina zakończenia</label>
+              <p id="endHourHelper" class="form-text">Format hh-mm</p>
             </div>
           </div>
         </div>
