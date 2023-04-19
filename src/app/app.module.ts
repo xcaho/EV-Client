@@ -10,6 +10,14 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { CreateEventComponent } from './recruiter/create-event/create-event.component';
 import { YourAppointmentsComponent } from './recruiter/your-appointments/your-appointments.component';
+import {RouterModule, Routes} from '@angular/router';
+
+const appRoute: Routes = [
+  {path: 'appointments', component: YourAppointmentsComponent},
+  {path: 'create', component: CreateEventComponent},
+  {path: '', redirectTo: 'appointments', pathMatch: 'full'}
+]
+
 
 @NgModule({
   declarations: [
@@ -24,7 +32,8 @@ import { YourAppointmentsComponent } from './recruiter/your-appointments/your-ap
     BrowserModule,
     NgbModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(appRoute)
   ],
   providers: [],
   bootstrap: [AppComponent]
