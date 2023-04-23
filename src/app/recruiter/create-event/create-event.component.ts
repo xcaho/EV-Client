@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
 import {EventDto} from "../../common/mainpage/EventDto";
+import { EventService } from '../../event.service';
 
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
-  styleUrls: ['./create-event.component.scss']
+  styleUrls: ['./create-event.component.scss'],
+  providers: [EventService]
 })
 export class CreateEventComponent {
 
@@ -19,8 +20,7 @@ export class CreateEventComponent {
     duration: '',
     breakTime: ''
   };
-  constructor(private http: HttpClient) {
-  }
+  constructor(private eventService: EventService) { }
 
   onSubmit(f: NgForm) {
     this.errorsMapVar = {
@@ -43,17 +43,14 @@ export class CreateEventComponent {
       60,
       15)
 
-    const headers = { "Content-Type": "application/json" }
-    const options = { "headers": headers }
-    this.http.post<any>('http://localhost:8080/events',
-      newEvent, options)
-      .subscribe(
-        response => {
-          console.log("Successfully added: " + JSON.stringify(response));
-        }, exception => {
-          let errorsMap = exception.error.errorsMap;
-          this.errorsMapVar = errorsMap;
-          console.log(errorsMap);
-        });
+    this.eventService.createEvent(newEvent).subscribe(
+      response => {
+        console.log("Successfully added: " + JSON.stringify(response));
+      }, exception => {
+        let errorsMap = exception.error.errorsMap;
+        this.errorsMapVar = errorsMap;
+        console.log(errorsMap);
+      }
+    )
   }
 }
