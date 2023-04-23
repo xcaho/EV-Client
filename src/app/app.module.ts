@@ -6,7 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './common/header/header.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { MainpageComponent } from './common/mainpage/mainpage.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { CreateEventComponent } from './recruiter/create-event/create-event.component';
 import { YourAppointmentsComponent } from './recruiter/your-appointments/your-appointments.component';
@@ -33,7 +33,8 @@ const appRoute: Routes = [
     NgbModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoute)
+    RouterModule.forRoot(appRoute),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
