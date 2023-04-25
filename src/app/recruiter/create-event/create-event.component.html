@@ -19,7 +19,7 @@
           <p id="nameHelper" class="form-text">np. Szybkie spotkanie</p>
         </div>
         <div class="mb-3 form-outline">
-          <textarea class="form-control" id="description" rows="3"
+          <textarea class="form-control" id="description" rows="3" formControlName="description"
                     aria-describedby="descriptionHelper" name="description"></textarea>
           <label for="description" class="form-label">Opis spotkania</label>
           <p id="descriptionHelper" class="form-text">Krótki opis</p>
@@ -44,16 +44,19 @@
           </div>
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="time" id="breakTime" list="" name="breakTime" formControlName="breakTime"
-                     aria-describedby="breakTimeHelper" aria-labelledby="breakTimeError"
-                     required class="form-control"
-                     [class.is-invalid]="breakTime.invalid && (breakTime.dirty || breakTime.touched)">
+              <select class="form-control" id="breakTime" required formControlName="breakTime"
+                      aria-describedby="breakTimeHelper" aria-labelledby="breakTimeError"
+                      [class.is-invalid]="breakTime.invalid && (breakTime.dirty || breakTime.touched)">
+                <option value="15">15 minut</option>
+                <option value="30">30 minut</option>
+                <option value="45">45 minut</option>
+              </select>
               <label for="breakTime" class="form-label">Przerwa</label>
               <div *ngIf="breakTime.invalid && (breakTime.dirty || breakTime.touched)" class="invalid-feedback">
                 <p *ngIf="breakTime.errors?.['required']" id="breakTimeError" class="mb-0">Podaj przerwę między
                   spotkaniami</p>
               </div>
-              <p id="breakTimeHelper" class="form-text">Format hh:mm</p>
+              <p id="breakTimeHelper" class="form-text">Podaj przerwę w minutach</p>
             </div>
           </div>
           <div class="col-6">

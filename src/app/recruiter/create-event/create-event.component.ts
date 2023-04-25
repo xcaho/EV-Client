@@ -1,18 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../common/mainpage/EventDto";
 import { EventService } from '../../event.service';
+import { Router } from '@angular/router';
 
 interface Event {
   name: string;
+  description: string;
   duration: string;
   breakTime: string;
   endDate: string;
   maxUsers: boolean;
-  nickname: string;
-  email: string;
-  password: string;
-  showPassword: boolean;
 }
 
 @Component({
@@ -21,10 +19,12 @@ interface Event {
   styleUrls: ['./create-event.component.scss'],
   providers: [EventService]
 })
+
 export class CreateEventComponent {
 
   reactiveForm!: FormGroup;
   event: Event;
+
 
   private validateTime(control: AbstractControl): { [key: string]: any } | null {
     const time = control.value;
@@ -39,7 +39,15 @@ export class CreateEventComponent {
     return null;
   }
 
-  constructor(private eventService: EventService) {
+  private validateTime2(control: AbstractControl): { [key: string]: any } | any {
+    const time = control.value;
+    const [hours, minutes] = time.split(':').map(Number);
+    const timeInMinutes = hours * 60 + minutes;
+    return timeInMinutes
+  }
+
+  constructor(private eventService: EventService,
+              private router: Router) {
     this.event = {} as Event;
   }
 
@@ -47,6 +55,8 @@ export class CreateEventComponent {
     this.reactiveForm = new FormGroup({
       name: new FormControl(this.event.name, [
         Validators.required
+      ]),
+      description: new FormControl(this.event.description, [
       ]),
       duration: new FormControl(this.event.duration, [
         Validators.required,
@@ -68,6 +78,10 @@ export class CreateEventComponent {
 
   get name() {
     return this.reactiveForm.get('name')!;
+  }
+
+  get description() {
+    return this.reactiveForm.get('description')!;
   }
 
   get duration() {
@@ -95,8 +109,10 @@ export class CreateEventComponent {
       }
       return;
     }
-
     this.event = this.reactiveForm.value;
+    setTimeout(() => {
+      this.router.navigate(['/appointments'])
+    }, 300);
   }
 
   serverValidation(f: FormGroupDirective) {
@@ -105,10 +121,12 @@ export class CreateEventComponent {
       formContent.name,
       formContent.description,
       "6666-06-06",
+      "6666-06-06",
       formContent.endDate,
       formContent.maxUsers,
       60,
-      15)
+      formContent.breakTime,
+    )
 
     this.eventService.createEvent(newEvent).subscribe(
       response => {

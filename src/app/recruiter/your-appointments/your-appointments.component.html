@@ -6,9 +6,17 @@
 </div>
 <div class="main-content container-xxl mb-5">
   <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
+    <div class="col-12 col-md-8 col-lg-6" *ngIf="!data[0]">
       <p class="h3 text-secondary text-center">brak zaplanowanych spotkań</p>
       <a routerLink="../create" class="col-12 col-md-6 btn btn-primary offset-md-3">Dodaj spotkanie</a>
+    </div>
+    <div class="col-12" *ngIf="data[0]">
+      <ul class="list-group">
+        <li class="list-group-item py-3 px-3 d-flex justify-content-between"
+            *ngFor="let item of data">
+          <span>{{ item.name }}</span> <span>{{ item.slotsTaken }}/{{ item.maxUsers }}</span>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
