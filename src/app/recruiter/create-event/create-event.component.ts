@@ -1,17 +1,8 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../common/mainpage/EventDto";
-import { EventService } from '../../event.service';
-import { Router } from '@angular/router';
-
-interface Event {
-  name: string;
-  description: string;
-  duration: string;
-  breakTime: string;
-  endDate: string;
-  maxUsers: boolean;
-}
+import {EventService} from '../../event.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-event',
@@ -23,7 +14,7 @@ interface Event {
 export class CreateEventComponent {
 
   reactiveForm!: FormGroup;
-  event: Event;
+  event: EventDto;
 
 
   private validateTime(control: AbstractControl): { [key: string]: any } | null {
@@ -39,16 +30,14 @@ export class CreateEventComponent {
     return null;
   }
 
-  private validateTime2(control: AbstractControl): { [key: string]: any } | any {
-    const time = control.value;
+  private convertTimeToMinutes(time: string): number {
     const [hours, minutes] = time.split(':').map(Number);
-    const timeInMinutes = hours * 60 + minutes;
-    return timeInMinutes
+    return hours * 60 + minutes;
   }
 
   constructor(private eventService: EventService,
               private router: Router) {
-    this.event = {} as Event;
+    this.event = {} as EventDto;
   }
 
   ngOnInit(): void {
@@ -58,11 +47,11 @@ export class CreateEventComponent {
       ]),
       description: new FormControl(this.event.description, [
       ]),
-      duration: new FormControl(this.event.duration, [
+      surveyDuration: new FormControl(this.event.surveyDuration, [
         Validators.required,
         this.validateTime
       ]),
-      breakTime: new FormControl(this.event.breakTime, [
+      surveyBreakTime: new FormControl(this.event.surveyBreakTime, [
         Validators.required
       ]),
       endDate: new FormControl(this.event.endDate, [
@@ -84,12 +73,12 @@ export class CreateEventComponent {
     return this.reactiveForm.get('description')!;
   }
 
-  get duration() {
-    return this.reactiveForm.get('duration')!;
+  get surveyDuration() {
+    return this.reactiveForm.get('surveyDuration')!;
   }
 
-  get breakTime() {
-    return this.reactiveForm.get('breakTime')!;
+  get surveyBreakTime() {
+    return this.reactiveForm.get('surveyBreakTime')!;
   }
 
   get endDate() {
@@ -102,20 +91,16 @@ export class CreateEventComponent {
 
 
   public validate(form: FormGroupDirective): void {
-    this.serverValidation(form);
     if (this.reactiveForm.invalid) {
       for (const control of Object.keys(this.reactiveForm.controls)) {
         this.reactiveForm.controls[control].markAsTouched();
       }
       return;
     }
-    this.event = this.reactiveForm.value;
-    setTimeout(() => {
-      this.router.navigate(['/appointments'])
-    }, 300);
+    this.saveEvent(form);
   }
 
-  serverValidation(f: FormGroupDirective) {
+  saveEvent(f: FormGroupDirective) {
     let formContent = f.value
     let newEvent = new EventDto(
       formContent.name,
@@ -124,13 +109,15 @@ export class CreateEventComponent {
       "6666-06-06",
       formContent.endDate,
       formContent.maxUsers,
-      60,
-      formContent.breakTime,
+      this.convertTimeToMinutes(formContent.surveyDuration),
+      formContent.surveyBreakTime,
     )
 
     this.eventService.createEvent(newEvent).subscribe(
       response => {
         console.log("Successfully added: " + JSON.stringify(response));
+        this.event = this.reactiveForm.value;
+        this.router.navigate(['/appointments'])
       }, exception => {
         let errorsMap = exception.error.errorsMap;
         console.log(errorsMap);

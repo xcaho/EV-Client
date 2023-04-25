@@ -27,36 +27,36 @@
         <div class="row">
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="time" id="duration" list="" name="nickname" formControlName="duration"
-                     aria-describedby="durationHelper" aria-labelledby="durationError durationError2"
+              <input type="time" id="surveyDuration" list="" name="nickname" formControlName="surveyDuration"
+                     aria-describedby="surveyDurationHelper" aria-labelledby="surveyDurationError surveyDurationError2"
                      required class="form-control"
-                     [class.is-invalid]="duration.invalid && (duration.dirty || duration.touched)">
-              <label for="duration" class="form-label">Czas trwania</label>
-              <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="invalid-feedback">
-                <p *ngIf="duration.errors?.['required']" id="durationError" class="mb-0">Podaj długość spotkania</p>
+                     [class.is-invalid]="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)">
+              <label for="surveyDuration" class="form-label">Czas trwania</label>
+              <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">
+                <p *ngIf="surveyDuration.errors?.['required']" id="surveyDurationError" class="mb-0">Podaj długość spotkania</p>
               </div>
-              <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="invalid-feedback">
-                <p *ngIf="duration.errors?.['invalidTime']" id="durationError2" class="mb-0">Podaj czas spotkania
+              <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">
+                <p *ngIf="surveyDuration.errors?.['invalidTime']" id="surveyDurationError2" class="mb-0">Podaj czas spotkania
                   dłuższy niż 15 minut</p>
               </div>
-              <p id="durationHelper" class="form-text">Format hh:mm</p>
+              <p id="surveyDurationHelper" class="form-text">Format hh:mm</p>
             </div>
           </div>
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <select class="form-control" id="breakTime" required formControlName="breakTime"
-                      aria-describedby="breakTimeHelper" aria-labelledby="breakTimeError"
-                      [class.is-invalid]="breakTime.invalid && (breakTime.dirty || breakTime.touched)">
+              <select class="form-control" id="surveyBreakTime" required formControlName="surveyBreakTime"
+                      aria-describedby="surveyBreakTimeHelper" aria-labelledby="surveyBreakTimeError"
+                      [class.is-invalid]="surveyBreakTime.invalid && (surveyBreakTime.dirty || surveyBreakTime.touched)">
                 <option value="15">15 minut</option>
                 <option value="30">30 minut</option>
                 <option value="45">45 minut</option>
               </select>
-              <label for="breakTime" class="form-label">Przerwa</label>
-              <div *ngIf="breakTime.invalid && (breakTime.dirty || breakTime.touched)" class="invalid-feedback">
-                <p *ngIf="breakTime.errors?.['required']" id="breakTimeError" class="mb-0">Podaj przerwę między
+              <label for="surveyBreakTime" class="form-label">Przerwa</label>
+              <div *ngIf="surveyBreakTime.invalid && (surveyBreakTime.dirty || surveyBreakTime.touched)" class="invalid-feedback">
+                <p *ngIf="surveyBreakTime.errors?.['required']" id="surveyBreakTimeError" class="mb-0">Podaj przerwę między
                   spotkaniami</p>
               </div>
-              <p id="breakTimeHelper" class="form-text">Podaj przerwę w minutach</p>
+              <p id="surveyBreakTimeHelper" class="form-text">Podaj przerwę w minutach</p>
             </div>
           </div>
           <div class="col-6">
