@@ -26,3 +26,16 @@
 .border-secondary {
   border-color: $primary-color !important;
 }
+
+.list-group {
+  border-radius: 0;
+}
+
+.list-group-item {
+  background-color: $bg-secondary;
+  border-color:#D3CED7 !important;
+}
+
+.list-group-item:nth-child(2n) {
+  background-color: $bg-dark;
+}

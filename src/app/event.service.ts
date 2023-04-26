@@ -22,4 +22,16 @@ export class EventService {
         })
       )
   }
+
+  getEvents(): Observable<any> {
+    const headers = { "Content-Type": "application/json" };
+    const options = { "headers": headers };
+
+    return this.http.get<any>('http://localhost:8080/events', options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
 }

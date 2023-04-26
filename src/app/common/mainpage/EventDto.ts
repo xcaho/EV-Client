@@ -2,19 +2,21 @@ export class EventDto {
 
   private name: string
   private description: string
-  private startDate: string
+  private researchStartDate: string
+  private researchEndDate: string
   private endDate: string
   private maxUsers: number
-  private duration: number
-  private breakTime: number
+  private surveyDuration: number
+  private surveyBreakTime: number
 
-  public constructor(name: string, description: string, startDate: string, endDate: string, maxUsers: number, duration: number, breakTime: number) {
+  public constructor(name: string, description: string, researchStartDate: string, researchEndDate: string, endDate: string, maxUsers: number, surveyDuration: number, surveyBreakTime: number) {
     this.name = name;
     this.description = description;
-    this.startDate = startDate;
+    this.researchStartDate = researchStartDate;
+    this.researchEndDate = researchEndDate;
     this.endDate = endDate;
     this.maxUsers = maxUsers;
-    this.duration = duration;
-    this.breakTime = breakTime;
+    this.surveyDuration = surveyDuration;
+    this.surveyBreakTime = surveyBreakTime;
   }
 }
