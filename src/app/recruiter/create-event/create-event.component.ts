@@ -46,6 +46,7 @@ export class CreateEventComponent {
         Validators.required
       ]),
       description: new FormControl(this.event.description, [
+        Validators.maxLength(150)
       ]),
       surveyDuration: new FormControl(this.event.surveyDuration, [
         Validators.required,

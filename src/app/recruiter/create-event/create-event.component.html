@@ -19,9 +19,13 @@
           <p id="nameHelper" class="form-text">np. Szybkie spotkanie</p>
         </div>
         <div class="mb-3 form-outline">
-          <textarea class="form-control" id="description" rows="3" formControlName="description"
-                    aria-describedby="descriptionHelper" name="description"></textarea>
+          <textarea type="text" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
+                    aria-labelledby="descriptionError" maxlength="151" class="form-control"
+                    [class.is-invalid]="description.invalid && (description.dirty || description.touched)"></textarea>
           <label for="description" class="form-label">Opis spotkania</label>
+          <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
+            <p *ngIf="description.errors?.['maxlength']" id="descriptionError" class="mb-0">Opis spotkania musi być krótszy niż 150 znaków</p>
+          </div>
           <p id="descriptionHelper" class="form-text">Krótki opis</p>
         </div>
         <div class="row">
