@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { EventService } from '../../event.service';
+import { EventDto } from "../../common/mainpage/EventDto";
 
 @Component({
   selector: 'app-your-appointments',
@@ -9,17 +10,17 @@ import { EventService } from '../../event.service';
 })
 export class YourAppointmentsComponent {
 
-  public data: any[];
+  events: EventDto[] = [];
+  isFetching: boolean = false;
 
-  constructor(private eventService: EventService) {
-    this.data = [];
-  }
+  constructor(private eventService: EventService) {}
 
-  ngOnInit() :void {
-    this.eventService.getEvents().subscribe((data) => {
-      this.data = data;
+  ngOnInit() {
+    this.isFetching = true;
+    this.eventService.getEvents().subscribe((events) => {
+      this.events = events;
+      this.isFetching = false;
     });
-
   }
 
 }

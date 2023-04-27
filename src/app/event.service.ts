@@ -11,11 +11,11 @@ export class EventService {
 
   constructor(private http:HttpClient) { }
 
-  createEvent(event: EventDto): Observable<any> {
+  createEvent(event: EventDto): Observable<EventDto> {
     const headers = { "Content-Type": "application/json" };
     const options = { "headers": headers };
 
-    return this.http.post<any>('http://localhost:8080/events', event, options)
+    return this.http.post<EventDto>('http://localhost:8080/events', event, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -23,11 +23,11 @@ export class EventService {
       )
   }
 
-  getEvents(): Observable<any> {
+  getEvents(): Observable<EventDto[]> {
     const headers = { "Content-Type": "application/json" };
     const options = { "headers": headers };
 
-    return this.http.get<any>('http://localhost:8080/events', options)
+    return this.http.get<EventDto[]>('http://localhost:8080/events', options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
