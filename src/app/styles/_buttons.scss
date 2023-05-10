@@ -35,3 +35,16 @@
     color:$text-primary !important;
   }
 }
+
+.btn-icon {
+  font-size: 1.25rem;
+  color: $primary-color;
+  border: 2px solid transparent;
+  i::before{
+    font-weight: 900 !important;
+  }
+  &:hover {
+    background-color: #B5B0C5;
+    color:$text-dark;
+  }
+}

@@ -3,6 +3,12 @@ import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators}
 import {EventDto} from "../../common/mainpage/EventDto";
 import {EventService} from '../../event.service';
 import {Router} from '@angular/router';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+
+export interface Item {
+  name: string;
+  hour: string[] | null;
+}
 
 @Component({
   selector: 'app-create-event',
@@ -12,9 +18,22 @@ import {Router} from '@angular/router';
 })
 
 export class CreateEventComponent {
-
   reactiveForm!: FormGroup;
   event: EventDto;
+
+
+  //ITEMS + FUNKCJA OPEN + private modalService: NgbModal W KONSTRUKTORZE DO KOMPONENTU DOSTEPNOSC
+  //NA GORZE JEST JESZCZE INTERFACE ITEM ^^^^^^^^^^^^^^^^^^^^^^
+  items: Item[] = [
+    { name: 'Poniedziałek', hour: ["11:00 - 13:00", "13:30 - 15:00"] },
+    { name: 'Wtorek', hour: ["14:00 - 16:00"] },
+    { name: 'Środa', hour: ["17:00 - 19:00"] },
+    { name: 'Czwartek', hour: null }
+  ];
+
+  open(content: any) {
+    this.modalService.open(content);
+  }
 
 
   private validateTime(control: AbstractControl): { [key: string]: any } | null {
@@ -36,7 +55,8 @@ export class CreateEventComponent {
   }
 
   constructor(private eventService: EventService,
-              private router: Router) {
+              private router: Router,
+              private modalService: NgbModal) {
     this.event = {} as EventDto;
   }
 
@@ -125,4 +145,5 @@ export class CreateEventComponent {
       }
     )
   }
+
 }

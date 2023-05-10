@@ -1,14 +1,14 @@
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
     <h1 class="h2 mb-0">Twoje spotkania</h1>
-    <a routerLink="../create" class="col-12 col-md-auto btn btn-outline-primary">Dodaj spotkanie</a>
+    <a routerLink="../create" class="col-12 col-md-auto btn btn-primary">Dodaj spotkanie</a>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6" *ngIf="!isFetching && !events[0]">
-      <p class="h3 text-secondary text-center">brak zaplanowanych spotkań</p>
-      <a routerLink="../create" class="col-12 col-md-6 btn btn-primary offset-md-3">Dodaj spotkanie</a>
+      <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplananowaych spotkań</p>
+      <a routerLink="../create" class="col-12 col-md-4 btn btn-outline-primary offset-md-4">Dodaj spotkanie</a>
     </div>
     <div class="col-12" *ngIf="events[0]">
       <ul class="list-group">

@@ -71,7 +71,6 @@
   }
 }
 
-
 input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   color: $text-secondary;
@@ -79,4 +78,18 @@ input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webk
 
 textarea {
   min-height: 2.375rem;
+}
+
+.modal-body .form-control {
+  background-color: #fff;
+}
+
+.modal-body .form-label {
+  color: $text-dark;
+}
+
+.modal-body .form-control:focus {
+  + .form-label {
+    background-color: #fff;
+  }
 }
