@@ -83,6 +83,8 @@ export class CreateEventComponent {
         Validators.min(1),
         Validators.max(20),
       ]),
+      researchStartDate: new FormControl(this.event.researchStartDate, []),
+      researchEndDate: new FormControl(this.event.researchEndDate, []),
     });
   }
 
@@ -110,6 +112,14 @@ export class CreateEventComponent {
     return this.reactiveForm.get('maxUsers')!;
   }
 
+  get researchStartDate() {
+    return this.reactiveForm.get('researchStartDate')!;
+  }
+
+  get researchEndDate() {
+    return this.reactiveForm.get('researchEndDate')!;
+  }
+
 
   public validate(form: FormGroupDirective): void {
     if (this.reactiveForm.invalid) {
@@ -126,8 +136,8 @@ export class CreateEventComponent {
     let newEvent = new EventDto(
       formContent.name,
       formContent.description,
-      "6666-06-06",
-      "6666-06-06",
+      formContent.researchStartDate,
+      formContent.researchEndDate,
       formContent.endDate,
       formContent.maxUsers,
       this.convertTimeToMinutes(formContent.surveyDuration),
