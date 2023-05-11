@@ -1,7 +1,7 @@
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Dodaj dostępność</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button type="button" class="btn-close" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <form>
@@ -58,20 +58,39 @@
 </ng-template>
 <!--Koniec modala-->
 
-<p class="h5 mb-4">Dodaj swoją dostępność dla tego “eventu”</p>
-<section class="row calendar">
-  <section class="col-12 col-sm-6 col-lg-4" *ngFor="let item of items">
-    <div class="c-card">
-      <div class="c-card-header">
-        <div><p class="mb-0 ps-2">{{ item.name }}</p></div>
-        <button type="button" class="btn btn-outline-primary" title="Dodaj dostępność" (click)="open(content)">Dodaj</button>
-      </div>
-      <div class="c-card-body">
-        <div class="slot" *ngFor="let hour of item.hour">
-          <div><p class="mb-0 ps-2">{{hour}}</p></div>
-          <button type="button" class="btn btn-outline-primary">Usuń</button>
+<div class="h64 flex-center border-bottom border-secondary mb-4">
+  <div class="container-xxl">
+    <h1 class="h2 mb-0">Tworzenie spotkania</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-5">
+  <div class="row justify-content-center">
+    <section class="col-12 col-lg-9">
+      <p class="h5 mb-4">Dodaj swoją dostępność dla tego “eventu”</p>
+      <section class="row calendar">
+        <section class="col-12 col-sm-6 col-lg-4" *ngFor="let item of items">
+          <div class="c-card">
+            <div class="c-card-header">
+              <div><p class="mb-0 ps-2">{{ item.name }}</p></div>
+              <button type="button" class="btn btn-outline-primary" title="Dodaj dostępność" (click)="open(content)">Dodaj</button>
+            </div>
+            <div class="c-card-body">
+              <div class="slot" *ngFor="let hour of item.hour">
+                <div><p class="mb-0 ps-2">{{hour}}</p></div>
+                <button type="button" class="btn btn-outline-primary">Usuń</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="d-flex justify-content-between flex-wrap row">
+          <div class="col-12 col-sm-6 col-md-auto">
+            <a routerLink="/create" class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase">Wstecz</a>
+          </div>
+          <div class="col-12 col-sm-6 col-md-auto">
+            <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit">Dalej</button>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
-</section>
+      </section>
+    </section>
+  </div>
+</div>

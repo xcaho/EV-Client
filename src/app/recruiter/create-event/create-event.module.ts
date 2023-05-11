@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DefiningEventComponent } from './defining-event/defining-event.component';
 import { AvailabilityComponent } from './availability/availability.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 
 
@@ -17,7 +18,8 @@ import {ReactiveFormsModule} from "@angular/forms";
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ]
 })
 export class CreateEventModule { }

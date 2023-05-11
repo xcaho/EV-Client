@@ -128,7 +128,7 @@ export class DefiningEventComponent {
       response => {
         console.log("Successfully added: " + JSON.stringify(response));
         this.event = this.reactiveForm.value;
-        this.router.navigate(['/appointments'])
+        this.router.navigate(['/availability'])
       }, exception => {
         let errorsMap = exception.error.errorsMap;
         console.log(errorsMap);

@@ -26,7 +26,7 @@
     margin-bottom: 0;
   }
 
-  .form-control:focus {
+  .form-control:focus, .form-select:focus {
     box-shadow: none;
     border-color: $dark-color;
     background: $bg-secondary;
@@ -93,4 +93,8 @@ textarea {
   + .form-label {
     background-color: #fff;
   }
+}
+
+.form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"], .was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"] {
+  background-repeat: no-repeat;
 }
