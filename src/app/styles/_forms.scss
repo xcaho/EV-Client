@@ -2,7 +2,7 @@
   margin-bottom: 0.25rem !important;
 }
 
-.form-control {
+.form-control, .form-select {
   background-color: $bg-secondary;
   border-color: #BDBDBD;
   border-radius: 0.25rem;
@@ -29,6 +29,7 @@
   .form-control:focus {
     box-shadow: none;
     border-color: $dark-color;
+    background: $bg-secondary;
     + .form-label {
       transform: translateY(-1rem) translateY(0.1rem) scale(.8);
       background-color: $secondary-color;

@@ -83,8 +83,10 @@ export class CreateEventComponent {
         Validators.min(1),
         Validators.max(20),
       ]),
-      researchStartDate: new FormControl(this.event.researchStartDate, []),
-      researchEndDate: new FormControl(this.event.researchEndDate, []),
+      researchStartDate: new FormControl(this.event.researchStartDate, [
+        Validators.required,]),
+      researchEndDate: new FormControl(this.event.researchEndDate, [
+        Validators.required,]),
     });
   }
 
