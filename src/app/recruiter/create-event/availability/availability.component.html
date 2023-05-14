@@ -68,15 +68,15 @@
     <section class="col-12 col-lg-9">
       <p class="h5 mb-4">Dodaj swoją dostępność dla tego “eventu”</p>
       <section class="row calendar">
-        <section class="col-12 col-sm-6 col-lg-4" *ngFor="let item of items">
+        <section class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList">
           <div class="c-card">
             <div class="c-card-header">
-              <div><p class="mb-0 ps-2">{{ item.date }}</p></div>
+              <div><p class="mb-0 ps-2">{{ availability.date }}</p></div>
               <button type="button" class="btn btn-outline-primary" title="Dodaj dostępność" (click)="open(content)">Dodaj</button>
             </div>
             <div class="c-card-body">
-              <div class="slot" *ngFor="let hour of item.date">
-                <div><p class="mb-0 ps-2">{{hour}}</p></div>
+              <div class="slot" *ngFor="let hours of availability.hoursList">
+                <div><p class="mb-0 ps-2">{{hours.toString()}}</p></div>
                 <button type="button" class="btn btn-outline-primary">Usuń</button>
               </div>
             </div>
