@@ -71,11 +71,11 @@
         <section class="col-12 col-sm-6 col-lg-4" *ngFor="let item of items">
           <div class="c-card">
             <div class="c-card-header">
-              <div><p class="mb-0 ps-2">{{ item.name }}</p></div>
+              <div><p class="mb-0 ps-2">{{ item.date }}</p></div>
               <button type="button" class="btn btn-outline-primary" title="Dodaj dostępność" (click)="open(content)">Dodaj</button>
             </div>
             <div class="c-card-body">
-              <div class="slot" *ngFor="let hour of item.hour">
+              <div class="slot" *ngFor="let hour of item.date">
                 <div><p class="mb-0 ps-2">{{hour}}</p></div>
                 <button type="button" class="btn btn-outline-primary">Usuń</button>
               </div>
