@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormGroup} from "@angular/forms";
 import {EventService} from "../../../event.service";
 import {Router} from "@angular/router";
 import {Availability, AvailabilityHours} from "../../../common/mainpage/Availability";
-
+import {HoursAddComponent} from "./hours-add/hours-add.component";
 
 @Component({
   selector: 'app-availability',
@@ -13,7 +12,8 @@ import {Availability, AvailabilityHours} from "../../../common/mainpage/Availabi
   providers: [EventService]
 })
 export class AvailabilityComponent {
-  reactiveForm!: FormGroup;
+  @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
+
   availabilityList: Availability[] = [];
 
   constructor(private modalService: NgbModal, private router: Router) {
@@ -27,8 +27,8 @@ export class AvailabilityComponent {
 
   private getDates(startDate: Date, endDate: Date) {
     let currentDate: Date = startDate;
-    while(currentDate <= endDate) {
-      let hoursList : AvailabilityHours[] = []
+    while (currentDate <= endDate) {
+      let hoursList: AvailabilityHours[] = []
       this.availabilityList.push(
         new Availability(currentDate, hoursList))
 
@@ -41,17 +41,5 @@ export class AvailabilityComponent {
     date.setDate(date.getDate() + 1)
     return date
   }
-
-  open(content: any) {
-    this.modalService.open(content);
-  }
-
-  // ngOnInit(): void {
-  //   this.reactiveForm = new FormGroup({
-  //     name: new FormControl(this.event.name, [
-  //       Validators.required
-  //     ]),
-  //   });
-  // }
 
 }

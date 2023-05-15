@@ -34,7 +34,7 @@ export class DefiningEventComponent {
   }
 
   constructor(private eventService: EventService,
-              private router: Router,) {
+              private router: Router) {
     this.event = {} as EventDto;
   }
 

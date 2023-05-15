@@ -81,20 +81,6 @@ textarea {
   min-height: 2.375rem;
 }
 
-.modal-body .form-control {
-  background-color: #fff;
-}
-
-.modal-body .form-label {
-  color: $text-dark;
-}
-
-.modal-body .form-control:focus {
-  + .form-label {
-    background-color: #fff;
-  }
-}
-
 .form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"], .was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"] {
   background-repeat: no-repeat;
 }
