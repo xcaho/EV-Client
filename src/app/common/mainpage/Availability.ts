@@ -4,8 +4,8 @@ export class Availability {
   public hoursList: AvailabilityHours[]
 
   public constructor(date: Date, hoursList: AvailabilityHours[]) {
-    this.date = date.toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    this.hoursList = hoursList
+    this.date = date.toLocaleDateString('pl-PL', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+    this.hoursList = hoursList;
   }
 }
 

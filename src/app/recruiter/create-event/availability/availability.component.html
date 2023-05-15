@@ -13,21 +13,21 @@
           <div class="c-card">
             <div class="c-card-header">
               <div><p class="mb-0 ps-2">{{ availability.date }}</p></div>
-              <button type="button" class="btn btn-outline-primary" title="Dodaj dostępność" (click)="hoursAddComponent.open(hoursAddComponent.content, availability)">Dodaj</button>
+              <button type="button" class="btn btn-icon" title="Dodaj dostępność" (click)="hoursAddComponent.open(hoursAddComponent.content, availability)"><fa-icon [icon]="plus"></fa-icon><span class="d-none">Dodaj dostępność</span></button>
             </div>
             <div class="c-card-body">
               <div class="slot" *ngFor="let hours of availability.hoursList">
                 <div><p class="mb-0 ps-2">{{hours.toString()}}</p></div>
-                <button type="button" class="btn btn-outline-primary">Usuń</button>
+                <button type="button" class="btn btn-icon" title="Usuń dostępność" (click)="removeHour(availability, hours)"><fa-icon [icon]="trash">Usuń</fa-icon><span class="d-none">Usuń dostępność</span></button>
               </div>
             </div>
           </div>
         </section>
-        <div class="d-flex justify-content-between flex-wrap row">
-          <div class="col-12 col-sm-6 col-md-auto">
+        <div class="d-flex justify-content-between flex-wrap row mx-0">
+          <div class="col-12 col-sm-6 col-md-auto px-0">
             <a routerLink="/create" class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase">Wstecz</a>
           </div>
-          <div class="col-12 col-sm-6 col-md-auto">
+          <div class="col-12 col-sm-6 col-md-auto px-0">
             <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit">Dalej</button>
           </div>
         </div>

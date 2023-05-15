@@ -5,6 +5,7 @@ import { AvailabilityComponent } from './availability/availability.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import { HoursAddComponent } from './availability/hours-add/hours-add.component';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 
 
@@ -18,10 +19,11 @@ import { HoursAddComponent } from './availability/hours-add/hours-add.component'
     AvailabilityComponent,
     DefiningEventComponent
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterLink
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        RouterLink,
+        FontAwesomeModule
+    ]
 })
 export class CreateEventModule { }

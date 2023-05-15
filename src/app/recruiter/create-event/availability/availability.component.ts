@@ -4,6 +4,7 @@ import {EventService} from "../../../event.service";
 import {Router} from "@angular/router";
 import {Availability, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {HoursAddComponent} from "./hours-add/hours-add.component";
+import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-availability',
@@ -15,6 +16,8 @@ export class AvailabilityComponent {
   @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
 
   availabilityList: Availability[] = [];
+  plus = faPlus;
+  trash = faTrash;
 
   constructor(private modalService: NgbModal, private router: Router) {
     const navigation = this.router.getCurrentNavigation();
@@ -40,6 +43,14 @@ export class AvailabilityComponent {
     let date = new Date(currentDate)
     date.setDate(date.getDate() + 1)
     return date
+  }
+
+  removeHour (availability: Availability, hours: any): void {
+    availability.hoursList.forEach((itemList, index) => {
+      if (itemList === hours) {
+        availability.hoursList.splice(index, 1)
+      }
+    })
   }
 
 }
