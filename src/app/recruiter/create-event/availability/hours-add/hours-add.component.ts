@@ -3,10 +3,6 @@ import {Availability, AvailabilityHours} from "../../../../common/mainpage/Avail
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
-interface Hours {
-  startHour: any;
-  endHour: any;
-}
 
 @Component({
   selector: 'app-hours-add',
@@ -17,9 +13,9 @@ interface Hours {
 export class HoursAddComponent {
   @ViewChild('content') content: ElementRef | undefined;
 
-  availabilityList: any;
+  availability: any;
   hoursAddForm: FormGroup;
-  hours: Hours;
+  hours: AvailabilityHours;
   modalRef: NgbModalRef = null!;
 
   constructor(private modalService: NgbModal, private fb: FormBuilder) {
@@ -27,7 +23,7 @@ export class HoursAddComponent {
       startHour: fb.control('brak danych', Validators.required),
       endHour: fb.control('brak danych', Validators.required)
     })
-    this.hours = {} as Hours;
+    this.hours = {} as AvailabilityHours;
   }
 
   get startHour() {
@@ -40,7 +36,7 @@ export class HoursAddComponent {
 
   open(content: any, availability: Availability): void {
     this.modalRef = this.modalService.open(content);
-    this.availabilityList = availability;
+    this.availability = availability;
   }
 
   closeModal(): void {
@@ -52,7 +48,7 @@ export class HoursAddComponent {
     const startTime = this.startHour.value;
     const endTime = this.endHour.value;
     if (this.hoursAddForm.valid) {
-      this.availabilityList.hoursList.push(new AvailabilityHours(startTime, endTime));
+      this.availability.hoursList.push(new AvailabilityHours(startTime, endTime));
       this.modalService.dismissAll();
       this.hoursAddForm.reset();
     } else {

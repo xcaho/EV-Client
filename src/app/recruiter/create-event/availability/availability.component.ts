@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {EventService} from "../../../event.service";
 import {Router} from "@angular/router";
-import {Availability, AvailabilityHours} from "../../../common/mainpage/Availability";
+import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {HoursAddComponent} from "./hours-add/hours-add.component";
 import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 
@@ -19,7 +19,7 @@ export class AvailabilityComponent {
   plus = faPlus;
   trash = faTrash;
 
-  constructor(private modalService: NgbModal, private router: Router) {
+  constructor(private eventService: EventService, private modalService: NgbModal, private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {
       startDate: string,
@@ -37,6 +37,38 @@ export class AvailabilityComponent {
 
       currentDate = this.addOneDay(currentDate)
     }
+  }
+
+  private convertTimeToMinutes(time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  private saveEvent() {
+    let newEvent;
+    if(localStorage.getItem("event")) {
+      // @ts-ignore
+      newEvent = JSON.parse(localStorage.getItem("event"))
+      newEvent.surveyDuration = this.convertTimeToMinutes(newEvent.surveyDuration)
+    }
+    this.eventService.createEvent(newEvent).subscribe(
+      response => {
+        console.log("Succesfully added: " + JSON.stringify(response));
+
+        let availabilityDtoList: AvailabilityDto[] = []
+        this.eventService.saveAvailabilityList(availabilityDtoList, response.id)
+
+        this.router.navigate(['/appointments'])
+      }, exception => {
+        let errorsMap = exception.error.errorsMap;
+        console.log(errorsMap)
+      }
+    )
+  }
+
+  submitForm() {
+    this.saveEvent();
+    localStorage.removeItem("event")
   }
 
   private addOneDay(currentDate: Date) {
