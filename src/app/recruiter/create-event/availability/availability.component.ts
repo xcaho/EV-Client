@@ -56,9 +56,26 @@ export class AvailabilityComponent {
         console.log("Succesfully added: " + JSON.stringify(response));
 
         let availabilityDtoList: AvailabilityDto[] = []
-        this.eventService.saveAvailabilityList(availabilityDtoList, response.id)
+        this.availabilityList.forEach((availability) => {
+          const day: Date = new Date(availability.date)
+          availability.hoursList.forEach((hours) => {
+            const startTimeFullDate: Date = this.prepareFullDate(hours.startHour, day);
+            const endTimeFullDate: Date = this.prepareFullDate(hours.endHour, day);
 
-        this.router.navigate(['/appointments'])
+            availabilityDtoList.push(new AvailabilityDto(startTimeFullDate, endTimeFullDate))
+          })
+        })
+
+        this.eventService.saveAvailabilityList(availabilityDtoList, response.id).subscribe(
+          response => {
+            console.log("Successfully added: " + JSON.stringify(response))
+            localStorage.removeItem("event")
+            this.router.navigate(['/appointments'])
+          }, exception => {
+            console.log(exception.error.errorsMap)
+          }
+        )
+
       }, exception => {
         let errorsMap = exception.error.errorsMap;
         console.log(errorsMap)
@@ -66,9 +83,16 @@ export class AvailabilityComponent {
     )
   }
 
+  private prepareFullDate(hour: string, day: Date) {
+    let temp = new Date(day)
+    const [hours, minutes] = hour.split(':').map(Number);
+    temp.setHours(hours)
+    temp.setMinutes(minutes)
+    return temp
+  }
+
   submitForm() {
     this.saveEvent();
-    localStorage.removeItem("event")
   }
 
   private addOneDay(currentDate: Date) {

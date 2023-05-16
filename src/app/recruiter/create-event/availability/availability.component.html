@@ -12,7 +12,7 @@
         <section class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList; let i=index">
           <div class="c-card">
             <div class="c-card-header">
-              <div><p class="mb-0 ps-2">{{ availability.date }}</p></div>
+              <div><p class="mb-0 ps-2">{{ availability.dateFormatted }}</p></div>
               <button type="button" class="btn btn-icon" title="Dodaj dostępność" (click)="hoursAddComponent.open(hoursAddComponent.content, availability)"><fa-icon [icon]="plus"></fa-icon><span class="d-none">Dodaj dostępność</span></button>
             </div>
             <div class="c-card-body">

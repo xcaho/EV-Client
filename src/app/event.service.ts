@@ -16,7 +16,7 @@ export class EventService {
     const headers = { "Content-Type": "application/json" };
     const options = { "headers": headers };
 
-    return this.http.post<EventDto>('http://localhost:8080/events/{eventId}/availabilities', availability, options)
+    return this.http.post<EventDto>('http://localhost:8080/events/'+ eventId +'/availabilities', availability, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
