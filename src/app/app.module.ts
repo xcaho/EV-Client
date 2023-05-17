@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './common/header/header.component';
@@ -13,6 +12,7 @@ import { YourAppointmentsComponent } from './recruiter/your-appointments/your-ap
 import {RouterModule, Routes} from '@angular/router';
 import {CreateEventModule} from "./recruiter/create-event/create-event.module";
 import {AvailabilityComponent} from "./recruiter/create-event/availability/availability.component";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
@@ -38,7 +38,8 @@ const appRoute: Routes = [
         HttpClientModule,
         RouterModule.forRoot(appRoute),
         ReactiveFormsModule,
-        CreateEventModule
+        CreateEventModule,
+        FontAwesomeModule
     ],
   providers: [],
   bootstrap: [AppComponent]

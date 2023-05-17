@@ -1,0 +1,11 @@
+.modal-content {
+  background-color: $bg-secondary !important;
+}
+
+.modal-header, .modal-body, .modal-footer {
+  border-color: #B5B0C5 !important;
+}
+
+.modal-footer {
+  justify-content: space-between;
+}

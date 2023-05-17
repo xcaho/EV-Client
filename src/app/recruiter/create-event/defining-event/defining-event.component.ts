@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
-import {Router} from "@angular/router";
+import {Router, NavigationExtras} from "@angular/router";
 
 @Component({
   selector: 'app-defining-event',
@@ -34,7 +34,7 @@ export class DefiningEventComponent {
   }
 
   constructor(private eventService: EventService,
-              private router: Router,) {
+              private router: Router) {
     this.event = {} as EventDto;
   }
 
@@ -124,11 +124,18 @@ export class DefiningEventComponent {
       formContent.surveyBreakTime,
     )
 
+    const navigationExtras: NavigationExtras = {
+      state: {
+        startDate: newEvent.researchStartDate,
+        endDate: newEvent.researchEndDate
+      }
+    };
+
     this.eventService.createEvent(newEvent).subscribe(
       response => {
         console.log("Successfully added: " + JSON.stringify(response));
         this.event = this.reactiveForm.value;
-        this.router.navigate(['/availability'])
+        this.router.navigate(['/availability'], navigationExtras)
       }, exception => {
         let errorsMap = exception.error.errorsMap;
         console.log(errorsMap);

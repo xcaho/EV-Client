@@ -29,7 +29,7 @@
   .form-control:focus, .form-select:focus {
     box-shadow: none;
     border-color: $dark-color;
-    background: $bg-secondary;
+    background-color: $bg-secondary;
     + .form-label {
       transform: translateY(-1rem) translateY(0.1rem) scale(.8);
       background-color: $secondary-color;
@@ -59,7 +59,7 @@
   }
 }
 
-.form-control:required {
+.form-control:required, .form-select:required {
   + .form-label {
     padding-right: 0.625rem;
     &::after {
@@ -79,20 +79,6 @@ input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webk
 
 textarea {
   min-height: 2.375rem;
-}
-
-.modal-body .form-control {
-  background-color: #fff;
-}
-
-.modal-body .form-label {
-  color: $text-dark;
-}
-
-.modal-body .form-control:focus {
-  + .form-label {
-    background-color: #fff;
-  }
 }
 
 .form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"], .was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"] {

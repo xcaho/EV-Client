@@ -1,12 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormGroup} from "@angular/forms";
 import {EventService} from "../../../event.service";
-
-export interface Item {
-  name: string;
-  hour: string[] | null;
-}
+import {Router} from "@angular/router";
+import {Availability, AvailabilityHours} from "../../../common/mainpage/Availability";
+import {HoursAddComponent} from "./hours-add/hours-add.component";
+import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-availability',
@@ -15,29 +13,44 @@ export interface Item {
   providers: [EventService]
 })
 export class AvailabilityComponent {
-  reactiveForm!: FormGroup;
+  @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
 
-  constructor(private modalService: NgbModal) {
-    // this.event = {} as EventDto;
+  availabilityList: Availability[] = [];
+  plus = faPlus;
+  trash = faTrash;
+
+  constructor(private modalService: NgbModal, private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as {
+      startDate: string,
+      endDate: string
+    }
+    this.getDates(new Date(state.startDate), new Date(state.endDate))
   }
 
-  items: Item[] = [
-    { name: 'Poniedziałek', hour: ["11:00 - 13:00", "13:30 - 15:00"] },
-    { name: 'Wtorek', hour: ["14:00 - 16:00"] },
-    { name: 'Środa', hour: ["17:00 - 19:00"] },
-    { name: 'Czwartek', hour: null }
-  ];
+  private getDates(startDate: Date, endDate: Date) {
+    let currentDate: Date = startDate;
+    while (currentDate <= endDate) {
+      let hoursList: AvailabilityHours[] = []
+      this.availabilityList.push(
+        new Availability(currentDate, hoursList))
 
-  open(content: any) {
-    this.modalService.open(content);
+      currentDate = this.addOneDay(currentDate)
+    }
   }
 
-  // ngOnInit(): void {
-  //   this.reactiveForm = new FormGroup({
-  //     name: new FormControl(this.event.name, [
-  //       Validators.required
-  //     ]),
-  //   });
-  // }
+  private addOneDay(currentDate: Date) {
+    let date = new Date(currentDate)
+    date.setDate(date.getDate() + 1)
+    return date
+  }
+
+  removeHour (availability: Availability, hours: any): void {
+    availability.hoursList.forEach((itemList, index) => {
+      if (itemList === hours) {
+        availability.hoursList.splice(index, 1)
+      }
+    })
+  }
 
 }
