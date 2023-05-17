@@ -1,3 +1,60 @@
+<!--MODAL - DO KOMPONENTU DOSTEPNOSC-->
+
+<!--<ng-template #content let-modal>-->
+<!--  <div class="modal-header">-->
+<!--    <h4 class="modal-title" id="modal-basic-title">Dodaj dostępność</h4>-->
+<!--    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>-->
+<!--  </div>-->
+<!--  <div class="modal-body">-->
+<!--    <form>-->
+<!--      <div class="row">-->
+<!--        <div class="col-6">-->
+<!--          <div class="mb-3 form-outline">-->
+<!--            <input type="time" id="xx" name="nickname" formControlName="surveyDuration"-->
+<!--                   aria-describedby="surveyDurationHelper" aria-labelledby="surveyDurationError surveyDurationError2"-->
+<!--                   required class="form-control"-->
+<!--                   [class.is-invalid]="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)">-->
+<!--            <label for="surveyDuration" class="form-label">Godzina od</label>-->
+<!--            <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">-->
+<!--              <p *ngIf="surveyDuration.errors?.['required']" id="xxx" class="mb-0">Podaj długość spotkania</p>-->
+<!--            </div>-->
+<!--            <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">-->
+<!--              <p *ngIf="surveyDuration.errors?.['invalidTime']" id="xxxxx" class="mb-0">Podaj czas spotkania-->
+<!--                dłuższy niż 15 minut</p>-->
+<!--            </div>-->
+<!--            <p id="xxxx" class="form-text">Format hh:mm</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-6">-->
+<!--          <div class="mb-3 form-outline">-->
+<!--            <input type="time" id="surveyDuration" name="nickname" formControlName="surveyDuration"-->
+<!--                   aria-describedby="surveyDurationHelper" aria-labelledby="surveyDurationError surveyDurationError2"-->
+<!--                   required class="form-control"-->
+<!--                   [class.is-invalid]="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)">-->
+<!--            <label for="surveyDuration" class="form-label">Godzina do</label>-->
+<!--            <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">-->
+<!--              <p *ngIf="surveyDuration.errors?.['required']" id="surveyDurationError" class="mb-0">Podaj długość spotkania</p>-->
+<!--            </div>-->
+<!--            <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">-->
+<!--              <p *ngIf="surveyDuration.errors?.['invalidTime']" id="surveyDurationError2" class="mb-0">Podaj czas spotkania-->
+<!--                dłuższy niż 15 minut</p>-->
+<!--            </div>-->
+<!--            <p id="surveyDurationHelper" class="form-text">Format hh:mm</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--  <div class="modal-footer">-->
+<!--    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>-->
+<!--  </div>-->
+<!--</ng-template>-->
+
+<!--TU SIE KONCZY MODAL-->
+
+
+
+
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl">
     <h1 class="h2 mb-0">Tworzenie spotkania</h1>
@@ -5,7 +62,15 @@
 </div>
 <div class="main-content container-xxl mb-5">
   <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
+    <div class="col-12 col-lg-9">
+
+<!--      TUTAJ TRZEBA BEDZIE DODAC DWA :
+          <app-zdefiniuj>....
+          <app-dostepnosc>....
+-->
+
+<!--      KOMPONENT ZDEFINIUJ EVENT-->
+
       <form [formGroup]="reactiveForm" #form="ngForm">
         <div class="form-outline mb-3">
           <input type="text" id="name" name="name" formControlName="name" aria-describedby="nameHelper"
@@ -31,7 +96,7 @@
         <div class="row">
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="time" id="surveyDuration" list="" name="nickname" formControlName="surveyDuration"
+              <input type="time" id="surveyDuration" list="" name="surveyDuration" formControlName="surveyDuration"
                      aria-describedby="surveyDurationHelper" aria-labelledby="surveyDurationError surveyDurationError2"
                      required class="form-control"
                      [class.is-invalid]="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)">
@@ -48,7 +113,7 @@
           </div>
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <select class="form-control" id="surveyBreakTime" required formControlName="surveyBreakTime"
+              <select class="form-select" id="surveyBreakTime" required formControlName="surveyBreakTime"
                       aria-describedby="surveyBreakTimeHelper" aria-labelledby="surveyBreakTimeError"
                       [class.is-invalid]="surveyBreakTime.invalid && (surveyBreakTime.dirty || surveyBreakTime.touched)">
                 <option value="15">15 minut</option>
@@ -60,7 +125,7 @@
                 <p *ngIf="surveyBreakTime.errors?.['required']" id="surveyBreakTimeError" class="mb-0">Podaj przerwę między
                   spotkaniami</p>
               </div>
-              <p id="surveyBreakTimeHelper" class="form-text">Podaj przerwę w minutach</p>
+              <p id="surveyBreakTimeHelper" class="form-text">Podaj przerwę między spotkaniami</p>
             </div>
           </div>
           <div class="col-6">
@@ -97,6 +162,32 @@
               <p id="maxUsersHelper" class="form-text">np. 5</p>
             </div>
           </div>
+          <div class="col-6">
+            <div class="mb-3 form-outline">
+              <input type="date" id="researchStartDate" name="researchStartDate" formControlName="researchStartDate"
+                     aria-describedby="researchStartDateHelper" aria-labelledby="researchStartDateError"
+                     required class="form-control"
+                     [class.is-invalid]="researchStartDate.invalid && (researchStartDate.dirty || researchStartDate.touched)">
+              <label for="researchStartDate" class="form-label">Początkowa data okresu zapisów</label>
+              <div *ngIf="researchStartDate.invalid && (researchStartDate.dirty || researchStartDate.touched)" class="invalid-feedback">
+                <p *ngIf="researchStartDate.errors?.['required']" id="researchStartDateError" class="mb-0">Podaj początkową datę okresu zapisów</p>
+              </div>
+              <p id="researchStartDateHelper" class="form-text">Format dd-mm-rrrr</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-3 form-outline">
+              <input type="date" id="researchEndDate" name="researchEndDate" formControlName="researchEndDate"
+                     aria-describedby="researchEndDateHelper" aria-labelledby="researchEndDateError"
+                     required class="form-control"
+                     [class.is-invalid]="researchEndDate.invalid && (researchEndDate.dirty || researchEndDate.touched)">
+              <label for="researchEndDate" class="form-label">Końcowa data okresu zapisów</label>
+              <div *ngIf="researchEndDate.invalid && (researchEndDate.dirty || researchEndDate.touched)" class="invalid-feedback">
+                <p *ngIf="researchEndDate.errors?.['required']" id="researchEndDateError" class="mb-0">Podaj końcową datę okresu zapisów</p>
+              </div>
+              <p id="researchEndDateHelper" class="form-text">Format dd-mm-rrrr</p>
+            </div>
+          </div>
         </div>
         <div class="d-flex justify-content-between flex-wrap row">
           <div class="col-12 col-sm-6">
@@ -107,6 +198,33 @@
           </div>
         </div>
       </form>
+
+<!--      AZ DOTAD-->
+
+
+<!--      KOMPONENT DOSTEPNOSC-->
+<!--      ON SIE SKLADA Z DWOCH CZESC, MODAL JEST NA SAMEJ GORZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+<!--      <p class="h5 mb-5">Dodaj swoją dostępność dla tego “eventu”</p>-->
+<!--      <section class="row calendar">-->
+<!--        <section class="col-12 col-sm-6 col-lg-4" *ngFor="let item of items">-->
+<!--          <div class="c-card">-->
+<!--            <div class="c-card-header">-->
+<!--              <div><p class="mb-0 ps-2">{{ item.name }}</p></div>-->
+<!--              <button type="button" class="btn btn-outline-primary" title="Dodaj dostępność" (click)="open(content)">Dodaj</button>-->
+<!--            </div>-->
+<!--            <div class="c-card-body">-->
+<!--              <div class="slot" *ngFor="let hour of item.hour">-->
+<!--                <div><p class="mb-0 ps-2">{{hour}}</p></div>-->
+<!--                <button type="button" class="btn btn-outline-primary">Usuń</button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </section>-->
+<!--      </section>-->
+
+<!--      AŻ DOTĄD-->
+
     </div>
   </div>
 </div>
