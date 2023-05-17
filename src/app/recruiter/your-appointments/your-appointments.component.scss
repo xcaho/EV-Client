@@ -1,0 +1,15 @@
+@import 'src/app/styles/variables';
+
+li {
+  padding:0;
+}
+
+.list-group {
+  .list-group-link {
+    padding: 1rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    color:$text-dark;
+    text-decoration: none;
+  }
+}

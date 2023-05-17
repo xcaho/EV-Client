@@ -1,0 +1,96 @@
+<div class="h64 flex-center border-bottom border-secondary mb-4">
+  <div class="container-xxl d-flex flex-wrap justify-content-between">
+    <h1 class="h2 mb-0">{{events[eventId - 1].name}}</h1>
+    <a [routerLink]="['/edit', eventId-1]" class="col-auto btn btn-primary">Edytuj spotkanie</a>
+  </div>
+</div>
+<div class="main-content container-xxl mb-5">
+  <section class="row justify-content-center">
+    <div class="col-12">
+      <p class="h5 mb-4">Szczegóły dotyczące spotkania "{{events[eventId - 1].name}}"</p>
+      <dl class="row gap">
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Opis:</dt>
+            <dd *ngIf="events[eventId-1].description !== null">{{events[eventId - 1].description}} 11</dd>
+            <dd *ngIf="events[eventId-1].description === null">–</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Długość spotkania:</dt>
+            <dd>{{events[eventId - 1].surveyDuration}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Zajętość slotów:</dt>
+            <dd>{{events[eventId - 1].slotsTaken}}/{{events[eventId - 1].maxUsers}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Długość przerwy:</dt>
+            <dd>{{events[eventId - 1].surveyBreakTime}} minut</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Początkowa data okresu zapisów:</dt>
+            <dd>{{events[eventId - 1].researchStartDate}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Końcowa data okresu zapisów:</dt>
+            <dd>{{events[eventId - 1].researchEndDate}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Data zakończenia zapisów:</dt>
+            <dd>{{events[eventId - 1].endDate}}</dd>
+          </div>
+        </div>
+      </dl>
+      <p class="h5 mt-4 mb-3">Dostępność</p>
+      <section class="row calendar">
+        <section class="col-12 col-sm-6 col-lg-4">
+          <div class="c-card">
+            <div class="c-card-header">
+              <p class="mb-0 ps-2">czwartek<br>
+                <span class="smaller">18 maja 2023</span></p>
+            </div>
+            <div class="c-card-body">
+              <div class="slot">
+                <p class="mb-0 ps-2">13:00 - 14:00</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="col-12 col-sm-6 col-lg-4">
+          <div class="c-card">
+            <div class="c-card-header">
+              <div><p class="mb-0 ps-2">ASD</p></div>
+            </div>
+            <div class="c-card-body">
+              <div class="slot">
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="col-12 col-sm-6 col-lg-4">
+          <div class="c-card">
+            <div class="c-card-header">
+              <div><p class="mb-0 ps-2">ASD</p></div>
+            </div>
+            <div class="c-card-body">
+              <div class="slot">
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </section>
+</div>

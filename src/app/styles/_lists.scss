@@ -1,0 +1,28 @@
+dt {
+  font-weight: 600;
+}
+
+dd {
+  margin-bottom: 0;
+}
+
+.list-group {
+  border-radius: 0;
+}
+
+.list-group-item {
+  background-color: $bg-secondary;
+  border-color: $border-color !important;
+}
+
+.list-group-item:hover {
+  background-color: $bg-dark;
+}
+
+.li-header span {
+  font-weight: 600;
+}
+
+.li-header:hover {
+  background-color: inherit;
+}

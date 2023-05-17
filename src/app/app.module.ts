@@ -13,11 +13,15 @@ import {RouterModule, Routes} from '@angular/router';
 import {CreateEventModule} from "./recruiter/create-event/create-event.module";
 import {AvailabilityComponent} from "./recruiter/create-event/availability/availability.component";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { EventComponent } from './recruiter/your-appointments/event/event.component';
+import {EditEventComponent} from "./recruiter/your-appointments/event/edit-event/edit-event.component";
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
   {path: 'availability', component: AvailabilityComponent},
   {path: 'create', component: CreateEventComponent},
+  {path: 'event/:id', component: EventComponent},
+  {path: 'edit/:id', component: EditEventComponent},
   {path: '', redirectTo: 'appointments', pathMatch: 'full'}
 ]
 
@@ -29,7 +33,9 @@ const appRoute: Routes = [
     FooterComponent,
     MainpageComponent,
     CreateEventComponent,
-    YourAppointmentsComponent
+    YourAppointmentsComponent,
+    EventComponent,
+    EditEventComponent
   ],
     imports: [
         BrowserModule,

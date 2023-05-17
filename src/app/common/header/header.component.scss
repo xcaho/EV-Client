@@ -10,7 +10,8 @@ header {
   color: $text-primary;
   display: inline-block;
   transform: translate(0, -0.5rem);
-  cursor: default;
+  cursor: pointer;
+  border-bottom:0.125rem solid transparent;
   .smaller {
     display: inline-block;
     font-size: $h3-font-size;
@@ -18,6 +19,7 @@ header {
   }
   &:hover, &:focus {
     color: $text-primary;
+    border-color: $bg-secondary;
   }
 }
 
