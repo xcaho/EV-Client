@@ -11,9 +11,12 @@ import {HttpClientModule} from "@angular/common/http";
 import { CreateEventComponent } from './recruiter/create-event/create-event.component';
 import { YourAppointmentsComponent } from './recruiter/your-appointments/your-appointments.component';
 import {RouterModule, Routes} from '@angular/router';
+import {CreateEventModule} from "./recruiter/create-event/create-event.module";
+import {AvailabilityComponent} from "./recruiter/create-event/availability/availability.component";
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
+  {path: 'availability', component: AvailabilityComponent},
   {path: 'create', component: CreateEventComponent},
   {path: '', redirectTo: 'appointments', pathMatch: 'full'}
 ]
@@ -28,14 +31,15 @@ const appRoute: Routes = [
     CreateEventComponent,
     YourAppointmentsComponent
   ],
-  imports: [
-    BrowserModule,
-    NgbModule,
-    FormsModule,
-    HttpClientModule,
-    RouterModule.forRoot(appRoute),
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        NgbModule,
+        FormsModule,
+        HttpClientModule,
+        RouterModule.forRoot(appRoute),
+        ReactiveFormsModule,
+        CreateEventModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
