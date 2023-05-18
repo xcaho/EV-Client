@@ -28,11 +28,6 @@ export class DefiningEventComponent {
     return null;
   }
 
-  private convertTimeToMinutes(time: string): number {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-  }
-
   constructor(private eventService: EventService,
               private router: Router) {
     this.event = {} as EventDto;
@@ -66,7 +61,13 @@ export class DefiningEventComponent {
       researchEndDate: new FormControl(this.event.researchEndDate, [
         Validators.required,]),
     });
+
+    if(localStorage.getItem("event")) {
+      // @ts-ignore
+      this.reactiveForm.setValue(JSON.parse(localStorage.getItem("event")))
+    }
   }
+
 
   get name() {
     return this.reactiveForm.get('name')!;
@@ -113,34 +114,21 @@ export class DefiningEventComponent {
 
   saveEvent(f: FormGroupDirective) {
     let formContent = f.value
-    let newEvent = new EventDto(
-      formContent.name,
-      formContent.description,
-      formContent.researchStartDate,
-      formContent.researchEndDate,
-      formContent.endDate,
-      formContent.maxUsers,
-      this.convertTimeToMinutes(formContent.surveyDuration),
-      formContent.surveyBreakTime,
-    )
 
     const navigationExtras: NavigationExtras = {
       state: {
-        startDate: newEvent.researchStartDate,
-        endDate: newEvent.researchEndDate
+        startDate: formContent.researchStartDate,
+        endDate: formContent.researchEndDate
       }
     };
 
-    this.eventService.createEvent(newEvent).subscribe(
-      response => {
-        console.log("Successfully added: " + JSON.stringify(response));
-        this.event = this.reactiveForm.value;
-        this.router.navigate(['/availability'], navigationExtras)
-      }, exception => {
-        let errorsMap = exception.error.errorsMap;
-        console.log(errorsMap);
-      }
-    )
+    localStorage.removeItem("event")
+    localStorage.setItem("event", JSON.stringify(this.reactiveForm.value))
+    this.router.navigate(['/availability'], navigationExtras)
+  }
+
+  backToMain() {
+    localStorage.removeItem("event")
   }
 
 }

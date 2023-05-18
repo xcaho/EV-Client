@@ -1,10 +1,14 @@
 export class Availability {
 
-  public date: string
+  public date: Date
+  public dayOfWeek: string
+  public dateFormatted: string
   public hoursList: AvailabilityHours[]
 
   public constructor(date: Date, hoursList: AvailabilityHours[]) {
-    this.date = date.toLocaleDateString('pl-PL', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+    this.date = date
+    this.dayOfWeek = date.toLocaleDateString('pl-PL', {weekday: 'long'})
+    this.dateFormatted = date.toLocaleDateString('pl-PL', {year: 'numeric', month: 'long', day: 'numeric'});
     this.hoursList = hoursList;
   }
 }
@@ -13,7 +17,6 @@ export class AvailabilityDto {
 
   public startDate: Date
   public endDate: Date
-
 
   constructor(startDate: Date, endDate: Date) {
     this.startDate = startDate;
