@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {EventService} from '../../event.service';
 
 @Component({
@@ -9,5 +9,6 @@ import {EventService} from '../../event.service';
 })
 
 export class CreateEventComponent {
+  @Input() eventId: number | null = null;
 
 }
