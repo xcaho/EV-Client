@@ -9,6 +9,6 @@ import {EventService} from '../../event.service';
 })
 
 export class CreateEventComponent {
-  @Input() eventId: number | null = null;
+  @Input() eventId: number = -1;
 
 }

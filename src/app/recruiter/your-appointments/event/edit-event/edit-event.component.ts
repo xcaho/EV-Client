@@ -9,7 +9,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class EditEventComponent {
   events: EventDto[] = [];
-  eventId: number | null = null;
+  eventId: number = -1;
 
 
   constructor(public route: ActivatedRoute) {

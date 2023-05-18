@@ -15,12 +15,13 @@ import {AvailabilityComponent} from "./recruiter/create-event/availability/avail
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EventComponent } from './recruiter/your-appointments/event/event.component';
 import {EditEventComponent} from "./recruiter/your-appointments/event/edit-event/edit-event.component";
+import {EventDto} from "./common/mainpage/EventDto";
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
   {path: 'availability', component: AvailabilityComponent},
   {path: 'create', component: CreateEventComponent},
-  {path: 'event/:id', component: EventComponent},
+  {path: 'event/:id', component: EventComponent, data: {event: EventDto}},
   {path: 'edit/:id', component: EditEventComponent},
   {path: '', redirectTo: 'appointments', pathMatch: 'full'}
 ]

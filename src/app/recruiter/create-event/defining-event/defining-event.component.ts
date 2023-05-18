@@ -11,7 +11,8 @@ import {Router, NavigationExtras} from "@angular/router";
   providers: [EventService]
 })
 export class DefiningEventComponent {
-  @Input() editEventId: number | null = null;
+  @Input() editEventId: number = -1;
+  isEdit: boolean = false;
   reactiveForm!: FormGroup;
   event: EventDto;
   events: EventDto[] = [];
@@ -34,6 +35,9 @@ export class DefiningEventComponent {
   constructor(private eventService: EventService,
               private router: Router) {
     this.event = {} as EventDto;
+    if (this.editEventId == -1) {
+      this.isEdit = true;
+    }
   }
 
   ngOnInit(): void {
@@ -77,7 +81,7 @@ export class DefiningEventComponent {
     });
 
     setTimeout(() => {
-        if (this.editEventId != null) {
+        if (this.isEdit) {
           this.reactiveForm.patchValue({
             name: this.events[this.editEventId].name,
             description: this.events[this.editEventId].description,
@@ -153,8 +157,13 @@ export class DefiningEventComponent {
     this.router.navigate(['/availability'], navigationExtras)
   }
 
-  backToMain() {
-    localStorage.removeItem("event")
+  goBack() {
+    if (this.isEdit) {
+      this.router.navigate(['/event/', this.editEventId])
+    } else {
+      localStorage.removeItem("event")
+      this.router.navigate(['/appointments'])
+    }
   }
 
 }
