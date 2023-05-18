@@ -11,12 +11,16 @@ dd {
 }
 
 .list-group-item {
-  background-color: $bg-secondary;
+  background-color: #fff;
   border-color: $border-color !important;
 }
 
 .list-group-item:hover {
   background-color: $bg-dark;
+}
+
+.li-header {
+  background-color: transparent;
 }
 
 .li-header span {
