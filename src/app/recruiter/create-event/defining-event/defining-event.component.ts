@@ -3,6 +3,7 @@ import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators}
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
 import {Router, NavigationExtras} from "@angular/router";
+import {EventUtils} from "../../../common/mainpage/EventUtils";
 
 @Component({
   selector: 'app-defining-event',
@@ -71,7 +72,7 @@ export class DefiningEventComponent {
       this.reactiveForm.patchValue({
         name: this.event.name,
         description: this.event.description,
-        surveyDuration: this.event.getSurveyDurationHHMM(),
+        surveyDuration: EventUtils.convertMinutesToHHMM(this.event.surveyDuration),
         surveyBreakTime: this.event.surveyBreakTime,
         endDate: this.event.endDate,
         maxUsers: this.event.maxUsers,

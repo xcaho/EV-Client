@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {EventDto} from "../../../common/mainpage/EventDto";
+import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {ActivatedRoute, Router} from '@angular/router';
 import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {EventService} from "../../../event.service";
@@ -13,11 +14,13 @@ import * as _ from "lodash";
 export class EventComponent {
   availabilityList: Availability[] = [];
   event!: EventDto;
+  surveyDurationHHMM = "00:00";
 
   constructor(private eventService: EventService, public router: Router) {
     if(localStorage.getItem("event")) {
       // @ts-ignore
       this.event = JSON.parse(localStorage.getItem("event"))
+      this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
     }
 
     this.eventService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
