@@ -1,22 +1,23 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {EventDto} from "./common/mainpage/EventDto";
-import {Observable, throwError } from "rxjs";
-import { catchError } from 'rxjs/operators';
-import {Availability, AvailabilityDto} from "./common/mainpage/Availability";
+import {Observable, throwError} from "rxjs";
+import {catchError} from 'rxjs/operators';
+import {AvailabilityDto} from "./common/mainpage/Availability";
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   saveAvailabilityList(availability: AvailabilityDto[], eventId: number) {
-    const headers = { "Content-Type": "application/json" };
-    const options = { "headers": headers };
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
 
-    return this.http.post<EventDto>('http://localhost:8080/events/'+ eventId +'/availabilities', availability, options)
+    return this.http.post<EventDto>('http://localhost:8080/events/' + eventId + '/availabilities', availability, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -25,8 +26,8 @@ export class EventService {
   }
 
   createEvent(event: EventDto): Observable<EventDto> {
-    const headers = { "Content-Type": "application/json" };
-    const options = { "headers": headers };
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
 
     return this.http.post<EventDto>('http://localhost:8080/events', event, options)
       .pipe(
@@ -37,8 +38,8 @@ export class EventService {
   }
 
   getEvents(): Observable<EventDto[]> {
-    const headers = { "Content-Type": "application/json" };
-    const options = { "headers": headers };
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
 
     return this.http.get<EventDto[]>('http://localhost:8080/events', options)
       .pipe(
