@@ -12,21 +12,13 @@ import * as _ from "lodash";
 })
 export class EventComponent {
   availabilityList: Availability[] = [];
-  event: EventDto;
+  event!: EventDto;
 
   constructor(private eventService: EventService, public router: Router) {
-    const navigation = this.router.getCurrentNavigation()
-    let state = <EventDto>navigation?.extras.state
-    this.event = new EventDto(state.name,
-      state.description,
-      state.researchStartDate,
-      state.researchEndDate,
-      state.endDate,
-      state.maxUsers,
-      state.surveyDuration,
-      state.surveyBreakTime,
-      state.slotsTaken)
-    this.event.id = state.id
+    if(localStorage.getItem("event")) {
+      // @ts-ignore
+      this.event = JSON.parse(localStorage.getItem("event"))
+    }
 
     this.eventService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
 
@@ -47,6 +39,8 @@ export class EventComponent {
     });
   }
 
-
+  goToEdit() {
+    this.router.navigate(['/edit/', this.event.id])
+  }
 
 }

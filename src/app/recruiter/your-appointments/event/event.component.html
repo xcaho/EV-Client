@@ -1,7 +1,7 @@
 <div class="h64 flex-center border-bottom border-secondary mb-4">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
     <h1 class="h2 mb-0">{{event.name}}</h1>
-    <a [routerLink]="['/edit', event.id]" class="col-auto btn btn-primary">Edytuj spotkanie</a>
+    <a class="col-auto btn btn-primary" (click)="goToEdit()">Edytuj spotkanie</a>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">

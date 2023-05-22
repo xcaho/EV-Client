@@ -8,14 +8,10 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./edit-event.component.scss']
 })
 export class EditEventComponent {
-  events: EventDto[] = [];
   eventId: number = -1;
 
 
   constructor(public route: ActivatedRoute) {
-  }
-
-  ngOnInit() {
     this.route.params.subscribe(params => {
       this.eventId = params['id'];
     });

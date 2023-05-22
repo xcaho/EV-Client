@@ -11,11 +11,9 @@ import {Router, NavigationExtras} from "@angular/router";
   providers: [EventService]
 })
 export class DefiningEventComponent {
-  @Input() editEventId: number = -1;
-  isEdit: boolean = false;
+  @Input() isEdit: boolean = false;
   reactiveForm!: FormGroup;
   event: EventDto;
-  events: EventDto[] = [];
   textareaValue: string = '';
 
 
@@ -34,10 +32,8 @@ export class DefiningEventComponent {
 
   constructor(private eventService: EventService,
               private router: Router) {
-    this.event = {} as EventDto;
-    if (this.editEventId == -1) {
-      this.isEdit = true;
-    }
+
+    this.event = {} as EventDto
   }
 
   ngOnInit(): void {
@@ -71,31 +67,18 @@ export class DefiningEventComponent {
 
     if (localStorage.getItem("event")) {
       // @ts-ignore
-      this.reactiveForm.setValue(JSON.parse(localStorage.getItem("event")))
+      this.event = JSON.parse(localStorage.getItem("event"))
+      this.reactiveForm.patchValue({
+        name: this.event.name,
+        description: this.event.description,
+        surveyDuration: this.event.getSurveyDurationHHMM(),
+        surveyBreakTime: this.event.surveyBreakTime,
+        endDate: this.event.endDate,
+        maxUsers: this.event.maxUsers,
+        researchStartDate: this.event.researchStartDate,
+        researchEndDate: this.event.researchEndDate
+      });
     }
-
-
-    // Edytowanie spotkania
-    this.eventService.getEvents().subscribe((events) => {
-      this.events = events;
-    });
-
-    setTimeout(() => {
-        if (this.isEdit) {
-          this.reactiveForm.patchValue({
-            name: this.events[this.editEventId].name,
-            description: this.events[this.editEventId].description,
-            surveyDuration: "11:30",
-            surveyBreakTime: this.events[this.editEventId].surveyBreakTime,
-            endDate: this.events[this.editEventId].endDate,
-            maxUsers: this.events[this.editEventId].maxUsers,
-            researchStartDate: this.events[this.editEventId].researchStartDate,
-            researchEndDate: this.events[this.editEventId].researchEndDate
-          });
-        }
-      },
-      100
-    )
   }
 
 
@@ -159,7 +142,7 @@ export class DefiningEventComponent {
 
   goBack() {
     if (this.isEdit) {
-      this.router.navigate(['/event/', this.editEventId])
+      this.router.navigate(['/event/', this.event.id])
     } else {
       localStorage.removeItem("event")
       this.router.navigate(['/appointments'])

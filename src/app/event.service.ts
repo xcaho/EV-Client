@@ -61,4 +61,16 @@ export class EventService {
         })
       )
   }
+
+  getEvent(id: number): Observable<EventDto> {
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.get<EventDto>('http://localhost:8080/events/' + id, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
 }

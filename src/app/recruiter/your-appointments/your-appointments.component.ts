@@ -20,6 +20,11 @@ export class YourAppointmentsComponent {
     localStorage.removeItem("event")
   }
 
+  goToRead(event: EventDto) {
+    localStorage.setItem("event", JSON.stringify(event))
+    this.router.navigate(['/event/', event.id])
+  }
+
   ngOnInit() {
     this.isFetching = true;
     this.eventService.getEvents().subscribe((events) => {
