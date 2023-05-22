@@ -73,4 +73,28 @@ export class EventService {
         })
       )
   }
+
+  updateEvent(event: EventDto, eventId: number){
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.put<EventDto>('http://localhost:8080/events/' + eventId, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  updateAvailabilityList(availability: AvailabilityDto[], eventId: number){
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.put<EventDto>('http://localhost:8080/events/' + eventId + '/availabilities', availability, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
 }

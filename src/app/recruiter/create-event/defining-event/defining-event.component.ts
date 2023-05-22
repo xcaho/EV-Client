@@ -132,7 +132,8 @@ export class DefiningEventComponent {
     const navigationExtras: NavigationExtras = {
       state: {
         startDate: formContent.researchStartDate,
-        endDate: formContent.researchEndDate
+        endDate: formContent.researchEndDate,
+        id: formContent.id
       }
     };
 
