@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
@@ -11,8 +11,11 @@ import {Router, NavigationExtras} from "@angular/router";
   providers: [EventService]
 })
 export class DefiningEventComponent {
+  @Input() editEventId: number | null = null;
   reactiveForm!: FormGroup;
   event: EventDto;
+  events: EventDto[] = [];
+  textareaValue: string = '';
 
 
   private validateTime(control: AbstractControl): { [key: string]: any } | null {
@@ -62,10 +65,33 @@ export class DefiningEventComponent {
         Validators.required,]),
     });
 
-    if(localStorage.getItem("event")) {
+    if (localStorage.getItem("event")) {
       // @ts-ignore
       this.reactiveForm.setValue(JSON.parse(localStorage.getItem("event")))
     }
+
+
+    // Edytowanie spotkania
+    this.eventService.getEvents().subscribe((events) => {
+      this.events = events;
+    });
+
+    setTimeout(() => {
+        if (this.editEventId != null) {
+          this.reactiveForm.patchValue({
+            name: this.events[this.editEventId].name,
+            description: this.events[this.editEventId].description,
+            surveyDuration: "11:30",
+            surveyBreakTime: this.events[this.editEventId].surveyBreakTime,
+            endDate: this.events[this.editEventId].endDate,
+            maxUsers: this.events[this.editEventId].maxUsers,
+            researchStartDate: this.events[this.editEventId].researchStartDate,
+            researchEndDate: this.events[this.editEventId].researchEndDate
+          });
+        }
+      },
+      100
+    )
   }
 
 

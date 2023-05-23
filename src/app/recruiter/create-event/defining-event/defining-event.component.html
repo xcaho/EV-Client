@@ -11,7 +11,7 @@
     <p id="nameHelper" class="form-text">np. Szybkie spotkanie</p>
   </div>
   <div class="mb-3 form-outline">
-          <textarea type="text" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
+          <textarea type="text" [(ngModel)]="textareaValue" [ngClass]="{'active': textareaValue}" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
                     aria-labelledby="descriptionError" maxlength="151" class="form-control"
                     [class.is-invalid]="description.invalid && (description.dirty || description.touched)"></textarea>
     <label for="description" class="form-label">Opis spotkania</label>

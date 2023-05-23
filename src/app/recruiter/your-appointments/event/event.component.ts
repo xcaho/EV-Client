@@ -17,10 +17,6 @@ export class EventComponent {
   constructor(private eventService: EventService, public route: ActivatedRoute) {
   }
 
-  getObjectValues(obj: any): any[] {
-    return Object.values(obj);
-  }
-
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.eventId = params['id'];
