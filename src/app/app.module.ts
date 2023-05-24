@@ -19,6 +19,7 @@ import {EventDto} from "./common/mainpage/EventDto";
 import {SurveyRegistrationComponent} from './participant/survey-registration/survey-registration.component';
 import {ConfirmationComponent} from './participant/confirmation/confirmation.component';
 import {MenuService} from "./menu.service";
+import { InvalidCodeComponent } from './participant/invalid-code/invalid-code.component';
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
@@ -41,7 +42,8 @@ const appRoute: Routes = [
     EventComponent,
     EditEventComponent,
     SurveyRegistrationComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    InvalidCodeComponent
   ],
   imports: [
     BrowserModule,
