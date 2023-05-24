@@ -7,7 +7,7 @@
         <span class="navbar-toggler-icon"></span>
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse mb-2 mb-lg-0" id="navbarSupportedContent">
+      <div *ngIf="displayMenu$ | async" class="collapse navbar-collapse mb-2 mb-lg-0" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mt-2 mt-lg-0">
           <li class="nav-item" [routerLinkActive]="['active']">
             <a class="nav-link ps-2" routerLink="appointments">Twoje spotkania</a>
