@@ -28,29 +28,37 @@
           <li>poniedziałek, 15 maja 2023 09:00 - 14:30</li>
         </ul>
       </div>
-      <form class="row mt-1">
+      <form class="row mt-1" [formGroup]="surveyRegistrationForm">
         <div class="col-12 col-md-6">
           <div class="form-outline mb-3">
-            <select class="form-select" id="dayChoice" required formControlName="dayChoiceTime"
-                    aria-describedby="dayChoiceHelper" aria-labelledby="dayChoiceError">
+            <select class="form-select" id="dayChoice" required formControlName="dayChoice"
+                    aria-describedby="dayChoiceHelper" aria-labelledby="dayChoiceError"
+                    [class.is-invalid]="dayChoice !== null && (dayChoice.invalid && (dayChoice.dirty || dayChoice.touched))">
               <option value="15">11.03.2023 - środa</option>
               <option value="30">12.03.2023 - czwartek</option>
               <option value="45">13.03.2023 - piątek</option>
             </select>
             <label for="dayChoice" class="form-label">Dzień spotkania</label>
+            <div *ngIf="dayChoice !== null && dayChoice.invalid && (dayChoice.dirty || dayChoice.touched)" class="invalid-feedback">
+              <p *ngIf="dayChoice.errors?.['required']" id="dayChoiceError" class="mb-0">Wybierz dzień spotkania</p>
+            </div>
             <p id="dayChoiceHelper" class="form-text">Wybierz dzień spośród dostępnych</p>
           </div>
         </div>
         <div class="col-12 col-md-6">
           <div class="form-outline mb-3">
             <select class="form-select" id="hourChoice" required formControlName="hourChoice"
-                    aria-describedby="hourChoiceHelper" aria-labelledby="hourChoiceError">
+                    aria-describedby="hourChoiceHelper" aria-labelledby="hourChoiceError"
+                    [class.is-invalid]="hourChoice !== null && hourChoice.invalid && (hourChoice.dirty || hourChoice.touched)">
               <option value="15">11:00</option>
               <option value="15">11:30</option>
               <option value="15">12:00</option>
               <option value="15">13:00</option>
             </select>
             <label for="hourChoice" class="form-label">Godzina spotkania</label>
+            <div *ngIf="hourChoice !== null && hourChoice.invalid && (hourChoice.dirty || hourChoice.touched)" class="invalid-feedback">
+              <p *ngIf="hourChoice.errors?.['required']" id="hourChoiceError" class="mb-0">Wybierz godzinę spotkania</p>
+            </div>
             <p id="hourChoiceHelper" class="form-text">Wybierz odpowiadającą Ci godzinę</p>
           </div>
         </div>
