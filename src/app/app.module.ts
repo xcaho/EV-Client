@@ -16,6 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EventComponent } from './recruiter/your-appointments/event/event.component';
 import {EditEventComponent} from "./recruiter/your-appointments/event/edit-event/edit-event.component";
 import {EventDto} from "./common/mainpage/EventDto";
+import { SurveyRegistrationComponent } from './participant/survey-registration/survey-registration.component';
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
@@ -36,7 +37,8 @@ const appRoute: Routes = [
     CreateEventComponent,
     YourAppointmentsComponent,
     EventComponent,
-    EditEventComponent
+    EditEventComponent,
+    SurveyRegistrationComponent
   ],
     imports: [
         BrowserModule,

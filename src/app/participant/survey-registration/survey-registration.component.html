@@ -1,0 +1,71 @@
+<div class="h64 flex-center border-bottom border-secondary mb-5">
+  <div class="container-xxl d-flex flex-wrap justify-content-between">
+    <h1 class="h2 mb-0">Spotkanie dot. makiety Facebook 3.0</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-5">
+  <div class="row justify-content-center">
+    <section class="col-12 col-md-10 col-lg-8">
+      <h2 class="h5 mb-3">Zapisz się na badanie</h2>
+      <dl class="row gap mb-3">
+        <div class="col-12 col-sm-6">
+          <div class="bg-white px-3 py-2">
+            <dt>Długość spotkania:</dt>
+            <dd>1 godz. 30 min.</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="bg-white px-3 py-2">
+            <dt>Data zakończenia zapisów:</dt>
+            <dd><time>21.03.2023</time></dd>
+          </div>
+        </div>
+      </dl>
+      <div class="row">
+        <p class="mb-1">W tych terminach możesz się umówić na badanie</p>
+        <ul class="ms-3">
+          <li>piątek, 12 maja 2023 09:00 - 14:30; 16:00-17:30</li>
+          <li>poniedziałek, 15 maja 2023 09:00 - 14:30</li>
+        </ul>
+      </div>
+      <form class="row mt-1">
+        <div class="col-12 col-md-6">
+          <div class="form-outline mb-3">
+            <select class="form-select" id="dayChoice" required formControlName="dayChoiceTime"
+                    aria-describedby="dayChoiceHelper" aria-labelledby="dayChoiceError">
+              <option value="15">11.03.2023 - środa</option>
+              <option value="30">12.03.2023 - czwartek</option>
+              <option value="45">13.03.2023 - piątek</option>
+            </select>
+            <label for="dayChoice" class="form-label">Dzień spotkania</label>
+            <p id="dayChoiceHelper" class="form-text">Wybierz dzień spośród dostępnych</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-outline mb-3">
+            <select class="form-select" id="hourChoice" required formControlName="hourChoice"
+                    aria-describedby="hourChoiceHelper" aria-labelledby="hourChoiceError">
+              <option value="15">11:00</option>
+              <option value="15">11:30</option>
+              <option value="15">12:00</option>
+              <option value="15">13:00</option>
+            </select>
+            <label for="hourChoice" class="form-label">Godzina spotkania</label>
+            <p id="hourChoiceHelper" class="form-text">Wybierz odpowiadającą Ci godzinę</p>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+              Wyrażam zgodę na przetwarzanie moim danych osobowych przez Sieć Badawczą Łukasiewicz - Poznański Instytut Technologiczny w celu udzielenia odpowiedzi na pytanie zadane przez formularz kontaktowy zgodnie z wymogami RODO. Oświadczam, że zapoznałem się i akceptuję informacje o ochronie danych osobowych oraz politykę prywatności.
+            </label>
+          </div>
+        </div>
+        <div class="col-auto ms-auto mt-3">
+          <button class="btn btn-primary">Zapisz się</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
