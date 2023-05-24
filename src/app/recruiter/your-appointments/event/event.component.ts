@@ -1,7 +1,7 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {EventService} from "../../../event.service";
 import * as _ from "lodash";
@@ -24,7 +24,6 @@ export class EventComponent {
     }
 
     this.eventService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
-
       this.availabilityList = [];
       let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
       Object.keys(grouped).map((key) => {
