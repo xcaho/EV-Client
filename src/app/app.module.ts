@@ -27,7 +27,10 @@ const appRoute: Routes = [
   {path: 'create', component: CreateEventComponent},
   {path: 'event/:id', component: EventComponent, data: {event: EventDto}},
   {path: 'edit/:id', component: EditEventComponent},
-  {path: '', redirectTo: 'appointments', pathMatch: 'full'}
+  {path: '', redirectTo: 'appointments', pathMatch: 'full'},
+  {path: 'registration/:id', component: SurveyRegistrationComponent, data: {event: EventDto}},
+  {path: 'confirmation/:id', component: ConfirmationComponent},
+  {path: 'invalid-code/:id', component: InvalidCodeComponent},
 ]
 
 
