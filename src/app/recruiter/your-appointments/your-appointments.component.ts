@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { EventService } from '../../event.service';
 import { EventDto } from "../../common/mainpage/EventDto";
 import {Router} from "@angular/router";
+import {Availability} from "../../common/mainpage/Availability";
+import {AvailabilityService} from "../../availability.service";
 
 @Component({
   selector: 'app-your-appointments',
@@ -13,10 +15,11 @@ export class YourAppointmentsComponent {
   events: EventDto[] = [];
   isFetching: boolean = false;
 
-  constructor(private eventService: EventService, private router: Router) {}
+  constructor(private eventService: EventService, private availabilityService: AvailabilityService, private router: Router) {}
 
   goToCreate() {
     this.eventService.clearTemporaryEvent()
+    this.availabilityService.clearTemporaryAvailabilities()
     this.router.navigate(['/create'])
   }
 

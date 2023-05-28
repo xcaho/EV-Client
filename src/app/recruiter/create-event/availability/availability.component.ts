@@ -6,6 +6,7 @@ import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/
 import {HoursAddComponent} from "./hours-add/hours-add.component";
 import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {EventDto} from "../../../common/mainpage/EventDto";
+import {AvailabilityService} from "../../../availability.service";
 
 @Component({
   selector: 'app-availability',
@@ -20,15 +21,30 @@ export class AvailabilityComponent {
   plus = faPlus;
   trash = faTrash;
 
-  constructor(private eventService: EventService, private modalService: NgbModal, private router: Router) {
+  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
+              private modalService: NgbModal, private router: Router) {
   }
 
   ngOnInit() {
     this.event = this.eventService.getTemporaryEvent()
-    this.getDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate))
+    if(!this.event) {
+      this.goBack()
+    }
+
+    let list = this.availabilityService.getTemporaryAvailabilities()
+    if (!list || list.length == 0) {
+      this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate))
+    } else {
+      this.availabilityList = list
+    }
   }
 
-  private getDates(startDate: Date, endDate: Date) {
+  goBack() {
+    this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
+    this.router.navigate(['/create'])
+  }
+
+  private generateDates(startDate: Date, endDate: Date) {
     let currentDate: Date = startDate;
     while (currentDate <= endDate) {
       let hoursList: AvailabilityHours[] = []
@@ -42,34 +58,46 @@ export class AvailabilityComponent {
   submit() {
     this.eventService.createEvent(this.event).subscribe(
       response => {
+
         console.log("Succesfully added: " + JSON.stringify(response));
-
-        let availabilityDtoList: AvailabilityDto[] = []
-        this.availabilityList.forEach((availability) => {
-          const day: Date = new Date(availability.date)
-          availability.hoursList.forEach((hours) => {
-            const startTimeFullDate: Date = this.prepareFullDate(hours.startHour, day);
-            const endTimeFullDate: Date = this.prepareFullDate(hours.endHour, day);
-
-            availabilityDtoList.push(new AvailabilityDto(startTimeFullDate, endTimeFullDate))
-          })
-        })
-
-        this.eventService.saveAvailabilityList(availabilityDtoList, response.id).subscribe(
-          response => {
-            console.log("Successfully added: " + JSON.stringify(response))
-            this.eventService.clearTemporaryEvent()
-            this.router.navigate(['/appointments'])
-          }, exception => {
-            console.log(exception.error.errorsMap)
-          }
-        )
+        this.saveAvailability(response.id)
 
       }, exception => {
-        let errorsMap = exception.error.errorsMap;
-        console.log(errorsMap)
+        console.log(exception.error.errorsMap)
       }
     )
+  }
+
+  private saveAvailability(eventId: number) {
+
+    let availabilityDtoList: AvailabilityDto[] = this.convertAvailabilityToDto()
+    this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
+      response => {
+
+        console.log("Successfully added: " + JSON.stringify(response))
+        this.eventService.clearTemporaryEvent()
+        this.availabilityService.clearTemporaryAvailabilities()
+        this.router.navigate(['/appointments'])
+
+      }, exception => {
+        console.log(exception.error.errorsMap)
+      }
+    )
+  }
+
+  private convertAvailabilityToDto() {
+
+    let availabilityDtoList: AvailabilityDto[] = []
+    this.availabilityList.forEach((availability) => {
+      const day: Date = new Date(availability.date)
+      availability.hoursList.forEach((hours) => {
+        const startTimeFullDate: Date = this.prepareFullDate(hours.startHour, day);
+        const endTimeFullDate: Date = this.prepareFullDate(hours.endHour, day);
+
+        availabilityDtoList.push(new AvailabilityDto(startTimeFullDate, endTimeFullDate))
+      })
+    })
+    return availabilityDtoList
   }
 
   private prepareFullDate(hour: string, day: Date) {

@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {EventService} from "../../../event.service";
 import * as _ from "lodash";
+import {AvailabilityService} from "../../../availability.service";
 
 @Component({
   selector: 'app-event',
@@ -15,12 +16,12 @@ export class EventComponent {
   event!: EventDto;
   surveyDurationHHMM = "00:00";
 
-  constructor(private eventService: EventService, public router: Router) {
+  constructor(private eventService: EventService, private availabilityService: AvailabilityService, public router: Router) {
   }
 
   ngOnInit() {
     this.event = this.eventService.getTemporaryEvent()
-    this.eventService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
+    this.availabilityService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
 
       this.availabilityList = [];
       let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())

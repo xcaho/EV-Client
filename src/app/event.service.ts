@@ -15,31 +15,6 @@ export class EventService {
   constructor(private http: HttpClient) {
   }
 
-  saveAvailabilityList(availability: AvailabilityDto[], eventId: number) {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
-
-    return this.http.post<EventDto>('http://localhost:8080/events/' + eventId + '/availabilities', availability, options)
-      .pipe(
-        catchError((error: any) => {
-          return throwError(error);
-        })
-      )
-  }
-
-  getAvailabilityList(eventId: number): Observable<AvailabilityDto[]> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
-
-    return this.http.get<AvailabilityDto[]>('http://localhost:8080/events/' + eventId + '/availabilities', options)
-      .pipe(
-        map(res => res.map(tmp => new AvailabilityDto(tmp.startDate, tmp.endDate))),
-        catchError((error: any) => {
-          return throwError(error);
-        })
-      )
-  }
-
   createEvent(event: EventDto): Observable<EventDto> {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
@@ -77,13 +52,11 @@ export class EventService {
   }
 
   getTemporaryEvent(): EventDto {
-    console.log(this.temporaryEvent)
     return <EventDto>this.temporaryEvent;
   }
 
   setTemporaryEvent(event: EventDto) {
     this.temporaryEvent = event
-    console.log(this.temporaryEvent)
   }
 
   clearTemporaryEvent() {
