@@ -9,7 +9,6 @@ import {ActivatedRoute} from '@angular/router';
 export class EditEventComponent {
   eventId: number = -1;
 
-
   constructor(public route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       this.eventId = params['id'];

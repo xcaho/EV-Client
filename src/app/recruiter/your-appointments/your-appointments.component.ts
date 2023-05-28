@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
-import { EventService } from '../../event.service';
-import { EventDto } from "../../common/mainpage/EventDto";
+import {Component} from '@angular/core';
+import {EventService} from '../../event.service';
+import {EventDto} from "../../common/mainpage/EventDto";
 import {Router} from "@angular/router";
-import {Availability} from "../../common/mainpage/Availability";
 import {AvailabilityService} from "../../availability.service";
 
 @Component({
