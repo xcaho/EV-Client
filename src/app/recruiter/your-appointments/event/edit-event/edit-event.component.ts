@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {EventDto} from "../../../../common/mainpage/EventDto";
 import {ActivatedRoute} from '@angular/router';
 
 @Component({

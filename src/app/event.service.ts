@@ -10,6 +10,8 @@ import {AvailabilityDto} from "./common/mainpage/Availability";
 })
 export class EventService {
 
+  temporaryEvent?: EventDto
+
   constructor(private http: HttpClient) {
   }
 
@@ -72,5 +74,19 @@ export class EventService {
           return throwError(error);
         })
       )
+  }
+
+  getTemporaryEvent(): EventDto {
+    console.log(this.temporaryEvent)
+    return <EventDto>this.temporaryEvent;
+  }
+
+  setTemporaryEvent(event: EventDto) {
+    this.temporaryEvent = event
+    console.log(this.temporaryEvent)
+  }
+
+  clearTemporaryEvent() {
+    this.temporaryEvent = undefined
   }
 }

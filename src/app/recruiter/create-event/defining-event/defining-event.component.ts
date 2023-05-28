@@ -1,35 +1,20 @@
 import {Component, Input} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
-import {Router, NavigationExtras} from "@angular/router";
+import {Router} from "@angular/router";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
 
 @Component({
   selector: 'app-defining-event',
   templateUrl: './defining-event.component.html',
-  styleUrls: ['./defining-event.component.scss'],
-  providers: [EventService]
+  styleUrls: ['./defining-event.component.scss']
 })
 export class DefiningEventComponent {
   @Input() isEdit: boolean = false;
   reactiveForm!: FormGroup;
   event: EventDto;
-  textareaValue: string = '';
-
-
-  private validateTime(control: AbstractControl): { [key: string]: any } | null {
-    const time = control.value;
-    if (!time) {
-      return null;
-    }
-    const [hours, minutes] = time.split(':').map(Number);
-    const timeInMinutes = hours * 60 + minutes;
-    if (timeInMinutes < 15) {
-      return {invalidTime: true};
-    }
-    return null;
-  }
+  textAreaValue: string = '';
 
   constructor(private eventService: EventService,
               private router: Router) {
@@ -38,6 +23,63 @@ export class DefiningEventComponent {
   }
 
   ngOnInit(): void {
+    this.initFormGroup()
+    this.event = this.eventService.getTemporaryEvent()
+    if (this.event) {
+      this.patchForm()
+    }
+  }
+
+  public validate(form: FormGroupDirective): void {
+    if (this.reactiveForm.invalid) {
+      for (const control of Object.keys(this.reactiveForm.controls)) {
+        this.reactiveForm.controls[control].markAsTouched();
+      }
+      return;
+    }
+    this.saveEvent(form);
+  }
+
+  saveEvent(f: FormGroupDirective) {
+    let formContent = f.value
+
+    this.event = new EventDto(
+      formContent.name,
+      formContent.description,
+      formContent.researchStartDate,
+      formContent.researchEndDate,
+      formContent.endDate,
+      formContent.maxUsers,
+      EventUtils.convertTimeToMinutes(formContent.surveyDuration),
+      formContent.surveyBreakTime,
+      formContent.slotsTaken)
+
+    this.eventService.setTemporaryEvent(this.event)
+    this.router.navigate(['/availability'])
+  }
+
+  goBack() {
+    if (this.isEdit) {
+      this.router.navigate(['/event/', this.event.id])
+    } else {
+      this.router.navigate(['/appointments'])
+    }
+  }
+
+  private patchForm() {
+    this.reactiveForm.patchValue({
+      name: this.event.name,
+      description: this.event.description,
+      surveyDuration: EventUtils.convertMinutesToHHMM(this.event.surveyDuration),
+      surveyBreakTime: this.event.surveyBreakTime,
+      endDate: this.event.endDate,
+      maxUsers: this.event.maxUsers,
+      researchStartDate: this.event.researchStartDate,
+      researchEndDate: this.event.researchEndDate
+    })
+  }
+
+  private initFormGroup() {
     this.reactiveForm = new FormGroup({
       name: new FormControl(this.event.name, [
         Validators.required
@@ -47,7 +89,7 @@ export class DefiningEventComponent {
       ]),
       surveyDuration: new FormControl(this.event.surveyDuration, [
         Validators.required,
-        this.validateTime
+        EventUtils.validateTime
       ]),
       surveyBreakTime: new FormControl(this.event.surveyBreakTime, [
         Validators.required
@@ -65,23 +107,7 @@ export class DefiningEventComponent {
       researchEndDate: new FormControl(this.event.researchEndDate, [
         Validators.required,]),
     });
-
-    if (localStorage.getItem("event")) {
-      // @ts-ignore
-      this.event = JSON.parse(localStorage.getItem("event"))
-      this.reactiveForm.patchValue({
-        name: this.event.name,
-        description: this.event.description,
-        surveyDuration: EventUtils.convertMinutesToHHMM(this.event.surveyDuration),
-        surveyBreakTime: this.event.surveyBreakTime,
-        endDate: this.event.endDate,
-        maxUsers: this.event.maxUsers,
-        researchStartDate: this.event.researchStartDate,
-        researchEndDate: this.event.researchEndDate
-      });
-    }
   }
-
 
   get name() {
     return this.reactiveForm.get('name')!;
@@ -113,41 +139,6 @@ export class DefiningEventComponent {
 
   get researchEndDate() {
     return this.reactiveForm.get('researchEndDate')!;
-  }
-
-
-  public validate(form: FormGroupDirective): void {
-    if (this.reactiveForm.invalid) {
-      for (const control of Object.keys(this.reactiveForm.controls)) {
-        this.reactiveForm.controls[control].markAsTouched();
-      }
-      return;
-    }
-    this.saveEvent(form);
-  }
-
-  saveEvent(f: FormGroupDirective) {
-    let formContent = f.value
-
-    const navigationExtras: NavigationExtras = {
-      state: {
-        startDate: formContent.researchStartDate,
-        endDate: formContent.researchEndDate
-      }
-    };
-
-    localStorage.removeItem("event")
-    localStorage.setItem("event", JSON.stringify(this.reactiveForm.value))
-    this.router.navigate(['/availability'], navigationExtras)
-  }
-
-  goBack() {
-    if (this.isEdit) {
-      this.router.navigate(['/event/', this.event.id])
-    } else {
-      localStorage.removeItem("event")
-      this.router.navigate(['/appointments'])
-    }
   }
 
 }

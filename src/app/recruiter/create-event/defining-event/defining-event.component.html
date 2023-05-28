@@ -11,7 +11,7 @@
     <p id="nameHelper" class="form-text">np. Szybkie spotkanie</p>
   </div>
   <div class="mb-3 form-outline">
-          <textarea type="text" [(ngModel)]="textareaValue" [ngClass]="{'active': textareaValue}" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
+          <textarea type="text" [(ngModel)]="textAreaValue" [ngClass]="{'active': textAreaValue}" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
                     aria-labelledby="descriptionError" maxlength="151" class="form-control"
                     [class.is-invalid]="description.invalid && (description.dirty || description.touched)"></textarea>
     <label for="description" class="form-label">Opis spotkania</label>
@@ -23,7 +23,7 @@
   <div class="row">
     <div class="col-12 col-sm-6">
       <div class="mb-3 form-outline">
-        <input type="time" id="surveyDuration" list="" name="surveyDuration" formControlName="surveyDuration"
+        <input type="time" id="surveyDuration" name="surveyDuration" formControlName="surveyDuration"
                aria-describedby="surveyDurationHelper" aria-labelledby="surveyDurationError surveyDurationError2"
                required class="form-control"
                [class.is-invalid]="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)">
@@ -71,7 +71,7 @@
     </div>
     <div class="col-12 col-sm-6">
       <div class="mb-3 form-outline">
-        <input type="number" id="maxUsers" list="" name="maxUsers" formControlName="maxUsers"
+        <input type="number" id="maxUsers" name="maxUsers" formControlName="maxUsers"
                aria-describedby="maxUsersHelper" aria-labelledby="maxUsersError maxUsersError2 maxUsersError3"
                required class="form-control"
                [class.is-invalid]="maxUsers.invalid && (maxUsers.dirty || maxUsers.touched)">

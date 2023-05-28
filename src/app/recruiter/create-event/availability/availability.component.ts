@@ -5,27 +5,27 @@ import {Router} from "@angular/router";
 import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {HoursAddComponent} from "./hours-add/hours-add.component";
 import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {EventDto} from "../../../common/mainpage/EventDto";
 
 @Component({
   selector: 'app-availability',
   templateUrl: './availability.component.html',
-  styleUrls: ['./availability.component.scss'],
-  providers: [EventService]
+  styleUrls: ['./availability.component.scss']
 })
 export class AvailabilityComponent {
   @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
 
   availabilityList: Availability[] = [];
+  event!: EventDto;
   plus = faPlus;
   trash = faTrash;
 
   constructor(private eventService: EventService, private modalService: NgbModal, private router: Router) {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as {
-      startDate: string,
-      endDate: string
-    }
-    this.getDates(new Date(state.startDate), new Date(state.endDate))
+  }
+
+  ngOnInit() {
+    this.event = this.eventService.getTemporaryEvent()
+    this.getDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate))
   }
 
   private getDates(startDate: Date, endDate: Date) {
@@ -39,19 +39,8 @@ export class AvailabilityComponent {
     }
   }
 
-  private convertTimeToMinutes(time: string): number {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-  }
-
-  private saveEvent() {
-    let newEvent;
-    if(localStorage.getItem("event")) {
-      // @ts-ignore
-      newEvent = JSON.parse(localStorage.getItem("event"))
-      newEvent.surveyDuration = this.convertTimeToMinutes(newEvent.surveyDuration)
-    }
-    this.eventService.createEvent(newEvent).subscribe(
+  submit() {
+    this.eventService.createEvent(this.event).subscribe(
       response => {
         console.log("Succesfully added: " + JSON.stringify(response));
 
@@ -69,7 +58,7 @@ export class AvailabilityComponent {
         this.eventService.saveAvailabilityList(availabilityDtoList, response.id).subscribe(
           response => {
             console.log("Successfully added: " + JSON.stringify(response))
-            localStorage.removeItem("event")
+            this.eventService.clearTemporaryEvent()
             this.router.navigate(['/appointments'])
           }, exception => {
             console.log(exception.error.errorsMap)
@@ -89,10 +78,6 @@ export class AvailabilityComponent {
     temp.setHours(hours)
     temp.setMinutes(minutes)
     return temp
-  }
-
-  submitForm() {
-    this.saveEvent();
   }
 
   private addOneDay(currentDate: Date) {

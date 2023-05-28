@@ -6,8 +6,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-your-appointments',
   templateUrl: './your-appointments.component.html',
-  styleUrls: ['./your-appointments.component.scss'],
-  providers: [EventService]
+  styleUrls: ['./your-appointments.component.scss']
 })
 export class YourAppointmentsComponent {
 
@@ -17,11 +16,11 @@ export class YourAppointmentsComponent {
   constructor(private eventService: EventService, private router: Router) {}
 
   goToCreate() {
-    localStorage.removeItem("event")
+    this.eventService.clearTemporaryEvent()
+    this.router.navigate(['/create'])
   }
 
   goToRead(event: EventDto) {
-    localStorage.setItem("event", JSON.stringify(event))
     this.router.navigate(['/event/', event.id])
   }
 
