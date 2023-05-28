@@ -1,14 +1,14 @@
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
     <h1 class="h2 mb-0">Twoje spotkania</h1>
-    <a routerLink="../create" class="col-auto btn btn-primary" (click)="goToCreate()">Dodaj spotkanie</a>
+    <a class="col-auto btn btn-primary" (click)="goToCreate()">Dodaj spotkanie</a>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
   <div class="row justify-content-center">
     <section class="col-12 col-md-8 col-lg-6" *ngIf="!isFetching && !events[0]">
       <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplananowaych spotkań</p>
-      <a routerLink="../create" class="col-12 col-md-4 btn btn-outline-primary offset-md-4">Dodaj spotkanie</a>
+      <a class="col-12 col-md-4 btn btn-outline-primary offset-md-4" (click)="goToCreate()">Dodaj spotkanie</a>
     </section>
     <section class="col-12" *ngIf="events[0]">
       <ul class="list-group">
@@ -26,7 +26,7 @@
         </li>
         <li class="list-group-item"
             *ngFor="let event of events">
-          <a class="list-group-link"(click)="goToRead(event)">
+          <a class="list-group-link" (click)="goToRead(event)">
             <div class="d-flex justify-content-between w-100">
               <div class="w-50">
                 <span class="mb-0">{{ event.name }}</span>

@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {EventDto} from "../../../common/mainpage/EventDto";
-import {EventUtils} from "../../../common/mainpage/EventUtils";
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
 import {EventService} from "../../../event.service";
 import * as _ from "lodash";
+import {AvailabilityService} from "../../../availability.service";
 
 @Component({
   selector: 'app-event',
@@ -14,16 +14,25 @@ import * as _ from "lodash";
 export class EventComponent {
   availabilityList: Availability[] = [];
   event!: EventDto;
+  eventId: number = -1
   surveyDurationHHMM = "00:00";
 
-  constructor(private eventService: EventService, public router: Router) {
-    if(localStorage.getItem("event")) {
-      // @ts-ignore
-      this.event = JSON.parse(localStorage.getItem("event"))
-      this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
-    }
+  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
+              public router: Router, private route: ActivatedRoute) {
+  }
 
-    this.eventService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.eventId = params['id'];
+    });
+
+    this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
+      console.log(eventDto)
+      this.event = eventDto
+    })
+
+    this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
+      console.log(availabilityDtoList)
       this.availabilityList = [];
       let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
       Object.keys(grouped).map((key) => {
