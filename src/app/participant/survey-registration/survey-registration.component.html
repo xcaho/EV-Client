@@ -1,6 +1,6 @@
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
-    <h1 class="h2 mb-0">Spotkanie dot. makiety Facebook 3.0</h1>
+    <h1 class="h2 mb-0">{{events[this.eventId].name}}</h1>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
@@ -11,32 +11,33 @@
         <div class="col-12 col-sm-6">
           <div class="bg-white px-3 py-2">
             <dt>Długość spotkania:</dt>
-            <dd>1 godz. 30 min.</dd>
+            <dd>{{events[this.eventId].surveyDuration}} minut</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="bg-white px-3 py-2">
             <dt>Data zakończenia zapisów:</dt>
-            <dd><time>21.03.2023</time></dd>
+            <dd><time>{{events[this.eventId].endDate}}</time></dd>
           </div>
         </div>
       </dl>
       <div class="row">
         <p class="mb-1">W tych terminach możesz się umówić na badanie</p>
         <ul class="ms-3">
-          <li>piątek, 12 maja 2023 09:00 - 14:30; 16:00-17:30</li>
-          <li>poniedziałek, 15 maja 2023 09:00 - 14:30</li>
+          <ng-container *ngFor="let availability of availabilityList">
+            <li>{{availability.dayOfWeek}}, {{availability.dateFormatted}}: {{availability.hoursList}}</li>
+          </ng-container>
         </ul>
       </div>
-      <form class="row mt-1" [formGroup]="surveyRegistrationForm">
+      <form class="row mt-1" [formGroup]="registrationForm">
         <div class="col-12 col-md-6">
           <div class="form-outline mb-3">
             <select class="form-select" id="dayChoice" required formControlName="dayChoice"
+                    [(ngModel)]="selectedDay"
                     aria-describedby="dayChoiceHelper" aria-labelledby="dayChoiceError"
-                    [class.is-invalid]="dayChoice !== null && (dayChoice.invalid && (dayChoice.dirty || dayChoice.touched))">
-              <option value="15">11.03.2023 - środa</option>
-              <option value="30">12.03.2023 - czwartek</option>
-              <option value="45">13.03.2023 - piątek</option>
+                    [class.is-invalid]="dayChoice !== null && (dayChoice.invalid && (dayChoice.dirty || dayChoice.touched))"
+                    (change)="filterHoursList()">
+              <option *ngFor="let availability of availabilityList" [value]="availability.date.toDateString()">{{availability.dateFormatted}} - {{availability.dayOfWeek}}</option>
             </select>
             <label for="dayChoice" class="form-label">Dzień spotkania</label>
             <div *ngIf="dayChoice !== null && dayChoice.invalid && (dayChoice.dirty || dayChoice.touched)" class="invalid-feedback">
@@ -49,23 +50,27 @@
           <div class="form-outline mb-3">
             <select class="form-select" id="hourChoice" required formControlName="hourChoice"
                     aria-describedby="hourChoiceHelper" aria-labelledby="hourChoiceError"
-                    [class.is-invalid]="hourChoice !== null && hourChoice.invalid && (hourChoice.dirty || hourChoice.touched)">
-              <option value="15">11:00</option>
-              <option value="15">11:30</option>
-              <option value="15">12:00</option>
-              <option value="15">13:00</option>
+                    [class.is-invalid]="hourChoice !== null && hourChoice.invalid && (hourChoice.dirty || hourChoice.touched)"
+                    [(ngModel)]="selectedHour">
+                <ng-container *ngIf="filteredHoursList.length > 0">
+                  <option *ngFor="let hours of filteredHoursList" [value]="hours">{{hours}}</option>
+                </ng-container>
+                <ng-container *ngIf="filteredHoursList.length == 0">
+                  <option [value]="-1">-</option>
+                </ng-container>
             </select>
             <label for="hourChoice" class="form-label">Godzina spotkania</label>
             <div *ngIf="hourChoice !== null && hourChoice.invalid && (hourChoice.dirty || hourChoice.touched)" class="invalid-feedback">
               <p *ngIf="hourChoice.errors?.['required']" id="hourChoiceError" class="mb-0">Wybierz godzinę spotkania</p>
+              <p *ngIf="hourChoice.errors?.['min']" id="hourChoiceError2" class="mb-0">Wybierz dzień spotkania</p>
             </div>
             <p id="hourChoiceHelper" class="form-text">Wybierz odpowiadającą Ci godzinę</p>
           </div>
         </div>
         <div class="col-12">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox" id="consents" formControlName="consents">
+            <label class="form-check-label" for="consents">
               Wyrażam zgodę na przetwarzanie moim danych osobowych przez Sieć Badawczą Łukasiewicz - Poznański Instytut Technologiczny w celu udzielenia odpowiedzi na pytanie zadane przez formularz kontaktowy zgodnie z wymogami RODO. Oświadczam, że zapoznałem się i akceptuję informacje o ochronie danych osobowych oraz politykę prywatności.
             </label>
           </div>

@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {EventDto} from "../../common/mainpage/EventDto";
+import {EventService} from "../../event.service";
+import {ActivatedRoute} from "@angular/router";
+import {Availability, AvailabilityDto, AvailabilityHours} from "../../common/mainpage/Availability";
+import * as _ from "lodash";
+import {AvailabilityService} from "../../availability.service";
 
-export interface Event {
+export interface Registration {
   dayChoice: FormControl<string | null>;
   hourChoice: FormControl<string | null>;
+  consents: FormControl<number | null>
 }
 
 @Component({
@@ -13,30 +20,113 @@ export interface Event {
 })
 
 export class SurveyRegistrationComponent {
-  surveyRegistrationForm: FormGroup;
-  event: Event = {
-    dayChoice: new FormControl(''),
-    hourChoice: new FormControl('')
-  };
+  events: EventDto[] = [];
+  availabilityList: Availability[] = [];
+  isFetching: boolean = false;
+  eventId: number = 0;
+  registrationForm: FormGroup;
+  selectedDay: string | null = null;
+  selectedHour: string | null = null;
+  filteredHoursList: any[] = [];
 
-  constructor() {
-    this.surveyRegistrationForm = new FormGroup({
-      dayChoice: this.event.dayChoice,
-      hourChoice: this.event.hourChoice
+  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
+              private route: ActivatedRoute) {
+
+    this.registrationForm = new FormGroup({
+      dayChoice: new FormControl(''),
+      hourChoice: new FormControl(''),
+      consents: new FormControl()
     })
-  }
 
-  get dayChoice() {
-    return this.surveyRegistrationForm.get('dayChoice');
-  }
-
-  get hourChoice() {
-    return this.surveyRegistrationForm.get('hourChoice');
+    this.route.params.subscribe(params => {
+      this.eventId = params['id'] - 1;
+    });
   }
 
   ngOnInit(): void {
-    this.surveyRegistrationForm.get('dayChoice')?.setValidators([Validators.required]);
-    this.surveyRegistrationForm.get('hourChoice')?.setValidators([Validators.required]);
+    this.fetchEvents();
+    this.setFormValidators();
+    this.fetchAvailabilityList();
+  }
+
+  private fetchEvents(): void {
+    this.isFetching = true;
+    this.eventService.getEvents().subscribe((events) => {
+      this.events = events;
+      this.isFetching = false;
+    });
+  }
+
+  private setFormValidators(): void {
+    const dayChoiceControl = this.registrationForm.get('dayChoice');
+    const hourChoiceControl = this.registrationForm.get('hourChoice');
+    const consentsControl = this.registrationForm.get('consents');
+
+    dayChoiceControl?.setValidators([Validators.required]);
+    hourChoiceControl?.setValidators([Validators.required, Validators.min(1)]);
+    consentsControl?.setValidators([Validators.required]);
+  }
+
+  private fetchAvailabilityList(): void {
+    this.availabilityService.getAvailabilityList(this.eventId + 1).subscribe((availabilityDtoList) => {
+      this.availabilityList = [];
+      let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
+      Object.keys(grouped).map((key) => {
+
+        let groupItems: AvailabilityDto[] = grouped[key]
+        let availabilityHoursList: AvailabilityHours[] = []
+        groupItems.forEach(x => {
+
+          availabilityHoursList.push(x.getHours())
+        })
+
+        let availability: Availability = new Availability(new Date(key), availabilityHoursList)
+        this.availabilityList.push(availability)
+      })
+    });
+  }
+
+  filterHoursList(): void {
+    const selectedDayIndex = this.availabilityList.findIndex(availability =>
+      availability.date.toDateString() === this.selectedDay
+    );
+
+    this.filteredHoursList = [];
+
+    if (selectedDayIndex !== -1) {
+      this.availabilityList[selectedDayIndex].hoursList.forEach((hourItem) => {
+        const {startHour, endHour} = hourItem;
+        const [startHourValue, startMinuteValue] = startHour.split(':').map(part => parseInt(part, 10));
+        const [endHourValue, endMinuteValue] = endHour.split(':').map(part => parseInt(part, 10));
+
+        const startDate = new Date();
+        startDate.setHours(startHourValue, startMinuteValue);
+
+        const endDate = new Date();
+        endDate.setHours(endHourValue, endMinuteValue);
+
+        while (startDate <= endDate) {
+          const currentHour = startDate.getHours();
+          const currentMinute = startDate.getMinutes();
+          const formattedHour = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+
+          this.filteredHoursList.push(formattedHour);
+          startDate.setMinutes(startDate.getMinutes() + 30);
+        }
+      });
+    }
+  }
+
+  get dayChoice() {
+    return this.registrationForm.get('dayChoice');
+  }
+
+  get hourChoice() {
+    return this.registrationForm.get('hourChoice');
+  }
+
+  get consents() {
+    return this.registrationForm.get('consents');
   }
 
 }

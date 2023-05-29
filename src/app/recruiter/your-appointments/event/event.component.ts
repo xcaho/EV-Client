@@ -27,12 +27,13 @@ export class EventComponent {
     });
 
     this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
-      console.log(eventDto)
-      this.event = eventDto
+      console.log(eventDto);
+      this.event = eventDto;
     })
 
     this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
       console.log(availabilityDtoList)
+      console.log(availabilityDtoList[0].endDate.getDate())
       this.availabilityList = [];
       let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
       Object.keys(grouped).map((key) => {
