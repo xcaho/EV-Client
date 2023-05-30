@@ -3,7 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {EventDto} from "./common/mainpage/EventDto";
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
-import {Availability, AvailabilityDto} from "./common/mainpage/Availability";
+import {Availability, AvailabilityDto, AvailabilityHours} from "./common/mainpage/Availability";
+import * as _ from "lodash";
 
 @Injectable({
   providedIn: 'root',
@@ -112,5 +113,23 @@ export class AvailabilityService {
     const time2 = new Date(`2000-01-01T${hour2}`);
 
     return Math.abs(time2.getTime() - time1.getTime()) / (1000 * 60);
+  }
+
+  public mapFromDto(availabilityDtoList: AvailabilityDto[]): Availability[] {
+    let availabilityList: Availability[] = [];
+    let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
+    Object.keys(grouped).map((key) => {
+
+      let groupItems: AvailabilityDto[] = grouped[key]
+      let availabilityHoursList: AvailabilityHours[] = []
+      groupItems.forEach(x => {
+
+        availabilityHoursList.push(x.getHours())
+      })
+
+      let availability: Availability = new Availability(new Date(key), availabilityHoursList)
+      availabilityList.push(availability)
+    })
+    return availabilityList
   }
 }

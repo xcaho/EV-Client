@@ -2,10 +2,12 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EventDto} from "../../common/mainpage/EventDto";
 import {EventService} from "../../event.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Availability, AvailabilityDto, AvailabilityHours} from "../../common/mainpage/Availability";
 import * as _ from "lodash";
 import {AvailabilityService} from "../../availability.service";
+import {SurveyService} from "../../survey.service";
+import {SurveyDto} from "../../common/mainpage/SurveyDto";
 
 export interface Registration {
   dayChoice: FormControl<string | null>;
@@ -20,17 +22,22 @@ export interface Registration {
 })
 
 export class SurveyRegistrationComponent {
-  events: EventDto[] = [];
+
+  survey!: SurveyDto;
+  event!: EventDto;
   availabilityList: Availability[] = [];
   isFetching: boolean = false;
-  eventId: number = 0;
+  surveyCode!: string;
   registrationForm: FormGroup;
   selectedDay: string | null = null;
   selectedHour: string | null = null;
   filteredHoursList: any[] = [];
 
-  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
-              private route: ActivatedRoute) {
+  constructor(private eventService: EventService,
+              private availabilityService: AvailabilityService,
+              private surveyService: SurveyService,
+              private route: ActivatedRoute,
+              private router: Router) {
 
     this.registrationForm = new FormGroup({
       dayChoice: new FormControl(''),
@@ -39,20 +46,35 @@ export class SurveyRegistrationComponent {
     })
 
     this.route.params.subscribe(params => {
-      this.eventId = params['id'] - 1;
+      this.surveyCode = params['code'];
     });
   }
 
   ngOnInit(): void {
-    this.fetchEvents();
+
+    this.fetchSurvey()
+    if (this.survey.date == null) {
+      this.router.navigate(['invalid-code/:code'])
+    }
+
+    this.fetchEvent(this.survey.eventId);
     this.setFormValidators();
     this.fetchAvailabilityList();
   }
 
-  private fetchEvents(): void {
+  private fetchSurvey() {
+    this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
+      this.survey = surveyDto
+    }, (error) => {
+      console.log(error)
+      this.router.navigate(['invalid-code/:code'])
+    })
+  }
+
+  private fetchEvent(eventId: number): void {
     this.isFetching = true;
-    this.eventService.getEvents().subscribe((events) => {
-      this.events = events;
+    this.eventService.getEvent(eventId).subscribe((event) => {
+      this.event = event;
       this.isFetching = false;
     });
   }
@@ -68,21 +90,8 @@ export class SurveyRegistrationComponent {
   }
 
   private fetchAvailabilityList(): void {
-    this.availabilityService.getAvailabilityList(this.eventId + 1).subscribe((availabilityDtoList) => {
-      this.availabilityList = [];
-      let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
-      Object.keys(grouped).map((key) => {
-
-        let groupItems: AvailabilityDto[] = grouped[key]
-        let availabilityHoursList: AvailabilityHours[] = []
-        groupItems.forEach(x => {
-
-          availabilityHoursList.push(x.getHours())
-        })
-
-        let availability: Availability = new Availability(new Date(key), availabilityHoursList)
-        this.availabilityList.push(availability)
-      })
+    this.availabilityService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
+      this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList)
     });
   }
 

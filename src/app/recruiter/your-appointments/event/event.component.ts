@@ -32,22 +32,7 @@ export class EventComponent {
     })
 
     this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
-      console.log(availabilityDtoList)
-      console.log(availabilityDtoList[0].endDate.getDate())
-      this.availabilityList = [];
-      let grouped = _.groupBy(availabilityDtoList, x => x.startDate.toDateString())
-      Object.keys(grouped).map((key) => {
-
-        let groupItems: AvailabilityDto[] = grouped[key]
-        let availabilityHoursList: AvailabilityHours[] = []
-        groupItems.forEach(x => {
-
-          availabilityHoursList.push(x.getHours())
-        })
-
-        let availability: Availability = new Availability(new Date(key), availabilityHoursList)
-        this.availabilityList.push(availability)
-      })
+      this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
     });
   }
 

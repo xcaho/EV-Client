@@ -25,12 +25,12 @@ const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
   {path: 'availability', component: AvailabilityComponent},
   {path: 'create', component: CreateEventComponent},
-  {path: 'event/:id', component: EventComponent, data: {event: EventDto}},
+  {path: 'event/:id', component: EventComponent},
   {path: 'edit/:id', component: EditEventComponent},
   {path: '', redirectTo: 'appointments', pathMatch: 'full'},
-  {path: 'registration/:id', component: SurveyRegistrationComponent, data: {event: EventDto}},
-  {path: 'confirmation/:id', component: ConfirmationComponent},
-  {path: 'invalid-code/:id', component: InvalidCodeComponent},
+  {path: 'registration/:code', component: SurveyRegistrationComponent},
+  {path: 'confirmation/:code', component: ConfirmationComponent},
+  {path: 'invalid-code/:code', component: InvalidCodeComponent},
 ]
 
 
