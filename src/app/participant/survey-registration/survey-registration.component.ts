@@ -99,11 +99,17 @@ export class SurveyRegistrationComponent {
         const [startHourValue, startMinuteValue] = startHour.split(':').map(part => parseInt(part, 10));
         const [endHourValue, endMinuteValue] = endHour.split(':').map(part => parseInt(part, 10));
 
+        const totalLength = this.events[this.eventId].surveyDuration + this.events[this.eventId].surveyBreakTime;
+        const totalLengthDate = new Date();
+        totalLengthDate.setHours(Math.floor(totalLength / 60), totalLength % 60);
+
         const startDate = new Date();
         startDate.setHours(startHourValue, startMinuteValue);
 
         const endDate = new Date();
-        endDate.setHours(endHourValue, endMinuteValue);
+        const totalChoiceMinutes = endMinuteValue + endHourValue * 60;
+        const minutesDif = totalChoiceMinutes - totalLength;
+        endDate.setHours(Math.floor(minutesDif / 60), minutesDif % 60);
 
         while (startDate <= endDate) {
           const currentHour = startDate.getHours();
@@ -117,31 +123,11 @@ export class SurveyRegistrationComponent {
     }
   }
 
-  updateAvailableHours(hoursList: string[], hoursChoice: String ) {
-    const totalLength = this.events[this.eventId].surveyDuration + this.events[this.eventId].surveyBreakTime;
-    const totalLengthDate = new Date();
-    totalLengthDate.setHours(Math.floor(totalLength / 60), totalLength % 60);
-
-    const [choiceHourValue, choiceMinuteValue] = hoursChoice.split(':').map(part => parseInt(part, 10));
-
-    const lowerBound = new Date();
-    const totalChoiceMinutes = choiceMinuteValue + choiceHourValue * 60;
-    const minutesDif = totalChoiceMinutes - totalLength;
-    lowerBound.setHours(Math.floor(minutesDif / 60), minutesDif % 60)
-
-    const upperBound = new Date();
-    const totalSumMinutes = choiceMinuteValue + totalLengthDate.getMinutes()
-    upperBound.setHours(choiceHourValue + totalLengthDate.getHours() + Math.floor(totalSumMinutes/60) , totalSumMinutes % 60)
-
-    const updatedHoursList = hoursList.filter(hour => {
-      const [hourValue, minuteValue] = hour.split(':').map(part => parseInt(part, 10));
-      const currentTime = new Date();
-      currentTime.setHours(hourValue, minuteValue);
-      return currentTime <= lowerBound || currentTime >= upperBound;
-    });
-
-    return updatedHoursList;
-  }
+  //save() {
+  //  // @ts-ignore
+  //  const updatedHoursList = this.availabilityService.updateAvailableHours(this.filteredHoursList, this.hourChoice.value, this.events, this.eventId);
+  //  console.log(updatedHoursList);
+  //}
 
   get dayChoice() {
     return this.registrationForm.get('dayChoice');
