@@ -5,6 +5,7 @@ import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/
 import {EventService} from "../../../event.service";
 import * as _ from "lodash";
 import {AvailabilityService} from "../../../availability.service";
+import {EventUtils} from "../../../common/mainpage/EventUtils";
 
 @Component({
   selector: 'app-event',
@@ -29,6 +30,7 @@ export class EventComponent {
     this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
       console.log(eventDto);
       this.event = eventDto;
+      this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
     })
 
     this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
