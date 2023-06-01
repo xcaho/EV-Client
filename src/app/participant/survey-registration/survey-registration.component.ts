@@ -33,6 +33,7 @@ export class SurveyRegistrationComponent {
   selectedDay: string = "2077-01-01";
   selectedHour: string = "00:00";
   filteredHoursList: any[] = [];
+  updatedAvailabilityList: any[] = [];
 
   formEventName: string = "";
 
@@ -106,8 +107,9 @@ export class SurveyRegistrationComponent {
   }
 
   save() {
+    console.log(this.updatedAvailabilityList)
    // @ts-ignore
-    const updatedHoursList = this.availabilityService.updateAvailableHours(this.filteredHoursList, this.hourChoice.value,
+    const updatedHoursList = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList, this.hourChoice.value,
       this.event);
 
     let date: Date = new Date(this.selectedDay)
@@ -115,7 +117,6 @@ export class SurveyRegistrationComponent {
     date.setHours(hours, minutes)
     this.survey.date = date
 
-    console.log(date)
     this.surveyService.save(this.survey).subscribe((survey) => {
       console.log(survey)
       this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
@@ -130,6 +131,7 @@ export class SurveyRegistrationComponent {
     );
 
     this.filteredHoursList = [];
+    this.updatedAvailabilityList = [];
 
     if (selectedDayIndex !== -1) {
       this.availabilityList[selectedDayIndex].hoursList.forEach((hourItem) => {
@@ -143,18 +145,31 @@ export class SurveyRegistrationComponent {
 
         const startDate = new Date();
         startDate.setHours(startHourValue, startMinuteValue);
-
         const endDate = new Date();
+        endDate.setHours(endHourValue, endMinuteValue);
+
+        const updatedStartDate = new Date();
+        updatedStartDate.setHours(startHourValue, startMinuteValue);
+        const updatedEndDate = new Date();
         const totalChoiceMinutes = endMinuteValue + endHourValue * 60;
         const minutesDif = totalChoiceMinutes - totalLength;
-        endDate.setHours(Math.floor(minutesDif / 60), minutesDif % 60);
+        updatedEndDate.setHours(Math.floor(minutesDif / 60), minutesDif % 60);
+
+        while (updatedStartDate <= updatedEndDate) {
+          const currentHour = updatedStartDate.getHours();
+          const currentMinute = updatedStartDate.getMinutes();
+          const formattedHour = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+
+          this.filteredHoursList.push(formattedHour);
+          updatedStartDate.setMinutes(updatedStartDate.getMinutes() + 30);
+        }
 
         while (startDate <= endDate) {
           const currentHour = startDate.getHours();
           const currentMinute = startDate.getMinutes();
           const formattedHour = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
 
-          this.filteredHoursList.push(formattedHour);
+          this.updatedAvailabilityList.push(formattedHour);
           startDate.setMinutes(startDate.getMinutes() + 30);
         }
       });
