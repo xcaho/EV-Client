@@ -73,7 +73,7 @@ export class SurveyRegistrationComponent {
       this.fetchEvent(this.survey.eventId);
     }, (error) => {
       console.log(error)
-      this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
+      this.router.navigate(['/404'])
     })
   }
 

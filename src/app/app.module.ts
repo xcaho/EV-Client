@@ -15,11 +15,11 @@ import {AvailabilityComponent} from "./recruiter/create-event/availability/avail
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {EventComponent} from './recruiter/your-appointments/event/event.component';
 import {EditEventComponent} from "./recruiter/your-appointments/event/edit-event/edit-event.component";
-import {EventDto} from "./common/mainpage/EventDto";
 import {SurveyRegistrationComponent} from './participant/survey-registration/survey-registration.component';
 import {ConfirmationComponent} from './participant/confirmation/confirmation.component';
 import {MenuService} from "./menu.service";
 import { InvalidCodeComponent } from './participant/invalid-code/invalid-code.component';
+import { ErrorComponent } from './common/error/error.component';
 
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
@@ -31,6 +31,8 @@ const appRoute: Routes = [
   {path: 'register/:code', component: SurveyRegistrationComponent},
   {path: 'register/:code/confirmation', component: ConfirmationComponent},
   {path: 'register/:code/invalid-code', component: InvalidCodeComponent},
+  {path: '404', component: ErrorComponent},
+  {path: '**', redirectTo: '/404'}
 ]
 
 
@@ -46,7 +48,8 @@ const appRoute: Routes = [
     EditEventComponent,
     SurveyRegistrationComponent,
     ConfirmationComponent,
-    InvalidCodeComponent
+    InvalidCodeComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
