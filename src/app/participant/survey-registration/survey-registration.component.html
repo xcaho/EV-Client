@@ -1,6 +1,6 @@
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
-    <h1 class="h2 mb-0">{{event.name}}</h1>
+    <h1 class="h2 mb-0">{{formEventName}}</h1>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
@@ -11,13 +11,13 @@
         <div class="col-12 col-sm-6">
           <div class="bg-white px-3 py-2">
             <dt>Długość spotkania:</dt>
-            <dd>{{event.surveyDuration}} minut</dd>
+            <dd>{{formSurveyDuration}} minut</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="bg-white px-3 py-2">
             <dt>Data zakończenia zapisów:</dt>
-            <dd><time>{{event.endDate}}</time></dd>
+            <dd><time>{{formEventEndDate}}</time></dd>
           </div>
         </div>
       </dl>
@@ -76,7 +76,7 @@
           </div>
         </div>
         <div class="col-auto ms-auto mt-3">
-          <button class="btn btn-primary">Zapisz się</button>
+          <button class="btn btn-primary" (click)="save()">Zapisz się</button>
         </div>
       </form>
     </section>

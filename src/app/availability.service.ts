@@ -54,8 +54,8 @@ export class AvailabilityService {
     this.temporaryAvailabilities = undefined
   }
 
-  updateAvailableHours(hoursList: string[], hoursChoice: String, events: EventDto[], eventId: number ) {
-    const totalLength = events[eventId].surveyDuration + events[eventId].surveyBreakTime;
+  updateAvailableHours(hoursList: string[], hoursChoice: String, event: EventDto ) {
+    const totalLength = event.surveyDuration + event.surveyBreakTime;
     const totalLengthDate = new Date();
     totalLengthDate.setHours(Math.floor(totalLength / 60), totalLength % 60);
 
