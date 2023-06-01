@@ -70,7 +70,7 @@ export class AvailabilityComponent {
 
   private saveAvailability(eventId: number) {
 
-    let availabilityDtoList: AvailabilityDto[] = this.convertAvailabilityToDto()
+    let availabilityDtoList: AvailabilityDto[] = this.availabilityService.convertAvailabilityToDto(this.availabilityList)
     this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
       response => {
 
@@ -83,29 +83,6 @@ export class AvailabilityComponent {
         console.log(exception.error.errorsMap)
       }
     )
-  }
-
-  private convertAvailabilityToDto() {
-
-    let availabilityDtoList: AvailabilityDto[] = []
-    this.availabilityList.forEach((availability) => {
-      const day: Date = new Date(availability.date)
-      availability.hoursList.forEach((hours) => {
-        const startTimeFullDate: Date = this.prepareFullDate(hours.startHour, day);
-        const endTimeFullDate: Date = this.prepareFullDate(hours.endHour, day);
-
-        availabilityDtoList.push(new AvailabilityDto(startTimeFullDate, endTimeFullDate))
-      })
-    })
-    return availabilityDtoList
-  }
-
-  private prepareFullDate(hour: string, day: Date) {
-    let temp = new Date(day)
-    const [hours, minutes] = hour.split(':').map(Number);
-    temp.setHours(hours)
-    temp.setMinutes(minutes)
-    return temp
   }
 
   private addOneDay(currentDate: Date) {

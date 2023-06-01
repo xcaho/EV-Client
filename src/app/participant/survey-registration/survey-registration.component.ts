@@ -109,8 +109,8 @@ export class SurveyRegistrationComponent {
   save() {
     console.log(this.updatedAvailabilityList)
    // @ts-ignore
-    const updatedHoursList = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList, this.hourChoice.value,
-      this.event);
+    const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
+      this.selectedHour, this.selectedDay, this.availabilityList, this.event);
 
     let date: Date = new Date(this.selectedDay)
     const [hours, minutes] = this.selectedHour.split(':').map(Number);
@@ -120,9 +120,19 @@ export class SurveyRegistrationComponent {
     this.surveyService.save(this.survey).subscribe((survey) => {
       console.log(survey)
       this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
+
+      this.availabilityService.patchAvailabilityList(this.availabilityService.convertAvailabilityToDto(
+        updatedAvailabilites), this.event.id).subscribe(
+        (response) => {
+          console.log(response)
+        }, (exception) => {
+          console.log(exception)
+        }
+      )
+
       this.router.navigate(['register/' + this.surveyCode + '/confirmation'])
     })
-   console.log(updatedHoursList);
+   console.log(updatedAvailabilites);
   }
 
   filterHoursList(): void {

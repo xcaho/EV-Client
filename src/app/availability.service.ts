@@ -28,6 +28,18 @@ export class AvailabilityService {
       )
   }
 
+  patchAvailabilityList(availability: AvailabilityDto[], eventId: number) {
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.patch<EventDto>('http://localhost:8080/events/' + eventId + '/availabilities', availability, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
   getAvailabilityList(eventId: number): Observable<AvailabilityDto[]> {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
@@ -54,12 +66,36 @@ export class AvailabilityService {
     this.temporaryAvailabilities = undefined
   }
 
-  updateAvailableHours(hoursList: string[], hoursChoice: String, event: EventDto ) {
+  convertAvailabilityToDto(availabilityList: Availability[]): AvailabilityDto[] {
+
+    let availabilityDtoList: AvailabilityDto[] = []
+    availabilityList.forEach((availability) => {
+      const day: Date = new Date(availability.date)
+      availability.hoursList.forEach((hours) => {
+        const startTimeFullDate: Date = this.prepareFullDate(hours.startHour, day);
+        const endTimeFullDate: Date = this.prepareFullDate(hours.endHour, day);
+
+        availabilityDtoList.push(new AvailabilityDto(startTimeFullDate, endTimeFullDate))
+      })
+    })
+    return availabilityDtoList
+  }
+
+  private prepareFullDate(hour: string, day: Date) {
+    let temp = new Date(day)
+    const [hours, minutes] = hour.split(':').map(Number);
+    temp.setHours(hours)
+    temp.setMinutes(minutes)
+    return temp
+  }
+
+  updateAvailableHours(hoursList: string[], selectedHour: string, selectedDay: string, availabilities: Availability[],
+                       event: EventDto): Availability[] {
     const totalLength = event.surveyDuration + event.surveyBreakTime;
     const totalLengthDate = new Date();
     totalLengthDate.setHours(Math.floor(totalLength / 60), totalLength % 60);
 
-    const [choiceHourValue, choiceMinuteValue] = hoursChoice.split(':').map(part => parseInt(part, 10));
+    const [choiceHourValue, choiceMinuteValue] = selectedHour.split(':').map(part => parseInt(part, 10));
 
     const lowerBound = new Date();
     const totalChoiceMinutes = choiceMinuteValue + choiceHourValue * 60;
@@ -68,7 +104,8 @@ export class AvailabilityService {
 
     const upperBound = new Date();
     const totalSumMinutes = choiceMinuteValue + totalLengthDate.getMinutes()
-    upperBound.setHours(choiceHourValue + totalLengthDate.getHours() + Math.floor(totalSumMinutes/60) , totalSumMinutes % 60)
+    upperBound.setHours(choiceHourValue + totalLengthDate.getHours() + Math.floor(totalSumMinutes/60) ,
+      totalSumMinutes % 60)
 
     const updatedHoursList = hoursList.filter(hour => {
       const [hourValue, minuteValue] = hour.split(':').map(part => parseInt(part, 10));
@@ -105,7 +142,21 @@ export class AvailabilityService {
       ranges.push(startHour);
     }
 
-    return ranges;
+    let indexToSwap = 0;
+    let newAvailabilityHours: AvailabilityHours[] = []
+    let dayToExclude: Date = new Date(selectedDay)
+    availabilities.forEach(availability => {
+      if (availability.date.toDateString() == dayToExclude.toDateString()) {
+        ranges.forEach(range => {
+          const [startHour, endHour] = range.split('-');
+          newAvailabilityHours.push(new AvailabilityHours(startHour, endHour))
+        })
+        indexToSwap = availabilities.indexOf(availability)
+      }
+    })
+    availabilities[indexToSwap] = new Availability(dayToExclude, newAvailabilityHours)
+
+    return availabilities;
   }
 
   getHourDiff(hour1: string, hour2: string): number {
