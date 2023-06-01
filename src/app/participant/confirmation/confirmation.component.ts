@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {ConfirmationDto} from "../../common/mainpage/ConfirmationDto";
+import {SurveyService} from "../../survey.service";
 
 @Component({
   selector: 'app-confirmation',
@@ -7,4 +9,17 @@ import { Component } from '@angular/core';
 })
 export class ConfirmationComponent {
 
+  confirmation!: ConfirmationDto
+
+  formEventName: string = ""
+  formEventDate: string = ""
+
+  constructor(private surveyService: SurveyService) {
+  }
+
+  ngOnInit() {
+    this.confirmation = this.surveyService.getTemporaryConfirmation()
+    this.formEventName = this.confirmation.eventName
+    this.formEventDate = this.confirmation.dateFormatted
+  }
 }
