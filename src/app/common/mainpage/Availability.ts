@@ -19,8 +19,16 @@ export class AvailabilityDto {
   public endDate: Date
 
   constructor(startDate: Date, endDate: Date) {
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.startDate = new Date(startDate);
+    this.endDate = new Date(endDate);
+  }
+
+  getHours() : AvailabilityHours {
+    return new AvailabilityHours(this.convertDate(this.startDate), this.convertDate(this.endDate))
+  }
+
+  private convertDate(date: Date) {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   }
 }
 

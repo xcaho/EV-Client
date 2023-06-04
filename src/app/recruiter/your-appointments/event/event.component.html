@@ -1,55 +1,55 @@
 <div class="h64 flex-center border-bottom border-secondary mb-4">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
-    <h1 class="h2 mb-0">{{events[eventId - 1].name}}</h1>
-    <a [routerLink]="['/edit', eventId-1]" class="col-auto btn btn-primary">Edytuj spotkanie</a>
+    <h1 class="h2 mb-0">{{event.name}}</h1>
+    <a class="col-auto btn btn-primary" (click)="goToEdit()">Edytuj wydarzenie</a>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
   <section class="row justify-content-center">
     <section class="col-12">
-      <h2 class="h5 mb-3">Szczegóły dotyczące spotkania "{{events[eventId - 1].name}}"</h2>
+      <h2 class="h5 mb-3">Szczegóły dotyczące wydarzenia "{{event.name}}"</h2>
       <dl class="row gap">
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
             <dt>Opis:</dt>
-            <dd *ngIf="events[eventId-1].description !== null">{{events[eventId - 1].description}} 11</dd>
-            <dd *ngIf="events[eventId-1].description === null">–</dd>
+            <dd *ngIf="event.description !== ''">{{event.description}}</dd>
+            <dd *ngIf="event.description === ''" title="Brak opisu spotkania">–<span class="d-none">Brak opisu spotkania</span></dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
             <dt>Długość spotkania:</dt>
-            <dd>{{events[eventId - 1].surveyDuration}}</dd>
+            <dd>{{this.surveyDurationHHMM}}</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
             <dt>Zajętość slotów:</dt>
-            <dd>{{events[eventId - 1].slotsTaken}}/{{events[eventId - 1].maxUsers}}</dd>
+            <dd>{{event.slotsTaken}}/{{event.maxUsers}}</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
             <dt>Długość przerwy:</dt>
-            <dd>{{events[eventId - 1].surveyBreakTime}} minut</dd>
+            <dd>{{event.surveyBreakTime}} minut</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
-            <dt>Początkowa data okresu zapisów:</dt>
-            <dd>{{events[eventId - 1].researchStartDate}}</dd>
+            <dt>Data rozpoczęcia badań:</dt>
+            <dd>{{event.researchStartDate}}</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
-            <dt>Końcowa data okresu zapisów:</dt>
-            <dd>{{events[eventId - 1].researchEndDate}}</dd>
+            <dt>Data zakończenia badań:</dt>
+            <dd>{{event.researchEndDate}}</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
             <dt>Data zakończenia zapisów:</dt>
-            <dd>{{events[eventId - 1].endDate}}</dd>
+            <dd>{{event.endDate}}</dd>
           </div>
         </div>
       </dl>
@@ -57,37 +57,14 @@
     <section class="col-12">
       <h2 class="h5 mt-4 mb-3">Dostępność</h2>
       <div class="row calendar">
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList; let i=index">
           <div class="c-card">
             <div class="c-card-header">
-              <p class="mb-0 ps-2">czwartek<br>
-                <span class="smaller">18 maja 2023</span></p>
+              <p class="mb-0 ps-2">{{availability.dayOfWeek}}<br><span class="smaller">{{ availability.dateFormatted }}</span></p>
             </div>
             <div class="c-card-body">
-              <div class="slot">
-                <p class="mb-0 ps-2">13:00 - 14:00</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="c-card">
-            <div class="c-card-header">
-              <div><p class="mb-0 ps-2">ASD</p></div>
-            </div>
-            <div class="c-card-body">
-              <div class="slot">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="c-card">
-            <div class="c-card-header">
-              <div><p class="mb-0 ps-2">ASD</p></div>
-            </div>
-            <div class="c-card-body">
-              <div class="slot">
+              <div class="slot" *ngFor="let hours of availability.hoursList">
+                <p class="mb-0 ps-2">{{hours.toString()}}</p>
               </div>
             </div>
           </div>

@@ -4,32 +4,32 @@
            aria-labelledby="nameError"
            required minlength="1" maxlength="250" class="form-control"
            [class.is-invalid]="name.invalid && (name.dirty || name.touched)">
-    <label for="name" class="form-label">Nazwa spotkania</label>
+    <label for="name" class="form-label">Nazwa wydarzenia</label>
     <div *ngIf="name.invalid && (name.dirty || name.touched)" class="invalid-feedback">
       <p *ngIf="name.errors?.['required']" id="nameError" class="mb-0">Podaj nazwę wydarzenia</p>
     </div>
-    <p id="nameHelper" class="form-text">np. Szybkie spotkanie</p>
+    <p id="nameHelper" class="form-text">np. Szybkie wydarzenie</p>
   </div>
   <div class="mb-3 form-outline">
-          <textarea type="text" [(ngModel)]="textareaValue" [ngClass]="{'active': textareaValue}" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
+          <textarea type="text" [(ngModel)]="textAreaValue" [ngClass]="{'active': textAreaValue}" id="description" name="description" rows="3" formControlName="description" aria-describedby="descriptionHelper"
                     aria-labelledby="descriptionError" maxlength="151" class="form-control"
                     [class.is-invalid]="description.invalid && (description.dirty || description.touched)"></textarea>
-    <label for="description" class="form-label">Opis spotkania</label>
+    <label for="description" class="form-label">Opis wydarzenia</label>
     <div *ngIf="description.invalid && (description.dirty || description.touched)" class="invalid-feedback">
-      <p *ngIf="description.errors?.['maxlength']" id="descriptionError" class="mb-0">Opis spotkania musi być krótszy niż 150 znaków</p>
+      <p *ngIf="description.errors?.['maxlength']" id="descriptionError" class="mb-0">Opis wydarzenia musi być krótszy niż 150 znaków</p>
     </div>
     <p id="descriptionHelper" class="form-text">Krótki opis</p>
   </div>
   <div class="row">
     <div class="col-12 col-sm-6">
       <div class="mb-3 form-outline">
-        <input type="time" id="surveyDuration" list="" name="surveyDuration" formControlName="surveyDuration"
+        <input type="time" id="surveyDuration" name="surveyDuration" formControlName="surveyDuration"
                aria-describedby="surveyDurationHelper" aria-labelledby="surveyDurationError surveyDurationError2"
                required class="form-control"
                [class.is-invalid]="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)">
-        <label for="surveyDuration" class="form-label">Czas trwania</label>
+        <label for="surveyDuration" class="form-label">Czas trwania spotkania</label>
         <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">
-          <p *ngIf="surveyDuration.errors?.['required']" id="surveyDurationError" class="mb-0">Podaj długość spotkania</p>
+          <p *ngIf="surveyDuration.errors?.['required']" id="surveyDurationError" class="mb-0">Podaj długość jednego spotkania</p>
         </div>
         <div *ngIf="surveyDuration.invalid && (surveyDuration.dirty || surveyDuration.touched)" class="invalid-feedback">
           <p *ngIf="surveyDuration.errors?.['invalidTime']" id="surveyDurationError2" class="mb-0">Podaj czas spotkania
@@ -52,7 +52,7 @@
           <p *ngIf="surveyBreakTime.errors?.['required']" id="surveyBreakTimeError" class="mb-0">Podaj przerwę między
             spotkaniami</p>
         </div>
-        <p id="surveyBreakTimeHelper" class="form-text">Podaj przerwę między spotkaniami</p>
+        <p id="surveyBreakTimeHelper" class="form-text">Przerwa między spotkaniami</p>
       </div>
     </div>
     <div class="col-12 col-sm-6">
@@ -61,7 +61,7 @@
                aria-labelledby="endDateError"
                required class="form-control"
                [class.is-invalid]="endDate.invalid && (endDate.dirty || endDate.touched)">
-        <label for="endDate" class="form-label">Data końca zapisów</label>
+        <label for="endDate" class="form-label">Data zakończenia zapisów</label>
         <div *ngIf="endDate.invalid && (endDate.dirty || endDate.touched)" class="invalid-feedback">
           <p *ngIf="endDate.errors?.['required']" id="endDateError" class="mb-0">Podaj datę zakończenia
             zapisów</p>
@@ -71,7 +71,7 @@
     </div>
     <div class="col-12 col-sm-6">
       <div class="mb-3 form-outline">
-        <input type="number" id="maxUsers" list="" name="maxUsers" formControlName="maxUsers"
+        <input type="number" id="maxUsers" name="maxUsers" formControlName="maxUsers"
                aria-describedby="maxUsersHelper" aria-labelledby="maxUsersError maxUsersError2 maxUsersError3"
                required class="form-control"
                [class.is-invalid]="maxUsers.invalid && (maxUsers.dirty || maxUsers.touched)">
@@ -95,9 +95,9 @@
                aria-describedby="researchStartDateHelper" aria-labelledby="researchStartDateError"
                required class="form-control"
                [class.is-invalid]="researchStartDate.invalid && (researchStartDate.dirty || researchStartDate.touched)">
-        <label for="researchStartDate" class="form-label">Początkowa data okresu zapisów</label>
+        <label for="researchStartDate" class="form-label">Data rozpoczęcia badań</label>
         <div *ngIf="researchStartDate.invalid && (researchStartDate.dirty || researchStartDate.touched)" class="invalid-feedback">
-          <p *ngIf="researchStartDate.errors?.['required']" id="researchStartDateError" class="mb-0">Podaj początkową datę okresu zapisów</p>
+          <p *ngIf="researchStartDate.errors?.['required']" id="researchStartDateError" class="mb-0">Podaj datę rozpoczęcia badań</p>
         </div>
         <p id="researchStartDateHelper" class="form-text">Format dd-mm-rrrr</p>
       </div>
@@ -108,9 +108,9 @@
                aria-describedby="researchEndDateHelper" aria-labelledby="researchEndDateError"
                required class="form-control"
                [class.is-invalid]="researchEndDate.invalid && (researchEndDate.dirty || researchEndDate.touched)">
-        <label for="researchEndDate" class="form-label">Końcowa data okresu zapisów</label>
+        <label for="researchEndDate" class="form-label">Data zakończenia badań</label>
         <div *ngIf="researchEndDate.invalid && (researchEndDate.dirty || researchEndDate.touched)" class="invalid-feedback">
-          <p *ngIf="researchEndDate.errors?.['required']" id="researchEndDateError" class="mb-0">Podaj końcową datę okresu zapisów</p>
+          <p *ngIf="researchEndDate.errors?.['required']" id="researchEndDateError" class="mb-0">Podaj datę zakończenia badań</p>
         </div>
         <p id="researchEndDateHelper" class="form-text">Format dd-mm-rrrr</p>
       </div>
@@ -118,7 +118,7 @@
   </div>
   <div class="d-flex justify-content-between flex-wrap row">
     <div class="col-12 col-sm-6 col-md-auto">
-      <a routerLink="../" class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" (click)="backToMain()">Wstecz</a>
+      <a class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" (click)="goBack()">Anuluj</a>
     </div>
     <div class="col-12 col-sm-6 col-md-auto">
       <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit" (click)="validate(form)">Dalej</button>
