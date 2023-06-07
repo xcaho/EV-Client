@@ -148,8 +148,12 @@ export class AvailabilityService {
     availabilities.forEach(availability => {
       if (availability.date.toDateString() == dayToExclude.toDateString()) {
         ranges.forEach(range => {
-          const [startHour, endHour] = range.split('-');
-          newAvailabilityHours.push(new AvailabilityHours(startHour, endHour))
+          if (range.indexOf("-") > -1){
+            const [startHour, endHour] = range.split('-');
+            if (this.getHourDiff(startHour, endHour) >= totalLength){
+              newAvailabilityHours.push(new AvailabilityHours(startHour, endHour))
+            }
+          }
         })
         indexToSwap = availabilities.indexOf(availability)
       }
