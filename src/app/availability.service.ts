@@ -150,7 +150,7 @@ export class AvailabilityService {
         ranges.forEach(range => {
           if (range.indexOf("-") > -1){
             const [startHour, endHour] = range.split('-');
-            if (this.getHourDiff(startHour, endHour) >= totalLength){
+            if (this.getHourDiff(startHour, endHour) >= event.surveyDuration){
               newAvailabilityHours.push(new AvailabilityHours(startHour, endHour))
             }
           }
