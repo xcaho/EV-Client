@@ -28,6 +28,18 @@ export class SurveyService {
       )
   }
 
+  getSurveys(eventId: number): Observable<SurveyDto[]> {
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.get<SurveyDto[]>('http://localhost:8080/events/' + eventId + '/surveys', options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
   save(survey: SurveyDto): Observable<SurveyDto> {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
