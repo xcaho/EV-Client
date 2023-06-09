@@ -101,7 +101,7 @@
               <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączony</ng-container>
             </div>
             <div class="col-4" role="cell">
-              <span id="kod{{survey.id}}}" style="display:inline-block; min-width: 115px;">{{survey.code}}</span>
+              <span id="kod{{survey.id}}" style="display:inline-block; min-width: 125px;">{{survey.code}}</span>
               <button class="btn btn-icon btn-list fa-solid fa-copy" title="Skopiuj link do spotkania - {{survey.code}}"
                       (click)="copyToClipboard(survey.code)">
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
