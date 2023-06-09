@@ -7,7 +7,7 @@ import {Availability, AvailabilityDto, AvailabilityHours} from "../../common/mai
 import * as _ from "lodash";
 import {AvailabilityService} from "../../availability.service";
 import {SurveyService} from "../../survey.service";
-import {SurveyDto} from "../../common/mainpage/SurveyDto";
+import {SurveyDto, SurveyState} from "../../common/mainpage/SurveyDto";
 import {ConfirmationDto} from "../../common/mainpage/ConfirmationDto";
 
 export interface Registration {
@@ -116,6 +116,7 @@ export class SurveyRegistrationComponent {
     const [hours, minutes] = this.selectedHour.split(':').map(Number);
     date.setHours(hours, minutes)
     this.survey.date = date
+    this.survey.surveyState = SurveyState.ACTIVE
 
     this.surveyService.save(this.survey).subscribe((survey) => {
       console.log(survey)

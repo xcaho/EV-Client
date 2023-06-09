@@ -19,7 +19,7 @@ export class SurveyDto {
   }
 }
 
-enum SurveyState {
+export enum SurveyState {
   UNDEFINED = 'UNDEFINED',
   ACTIVE = 'ACTIVE',
   EXPIRED = 'EXPIRED',
