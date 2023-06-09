@@ -107,11 +107,18 @@
               </button>
             </div>
             <div class="col-4" role="cell" *ngIf="survey.date">{{survey.date}}</div>
-            <div class="col-4" role="cell" *ngIf="!survey.date" title="Spotkanie nie zostało jeszcze umówione"><span class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–</div>
+            <div class="col-4" role="cell" *ngIf="!survey.date" title="Spotkanie nie zostało jeszcze umówione"><span
+              class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
+            </div>
             <div class="col-1 text-end" role="cell">
-              <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj spotkanie">
-                <fa-icon [icon]="trash">Usuń</fa-icon>
-                <span class="d-none">Odwołaj spotkanie</span></button>
+              <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
+                      *ngIf="survey.surveyState === 'ACTIVE'">
+                <fa-icon [icon]="trash">Odwołaj spotkanie</fa-icon>
+              </button>
+              <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
+                      *ngIf="survey.surveyState != 'ACTIVE'">
+                <fa-icon [icon]="trash">Dezaktywuj kod</fa-icon>
+              </button>
             </div>
           </div>
         </li>
@@ -120,20 +127,33 @@
         <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let survey of surveyList; let i=index">
           <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
             <dt class="col-5 col-sm-4 text-end">Status:</dt>
-            <dd class="col-7 col-sm-8">{{survey.surveyState}}</dd>
+            <dd class="col-7 col-sm-8">
+              <ng-container *ngIf="survey.surveyState === 'ACTIVE'">Użyty</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'UNDEFINED'">Nieużyty</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'EXPIRED'">Przeterminowany</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączony</ng-container>
+            </dd>
             <dt class="col-5 col-sm-4 text-end">Kod:</dt>
             <dd class="col-7 col-sm-8">{{survey.code}}</dd>
             <dt class="col-5 col-sm-4 text-end">Data spotkania:</dt>
-            <dd class="col-7 col-sm-8">{{survey.date}}</dd>
+            <dd class="col-7 col-sm-8" *ngIf="survey.date">{{survey.date}}</dd>
+            <dd class="col-7 col-sm-8" *ngIf="!survey.date" title="Spotkanie nie zostało jeszcze umówione"><span
+              class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
+            </dd>
             <dt class="col-5 col-sm-4 text-end">Akcje:</dt>
             <dd class="col-7 col-sm-8">
               <button class="btn btn-icon fa-solid fa-copy" title="Skopiuj link do spotkania - {{survey.code}}"
                       (click)="copyToClipboard(survey.code)">
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
-              <button type="button" class="btn btn-icon" title="Dezaktywuj spotkanie">
-                <fa-icon [icon]="trash">Usuń</fa-icon>
-                <span class="d-none">Odwołaj spotkanie</span></button>
+              <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
+                      *ngIf="survey.surveyState === 'ACTIVE'">
+                <fa-icon [icon]="trash">Odwołaj spotkanie</fa-icon>
+              </button>
+              <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
+                      *ngIf="survey.surveyState != 'ACTIVE'">
+                <fa-icon [icon]="trash">Dezaktywuj kod</fa-icon>
+              </button>
             </dd>
           </dl>
         </li>
