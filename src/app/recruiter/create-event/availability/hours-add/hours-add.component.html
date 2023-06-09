@@ -2,7 +2,8 @@
   <div aria-labelledby="modalTitle">
     <div class="modal-header">
       <h3 class="modal-title" id="modalTitle">Dodaj dostępność</h3>
-      <button type="button" class="btn-close" aria-label="Zamknij modal" (click)="closeModal()"><span class="d-none">Zamknij modal</span></button>
+      <button type="button" class="btn-close" aria-label="Zamknij modal" (click)="closeModal()"><span class="d-none">Zamknij modal</span>
+      </button>
     </div>
     <div class="modal-body">
       <form [formGroup]="hoursAddForm">
@@ -36,9 +37,17 @@
         </div>
       </form>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-primary text-uppercase" (click)="closeModal()">Anuluj</button>
-      <button type="button" class="btn btn-primary text-uppercase" (click)="saveAvailability()" id="saveHours">Zapisz</button>
+    <div class="modal-footer px-0">
+      <div class="w-100 row m-0 justify-content-between">
+        <div class="col-6 col-sm-auto">
+          <button type="button" class="w-100 btn btn-outline-primary text-uppercase" (click)="closeModal()">Anuluj
+          </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+          <button type="button" class="w-100 btn btn-primary text-uppercase" (click)="saveAvailability()" id="saveHours">Zapisz
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>

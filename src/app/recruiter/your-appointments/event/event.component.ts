@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {ActivatedRoute, Router} from '@angular/router';
 import {Availability} from "../../../common/mainpage/Availability";
@@ -8,7 +8,8 @@ import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {SurveyService} from "../../../survey.service";
 import {SurveyDto} from "../../../common/mainpage/SurveyDto";
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
-import { ClipboardService } from 'ngx-clipboard';
+import {ClipboardService} from 'ngx-clipboard';
+import {DeleteCodeComponent} from "./delete-code/delete-code.component";
 
 @Component({
   selector: 'app-event',
@@ -16,13 +17,13 @@ import { ClipboardService } from 'ngx-clipboard';
   styleUrls: ['./event.component.scss']
 })
 export class EventComponent {
+  @ViewChild(DeleteCodeComponent) deleteCodeComponent!: DeleteCodeComponent;
   availabilityList: Availability[] = [];
   surveyList: SurveyDto[] = []
   event: EventDto;
   eventId: number = -1
   surveyDurationHHMM = "00:00";
   trash = faTrash;
-  code: string = '';
 
   constructor(private eventService: EventService, private availabilityService: AvailabilityService,
               private surveyService: SurveyService, public router: Router, private route: ActivatedRoute, private clipboardService: ClipboardService) {

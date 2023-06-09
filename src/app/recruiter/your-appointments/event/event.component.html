@@ -1,3 +1,4 @@
+<app-delete-code></app-delete-code>
 <div class="h64 flex-center border-bottom border-secondary mb-4">
   <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
     <h1 class="h2 mb-0">{{event.name}}</h1>
@@ -112,10 +113,12 @@
             </div>
             <div class="col-1 text-end" role="cell">
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)"
                       *ngIf="survey.surveyState === 'ACTIVE'">
                 <fa-icon [icon]="trash">Odwołaj spotkanie</fa-icon>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)"
                       *ngIf="survey.surveyState != 'ACTIVE'">
                 <fa-icon [icon]="trash">Dezaktywuj kod</fa-icon>
               </button>
@@ -147,11 +150,13 @@
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
-                      *ngIf="survey.surveyState === 'ACTIVE'">
+                      *ngIf="survey.surveyState === 'ACTIVE'"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)">
                 <fa-icon [icon]="trash">Odwołaj spotkanie</fa-icon>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
-                      *ngIf="survey.surveyState != 'ACTIVE'">
+                      *ngIf="survey.surveyState != 'ACTIVE'"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)">
                 <fa-icon [icon]="trash">Dezaktywuj kod</fa-icon>
               </button>
             </dd>
