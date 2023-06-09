@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {Observable, throwError} from "rxjs";
-import {EventDto} from "./common/mainpage/EventDto";
 import {catchError} from "rxjs/operators";
 import {SurveyDto} from "./common/mainpage/SurveyDto";
 import {HttpClient} from "@angular/common/http";

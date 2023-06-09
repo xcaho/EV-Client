@@ -53,8 +53,8 @@ export class EventComponent {
     })
   }
 
-  copyToClipboard() {
-    this.clipboardService.copyFromContent('localhost:4200/register/' + this.code);
+  copyToClipboard(code: string) {
+    this.clipboardService.copyFromContent('localhost:4200/register/' + code);
   }
 
 }
