@@ -63,11 +63,14 @@
   + .form-label {
     padding-right: 0.625rem;
     &::after {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      font-size: 0.425rem;
       position: absolute;
       right: 0;
-      top: 0.25rem;
-      content: '*';
-      color: red;
+      top: 0.425rem;
+      content: '\f621';
+      color: #dc3232;
     }
   }
 }

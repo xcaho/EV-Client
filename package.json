@@ -25,7 +25,9 @@
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.3",
     "lodash": "^4.17.21",
+    "ngx-clipboard": "^16.0.0",
     "rxjs": "~7.8.0",
+    "testcafe": "^2.6.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
   },

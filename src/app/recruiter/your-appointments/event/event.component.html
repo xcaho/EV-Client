@@ -1,7 +1,14 @@
 <div class="h64 flex-center border-bottom border-secondary mb-4">
-  <div class="container-xxl d-flex flex-wrap justify-content-between">
+  <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
     <h1 class="h2 mb-0">{{event.name}}</h1>
-    <a class="col-auto btn btn-primary" (click)="goToEdit()">Edytuj wydarzenie</a>
+    <div class="row mt-2 mt-md-0">
+      <div class="col-6 col-sm-auto">
+        <button class="w-100 btn btn-outline-primary">Usuń wydarzenie</button>
+      </div>
+      <div class="col-6 col-sm-auto">
+        <a class="w-100 btn btn-primary" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>
+      </div>
+    </div>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
@@ -70,6 +77,47 @@
           </div>
         </div>
       </div>
+    </section>
+    <section class="col-12">
+      <h2 class="h5 mt-4 mb-3" id="listTitle">Lista kodów</h2>
+      <ul class="list-group d-none d-md-block" role="table" aria-labelledby="listTitle">
+        <li class="list-group-item p-3 li-header d-block" role="rowgroup">
+          <div class="row" role="row">
+            <div class="col-3" role="columnheader">Status:</div>
+            <div class="col-4" role="columnheader">Kod:</div>
+            <div class="col-4" role="columnheader">Data spotkania:</div>
+            <div class="col-1 text-end sr-only" role="columnheader">Akcje:</div>
+          </div>
+        </li>
+        <li class="list-group-item d-block" role="rowgroup">
+          <div class="row" role="row">
+            <div class="col-3" role="cell">Niewykorzystany</div>
+            <div class="col-4" role="cell"><span id="kod1">3fauH4kGzJPWE</span> <button class="btn btn-icon btn-list fa-solid fa-copy" title="Skopiuj link do spotkania" aria-labelledby="kod1" (click)="copyToClipboard()"><span class="d-none">Skopiuj link do spotkania</span></button></div>
+            <div class="col-4" role="cell">31.02.2023</div>
+            <div class="col-1 text-end" role="cell">
+              <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj spotkanie"><fa-icon [icon]="trash">Usuń</fa-icon><span class="d-none">Odwołaj spotkanie</span></button>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
+        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3">
+          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+            <dt class="col-5 col-sm-4 text-end">Status:</dt>
+            <dd class="col-7 col-sm-8">Niewykorzystany</dd>
+            <dt class="col-5 col-sm-4 text-end">Kod:</dt>
+            <dd class="col-7 col-sm-8">3fauH4kGzJPWE</dd>
+            <dt class="col-5 col-sm-4 text-end">Data spotkania:</dt>
+            <dd class="col-7 col-sm-8">31.02.2023</dd>
+            <dt class="col-5 col-sm-4 text-end">Akcje:</dt>
+            <dd class="col-7 col-sm-8">
+              <button class="btn btn-icon fa-solid fa-copy" title="Skopiuj link do spotkania" aria-labelledby="kod1" (click)="copyToClipboard()"><span class="d-none">Skopiuj link do spotkania</span></button>
+              <button type="button" class="btn btn-icon" title="Dezaktywuj spotkanie"><fa-icon [icon]="trash">Usuń</fa-icon><span class="d-none">Odwołaj spotkanie</span></button>
+            </dd>
+          </dl>
+        </li>
+      </ul>
     </section>
   </section>
 </div>

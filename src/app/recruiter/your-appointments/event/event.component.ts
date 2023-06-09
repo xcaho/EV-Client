@@ -1,13 +1,14 @@
 import {Component} from '@angular/core';
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {ActivatedRoute, Router} from '@angular/router';
-import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
+import {Availability} from "../../../common/mainpage/Availability";
 import {EventService} from "../../../event.service";
-import * as _ from "lodash";
 import {AvailabilityService} from "../../../availability.service";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {SurveyService} from "../../../survey.service";
 import {SurveyDto} from "../../../common/mainpage/SurveyDto";
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-event',
@@ -20,9 +21,11 @@ export class EventComponent {
   event: EventDto;
   eventId: number = -1
   surveyDurationHHMM = "00:00";
+  trash = faTrash;
+  code: string = '';
 
   constructor(private eventService: EventService, private availabilityService: AvailabilityService,
-              private surveyService: SurveyService, public router: Router, private route: ActivatedRoute) {
+              private surveyService: SurveyService, public router: Router, private route: ActivatedRoute, private clipboardService: ClipboardService) {
 
     this.event = {} as EventDto
   }
@@ -45,11 +48,13 @@ export class EventComponent {
         console.log(surveys);
         this.surveyList = surveys;
       })
+    }, () => {
+      this.router.navigate(['/404'])
     })
   }
 
-  goToEdit() {
-    this.router.navigate(['/edit/', this.event.id])
+  copyToClipboard() {
+    this.clipboardService.copyFromContent('localhost:4200/register/' + this.code);
   }
 
 }

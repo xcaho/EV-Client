@@ -4,7 +4,7 @@
     <h1 class="h2 mb-0">Tworzenie wydarzenia</h1>
   </div>
 </div>
-<div class="main-content container-xxl mb-5">
+<div class="main-content container-xxl mb-5" id="maincontent">
   <div class="row justify-content-center">
     <section class="col-12 col-lg-9">
       <h2 class="h5 mb-3">Dodaj swoją dostępność</h2>
@@ -13,7 +13,7 @@
           <div class="c-card">
             <div class="c-card-header">
               <p class="mb-0 ps-2">{{availability.dayOfWeek}}<br><span class="smaller">{{ availability.dateFormatted }}</span></p>
-              <button type="button" class="btn btn-icon" title="Dodaj dostępność" (click)="hoursAddComponent.open(hoursAddComponent.content, availability)"><fa-icon [icon]="plus"></fa-icon><span class="d-none">Dodaj dostępność</span></button>
+              <button type="button" class="btn btn-icon" id="availability-{{i}}" title="Dodaj dostępność" (click)="hoursAddComponent.open(hoursAddComponent.content, availability)"><fa-icon [icon]="plus"></fa-icon><span class="d-none">Dodaj dostępność</span></button>
             </div>
             <div class="c-card-body">
               <div class="slot" *ngFor="let hours of availability.hoursList">
@@ -23,13 +23,13 @@
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-between flex-wrap row mx-0">
-          <div class="col-12 col-sm-6 col-md-auto px-0">
-            <a class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" (click)="goBack()" >Wstecz</a>
-          </div>
-          <div class="col-12 col-sm-6 col-md-auto px-0">
-            <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit" (click)="submit()">Zapisz</button>
-          </div>
+      </div>
+      <div class="justify-content-between flex-wrap row">
+        <div class="col-6 col-md-auto">
+          <button class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" (click)="goBack()" [routerLink]="['/create']">Wstecz</button>
+        </div>
+        <div class="col-6 col-md-auto">
+          <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit" (click)="submit()" aria-label="Zapisz wydarzenie">Zapisz</button>
         </div>
       </div>
     </section>
