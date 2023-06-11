@@ -116,7 +116,7 @@ export class SurveyRegistrationComponent {
     const [hours, minutes] = this.selectedHour.split(':').map(Number);
     date.setHours(hours, minutes)
     this.survey.date = date
-    this.survey.surveyState = SurveyState.ACTIVE
+    this.survey.surveyState = SurveyState.USED
 
     this.surveyService.save(this.survey).subscribe((survey) => {
       console.log(survey)

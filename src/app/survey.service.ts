@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Observable, throwError} from "rxjs";
+import {map, Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {SurveyDto} from "./common/mainpage/SurveyDto";
 import {HttpClient} from "@angular/common/http";
@@ -33,6 +33,8 @@ export class SurveyService {
 
     return this.http.get<SurveyDto[]>('http://localhost:8080/events/' + eventId + '/surveys', options)
       .pipe(
+        map(res => res.map(tmp => new SurveyDto(
+          tmp.id, tmp.code, tmp.date, tmp.surveyState, tmp.eventId))),
         catchError((error: any) => {
           return throwError(error);
         })
