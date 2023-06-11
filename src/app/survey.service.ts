@@ -41,11 +41,22 @@ export class SurveyService {
       )
   }
 
-  save(survey: SurveyDto): Observable<SurveyDto> {
+  modifySurvey(survey: SurveyDto): Observable<SurveyDto> {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
     return this.http.patch<SurveyDto>('http://localhost:8080/surveys/' + survey.id, survey, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+  saveSurvey(eventId: number): Observable<SurveyDto> {
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.post<SurveyDto>('http://localhost:8080/events/' + eventId + '/surveys', options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

@@ -118,7 +118,7 @@ export class SurveyRegistrationComponent {
     this.survey.date = date
     this.survey.surveyState = SurveyState.USED
 
-    this.surveyService.save(this.survey).subscribe((survey) => {
+    this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
       console.log(survey)
       this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
 

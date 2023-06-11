@@ -112,13 +112,13 @@
             </div>
             <div class="col-1 text-end" role="cell">
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'USED'">
                 <fa-icon [icon]="trash">Odwołaj spotkanie</fa-icon>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)"
-                      *ngIf="survey.surveyState != 'USED'">
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
+                      *ngIf="survey.surveyState === 'UNUSED'">
                 <fa-icon [icon]="trash">Dezaktywuj kod</fa-icon>
               </button>
             </div>
@@ -149,12 +149,12 @@
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
                       *ngIf="survey.surveyState === 'USED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)">
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash">Odwołaj spotkanie</fa-icon>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
-                      *ngIf="survey.surveyState != 'USED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey)">
+                      *ngIf="survey.surveyState === 'UNUSED'"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash">Dezaktywuj kod</fa-icon>
               </button>
             </dd>
