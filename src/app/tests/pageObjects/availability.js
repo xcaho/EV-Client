@@ -5,6 +5,7 @@ const startHour = Selector("#startHour");
 const endHour = Selector("#endHour");
 const saveBtn = Selector("#saveHours");
 const submitBtn = Selector('[type="submit"]')
+const days = Selector('[id*="day"]')
 
 const availabilityAdd = () => ({
   fillForm: async ({
@@ -18,8 +19,13 @@ const availabilityAdd = () => ({
       .typeText(endHour, endHourVal, {paste: true, replace: true})
       .click(saveBtn)
   },
+
   submit: async () => {
     await t.click(submitBtn)
+  },
+
+  countOfDaysAreEqual: async (value) => {
+    await t.expect(days.count).eql(value);
   }
 })
 
