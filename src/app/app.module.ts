@@ -21,6 +21,7 @@ import {InvalidCodeComponent} from './participant/invalid-code/invalid-code.comp
 import {ErrorComponent} from './common/error/error.component';
 import {appRoutes} from './app.routes';
 import {DeleteCodeComponent} from './recruiter/your-appointments/event/delete-code/delete-code.component';
+import { DeleteEventComponent } from './recruiter/your-appointments/event/delete-event/delete-event.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {DeleteCodeComponent} from './recruiter/your-appointments/event/delete-co
     ConfirmationComponent,
     InvalidCodeComponent,
     ErrorComponent,
-    DeleteCodeComponent
+    DeleteCodeComponent,
+    DeleteEventComponent
   ],
   imports: [
     BrowserModule,

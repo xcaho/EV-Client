@@ -1,10 +1,11 @@
 <app-delete-code></app-delete-code>
+<app-delete-event></app-delete-event>
 <div class="h64 flex-center border-bottom border-secondary mb-4">
   <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
     <h1 class="h2 mb-0">{{event.name}}</h1>
     <div class="row mt-2 mt-md-0">
       <div class="col-6 col-sm-auto">
-        <button class="w-100 btn btn-outline-primary">Usuń wydarzenie</button>
+        <button class="w-100 btn btn-outline-primary" (click)="deleteEventComponent.open(deleteEventComponent.content)">Zamknij wydarzenie</button>
       </div>
       <div class="col-6 col-sm-auto">
         <a class="w-100 btn btn-primary" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>

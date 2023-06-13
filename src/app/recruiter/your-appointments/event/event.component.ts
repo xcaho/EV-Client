@@ -10,6 +10,7 @@ import {SurveyDto} from "../../../common/mainpage/SurveyDto";
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {ClipboardService} from 'ngx-clipboard';
 import {DeleteCodeComponent} from "./delete-code/delete-code.component";
+import {DeleteEventComponent} from "./delete-event/delete-event.component";
 
 @Component({
   selector: 'app-event',
@@ -18,6 +19,7 @@ import {DeleteCodeComponent} from "./delete-code/delete-code.component";
 })
 export class EventComponent {
   @ViewChild(DeleteCodeComponent) deleteCodeComponent!: DeleteCodeComponent;
+  @ViewChild(DeleteEventComponent) deleteEventComponent!: DeleteEventComponent;
   availabilityList: Availability[] = [];
   surveyList: SurveyDto[] = []
   event: EventDto;

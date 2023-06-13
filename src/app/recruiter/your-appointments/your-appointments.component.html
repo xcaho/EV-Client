@@ -25,9 +25,9 @@
             <div class="col-1 text-end" role="columnheader">Sloty:</div>
           </div>
         </li>
-        <li class="list-group-item d-block" role="rowgroup" *ngFor="let event of events">
+        <li class="list-group-item p-3 d-block" role="rowgroup" *ngFor="let event of events">
           <a [routerLink]="['/event/', event.id]">
-          <div class="row mx-0 py-3" role="row">
+          <div class="row" role="row">
             <div class="col-2 col-lg-1" role="cell">Aktywny</div>
             <div class="col-4" role="cell">{{ event.name }}</div>
             <div class="col-2 col-lg-3" role="cell"><span class="text-nowrap">{{ event.researchStartDate }}</span> - <span class="text-nowrap">{{ event.researchEndDate }}</span></div>
