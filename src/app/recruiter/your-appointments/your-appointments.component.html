@@ -42,7 +42,7 @@
         <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
           <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
             <dt class="col-5 col-sm-4 text-end">Status:</dt>
-            <dd class="col-7 col-sm-8">Aktywne</dd>
+            <dd class="col-7 col-sm-8">{{ event.isActive() }}</dd>
             <dt class="col-5 col-sm-4 text-end">Nazwa wydarzenia:</dt>
             <dd class="col-7 col-sm-8">{{ event.name }}</dd>
             <dt class="col-5 col-sm-4 text-end">Czas trwania:</dt>
@@ -52,7 +52,7 @@
             <dt class="col-5 col-sm-4 text-end">Sloty:</dt>
             <dd class="col-7 col-sm-8">{{ event.slotsTaken }}/{{ event.maxUsers }}</dd>
           </dl>
-          <div class="row justify-content-end">
+          <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
             <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0" [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
           </div>
         </li>
