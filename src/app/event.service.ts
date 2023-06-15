@@ -27,12 +27,37 @@ export class EventService {
       )
   }
 
+  modifyEvent(event: EventDto): Observable<EventDto> {
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.patch<EventDto>('http://localhost:8080/events/' + event.id, event, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
   getEvents(): Observable<EventDto[]> {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
     return this.http.get<EventDto[]>('http://localhost:8080/events', options)
       .pipe(
+        map(events => events.map(event => new EventDto(
+          event.name,
+          event.description,
+          event.researchStartDate,
+          event.researchEndDate,
+          event.endDate,
+          event.maxUsers,
+          event.surveyDuration,
+          event.surveyBreakTime,
+          event.slotsTaken,
+          event.id,
+          event.active
+        ))),
         catchError((error: any) => {
           return throwError(error);
         })

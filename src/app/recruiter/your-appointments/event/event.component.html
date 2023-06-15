@@ -5,7 +5,7 @@
     <h1 class="h2 mb-0">{{event.name}}</h1>
     <div class="row mt-2 mt-md-0">
       <div class="col-6 col-sm-auto">
-        <button class="w-100 btn btn-outline-primary" (click)="deleteEventComponent.open(deleteEventComponent.content)">Zamknij wydarzenie</button>
+        <button class="w-100 btn btn-outline-primary" (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">Zamknij wydarzenie</button>
       </div>
       <div class="col-6 col-sm-auto">
         <a class="w-100 btn btn-primary" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>
@@ -138,7 +138,7 @@
             <dt class="col-5 col-sm-4 text-end">Kod:</dt>
             <dd class="col-7 col-sm-8">{{survey.code}}</dd>
             <dt class="col-5 col-sm-4 text-end">Data spotkania:</dt>
-            <dd class="col-7 col-sm-8" *ngIf="survey.date">{{survey.date}}</dd>
+            <dd class="col-7 col-sm-8" *ngIf="survey.date">{{survey.getDateFormatted()}}</dd>
             <dd class="col-7 col-sm-8" *ngIf="!survey.date" title="Spotkanie nie zostało jeszcze umówione"><span
               class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
             </dd>
