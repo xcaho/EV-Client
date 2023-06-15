@@ -25,8 +25,8 @@
             <div class="col-1 text-end" role="columnheader">Sloty:</div>
           </div>
         </li>
-        <li class="list-group-item p-3 d-block" role="rowgroup" *ngFor="let event of events">
-          <a [routerLink]="['/event/', event.id]">
+        <li class="list-group-item d-block" role="rowgroup" *ngFor="let event of events">
+          <a [routerLink]="['/event/', event.id]" class="p-3 d-block">
           <div class="row" role="row">
             <div class="col-2 col-lg-1" role="cell">{{ event.isActive() }}</div>
             <div class="col-4" role="cell">{{ event.name }}</div>
