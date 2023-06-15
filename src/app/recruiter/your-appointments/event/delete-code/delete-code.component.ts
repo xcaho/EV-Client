@@ -30,8 +30,10 @@ export class DeleteCodeComponent {
 
   deactivateCode() {
     this.survey.surveyState = SurveyState.INACTIVE
+
     this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
       console.log(survey)
+      this.survey.date = new Date(0)
 
       this.generateNewCode()
       this.closeModal()

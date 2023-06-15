@@ -3,8 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EventDto} from "../../common/mainpage/EventDto";
 import {EventService} from "../../event.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Availability, AvailabilityDto, AvailabilityHours} from "../../common/mainpage/Availability";
-import * as _ from "lodash";
+import {Availability} from "../../common/mainpage/Availability";
 import {AvailabilityService} from "../../availability.service";
 import {SurveyService} from "../../survey.service";
 import {SurveyDto, SurveyState} from "../../common/mainpage/SurveyDto";
@@ -67,9 +66,6 @@ export class SurveyRegistrationComponent {
   private fetchSurvey() {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
       this.survey = surveyDto
-      if (this.survey.date != null) {
-        this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
-      }
       this.fetchEvent(this.survey.eventId);
     }, (error) => {
       console.log(error)
@@ -84,6 +80,10 @@ export class SurveyRegistrationComponent {
       this.formEventName = event.name
       this.formSurveyDuration = event.surveyDuration
       this.formEventEndDate = event.endDate
+
+      if (this.survey.surveyState != SurveyState.UNUSED || this.event.slotsTaken == this.event.maxUsers) {
+        this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
+      }
 
       this.fetchAvailabilityList();
       this.isFetching = false;
