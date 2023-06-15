@@ -2,7 +2,8 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {SurveyService} from "../../../../survey.service";
 import {SurveyDto, SurveyState} from "../../../../common/mainpage/SurveyDto";
-import {Router} from "@angular/router";
+import {EventDto} from "../../../../common/mainpage/EventDto";
+import {EventService} from "../../../../event.service";
 
 @Component({
   selector: 'app-delete-code',
@@ -14,18 +15,21 @@ export class DeleteCodeComponent {
   modalRef: NgbModalRef = null!;
   survey: SurveyDto;
   surveyList: SurveyDto[] = [];
+  event: EventDto;
 
-  constructor(private modalService: NgbModal, private surveyService: SurveyService, private router: Router) {
+  constructor(private modalService: NgbModal, private surveyService: SurveyService, private eventService: EventService) {
     this.survey = {} as SurveyDto
+    this.event = {} as EventDto
   }
 
   ngOnInit(): void {
   }
 
-  open(content: any, survey: SurveyDto, surveyList: SurveyDto[]): void {
+  open(content: any, survey: SurveyDto, surveyList: SurveyDto[], event: EventDto): void {
     this.modalRef = this.modalService.open(content);
     this.survey = survey;
     this.surveyList = surveyList;
+    this.event = event;
   }
 
   deactivateCode() {
@@ -37,7 +41,11 @@ export class DeleteCodeComponent {
 
       this.generateNewCode()
       this.closeModal()
+      this.eventService.modifyEvent(this.event).subscribe((event) => {
+        console.log(event.slotsTaken);
+      })
     })
+
   }
 
   generateNewCode() {
