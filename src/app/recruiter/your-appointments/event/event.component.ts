@@ -44,6 +44,7 @@ export class EventComponent {
       this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
 
       this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
+        console.log(this.availabilityList)
         this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
       });
 
