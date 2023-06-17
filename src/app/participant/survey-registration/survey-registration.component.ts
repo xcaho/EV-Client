@@ -58,7 +58,6 @@ export class SurveyRegistrationComponent {
   }
 
   ngOnInit(): void {
-
     this.fetchSurvey()
     this.setFormValidators();
   }
