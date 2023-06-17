@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ConfirmationDto} from "../../common/mainpage/ConfirmationDto";
 import {SurveyService} from "../../survey.service";
 
