@@ -73,10 +73,10 @@
       <div class="client-logo" style="padding:15px"></div>
       <div class="bg-primary" style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">
         <h3>Summary</h3><br>
-        <p class="lead">Start Time: Sun Jun 11 2023 14:12:22 GMT+0200 (czas środkowoeuropejski letni)</p>
+        <p class="lead">Start Time: Fri Jun 16 2023 12:03:55 GMT+0200 (czas środkowoeuropejski letni)</p>
         <p class="lead">Browsers: Chrome 114.0.0.0 / Windows 11</p>
-        <p class="lead">Duration: 16s</p>
-        <p class="lead">Tests Failed: 1 out of 2</p>
+        <p class="lead">Duration: 12s</p>
+        <p class="lead">Tests Failed: 0 out of 2</p>
         <p class="lead">Tests Skipped: 0</p>
       </div><br>
       <table class="table sortable" style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">
@@ -96,16 +96,16 @@
   <td>Getting Started</td>
   <td>Correctly create event</td>
   <td>Chrome 114.0.0.0 / Windows 11</td>
-  <td>10s</td>
+  <td>11s</td>
   <td>passed</td>
  </tr>
- <tr class="danger">
+ <tr class="success">
   <td>2</td>
   <td>Getting Started</td>
   <td>Checking inputs validation</td>
   <td>Chrome 114.0.0.0 / Windows 11</td>
-  <td>5s</td>
-  <td><a href="#test-2">failed</a></td>
+  <td>1s</td>
+  <td>passed</td>
  </tr>
 
         </tbody>
@@ -122,32 +122,7 @@
       </table>
       <br>
       <h3>Error Details</h3>
-       <h4 id="test-2" style="color: red;">2. Getting Started - Checking inputs validation</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: expected false to be truthy
-
-Browser: Chrome 114.0.0.0 / Windows 11
-
-   52 |      .expect(durationError.exists).ok()
-   53 |      .expect(breakTimeError.exists).ok()
-   54 |      .expect(endDateError.exists).ok()
-   55 |      .expect(maxUsersError.exists).ok()
-   56 |      .expect(researchStartError.exists).ok()
- &gt; 57 |      .expect(researchEndError.exists).ok()
-   58 |  &#125
-   59 |})
-   60 |
-   61 |export default createEvent;
-   62 |
-
-   at Object.&lt;anonymous&gt; (G:\EV-Client\src\app\tests\pageObjects\createEvent.js:57:40)
-   at asyncGeneratorStep (G:\EV-Client\src\app\tests\pageObjects\createEvent.js:2:40)
-   at _next (G:\EV-Client\src\app\tests\pageObjects\createEvent.js:2:40)
-   at &lt;anonymous&gt; (G:\EV-Client\src\app\tests\pageObjects\createEvent.js:2:40)
-   at Object.&lt;anonymous&gt; (G:\EV-Client\src\app\tests\pageObjects\createEvent.js:2:40)
-   at Object.validaton (G:\EV-Client\src\app\tests\pageObjects\createEvent.js:58:4)
-   at &lt;anonymous&gt; (G:\EV-Client\src\app\tests\createEvent.js:63:25)
-   at asyncGeneratorStep (G:\EV-Client\src\app\tests\createEvent.js:4:41)
-   at _next (G:\EV-Client\src\app\tests\createEvent.js:4:41) </pre><br>
+      
     </div>
     <script>
       const modal = document.getElementById('myModal');
