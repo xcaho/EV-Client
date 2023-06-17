@@ -22,7 +22,7 @@
     pointer-events: none;
     transform-origin: 0 0;
     transition: all .15s ease-out;
-    color: rgba(0,0,0,.6);
+    color: $text-gray-color;
     margin-bottom: 0;
   }
 
@@ -70,7 +70,7 @@
       right: 0;
       top: 0.425rem;
       content: '\f621';
-      color: #dc3232;
+      color: $text-warn-color;
     }
   }
 }
