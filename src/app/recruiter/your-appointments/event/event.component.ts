@@ -58,7 +58,7 @@ export class EventComponent {
   }
 
   copyToClipboard(code: string) {
-    this.clipboardService.copyFromContent('localhost:4200/register/' + code);
+    this.clipboardService.copyFromContent('https://easyvisit.netlify.app/register/' + code);
   }
 
 }
