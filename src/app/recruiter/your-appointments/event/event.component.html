@@ -116,13 +116,13 @@
             </div>
             <div class="col-1 text-end" role="cell">
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'USED'">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'UNUSED'">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Dezaktywuj kod</span>
@@ -155,13 +155,13 @@
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
                       *ngIf="survey.surveyState === 'USED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)">
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
                       *ngIf="survey.surveyState === 'UNUSED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)">
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Dezaktywuj kod</span>
               </button>
