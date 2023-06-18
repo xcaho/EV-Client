@@ -36,17 +36,7 @@ export class DeleteEventComponent {
     this.eventService.modifyEvent(this.event).subscribe((event) => {
       console.log(event)
 
-      this.deactivateCodes()
       this.closeModal()
-    })
-  }
-
-  deactivateCodes() {
-    this.surveyList.forEach(survey => {
-      survey.surveyState = SurveyState.INACTIVE
-      this.surveyService.modifySurvey(survey).subscribe((surveyRes) => {
-        console.log(surveyRes)
-      })
     })
   }
 

@@ -11,15 +11,15 @@
 <div class="main-content container-xxl mb-4">
   <div class="row justify-content-center">
     <section class="col-12 col-md-8 col-lg-6" *ngIf="!isFetching && !events[0]">
-      <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplananowaych wydarzeń</p>
+      <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplanowaych wydarzeń</p>
       <a class="col-12 col-md-4 btn btn-outline-primary offset-md-4" (click)="goToCreate()" [routerLink]="['/create']">Dodaj wydarzenie</a>
     </section>
     <section class="col-12" *ngIf="events[0]">
       <ul class="list-group d-none d-md-block" role="table" aria-labelledby="pageTitle">
         <li class="list-group-item p-3 li-header d-block" role="rowgroup">
           <div class="row" role="row">
-            <div class="col-2 col-lg-1" role="columnheader">Status:</div>
-            <div class="col-4" role="columnheader">Nazwa wydarzenia:</div>
+            <div class="col-2" role="columnheader">Status:</div>
+            <div class="col-3" role="columnheader">Nazwa wydarzenia:</div>
             <div class="col-2 col-lg-3" role="columnheader">Czas trwania:</div>
             <div class="col-3" role="columnheader">Data zakończenia zapisów:</div>
             <div class="col-1 text-end" role="columnheader">Sloty:</div>
@@ -28,8 +28,8 @@
         <li class="list-group-item d-block" role="rowgroup" *ngFor="let event of events">
           <a [routerLink]="['/event/', event.id]" class="p-3 d-block">
           <div class="row" role="row">
-            <div class="col-2 col-lg-1" role="cell">{{ event.isActive() }}</div>
-            <div class="col-4" role="cell">{{ event.name }}</div>
+            <div class="col-2" role="cell">{{ event.isActive() }}</div>
+            <div class="col-3" role="cell">{{ event.name }}</div>
             <div class="col-2 col-lg-3" role="cell"><span class="text-nowrap">{{ event.researchStartDate }}</span> - <span class="text-nowrap">{{ event.researchEndDate }}</span></div>
             <div class="col-3" role="cell">{{ event.endDate }}</div>
             <div class="col-1 text-end" role="cell">{{ event.slotsTaken }}/{{ event.maxUsers }}</div>

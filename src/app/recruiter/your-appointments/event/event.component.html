@@ -11,11 +11,6 @@
         <a class="w-100 btn btn-primary" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>
       </div>
     </div>
-      <div class="row mt-2 mt-md-0" *ngIf="event.active === false">
-        <div class="col-12 col-sm-auto">
-          <a class="w-100 btn btn-primary" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>
-        </div>
-    </div>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
@@ -116,15 +111,18 @@
             <div class="col-4" role="cell" *ngIf="survey.date.toISOString() ==='1970-01-01T00:00:00.000Z'" title="Spotkanie nie zostało jeszcze umówione"><span
               class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
             </div>
+            <div class="col-4" role="cell" *ngIf="survey.date === null" title="Spotkanie nie zostało jeszcze umówione"><span
+              class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
+            </div>
             <div class="col-1 text-end" role="cell">
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'USED'">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'UNUSED'">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Dezaktywuj kod</span>
@@ -157,13 +155,13 @@
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
                       *ngIf="survey.surveyState === 'USED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)">
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
               <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
                       *ngIf="survey.surveyState === 'UNUSED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList, event)">
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Dezaktywuj kod</span>
               </button>

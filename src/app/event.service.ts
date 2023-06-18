@@ -19,7 +19,7 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.post<EventDto>('http://localhost:8080/events', event, options)
+    return this.http.post<EventDto>('https://easy-visit-edea476c86ab.herokuapp.com/events', event, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -31,7 +31,7 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.patch<EventDto>('http://localhost:8080/events/' + event.id, event, options)
+    return this.http.patch<EventDto>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + event.id, event, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -43,7 +43,7 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<EventDto[]>('http://localhost:8080/events', options)
+    return this.http.get<EventDto[]>('https://easy-visit-edea476c86ab.herokuapp.com/events', options)
       .pipe(
         map(events => events.map(event => new EventDto(
           event.name,
@@ -68,7 +68,7 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<EventDto>('http://localhost:8080/events/' + id, options)
+    return this.http.get<EventDto>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + id, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
