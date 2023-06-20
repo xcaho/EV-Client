@@ -43,6 +43,7 @@ export class DeleteCodeComponent {
   generateNewCode() {
     this.surveyService.saveSurvey(this.survey.eventId).subscribe((survey) => {
       console.log(survey)
+      survey.date = new Date(0)
       this.surveyList.push(survey)
     })
   }
