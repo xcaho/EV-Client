@@ -11,6 +11,7 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {ClipboardService} from 'ngx-clipboard';
 import {DeleteCodeComponent} from "./delete-code/delete-code.component";
 import {DeleteEventComponent} from "./delete-event/delete-event.component";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-event',
@@ -58,7 +59,7 @@ export class EventComponent {
   }
 
   copyToClipboard(code: string) {
-    this.clipboardService.copyFromContent('https://easyvisit.netlify.app/register/' + code);
+    this.clipboardService.copyFromContent(environment.selfUrl + '/register/' + code);
   }
 
 }

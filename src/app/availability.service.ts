@@ -5,6 +5,7 @@ import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {Availability, AvailabilityDto, AvailabilityHours} from "./common/mainpage/Availability";
 import * as _ from "lodash";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,8 @@ export class AvailabilityService {
 
   temporaryAvailabilities?: Availability[]
 
+  apiUrl: string = environment.apiUrl
+
   constructor(private http: HttpClient) {
   }
 
@@ -20,7 +23,7 @@ export class AvailabilityService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.post<EventDto>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + eventId + '/availabilities', availability, options)
+    return this.http.post<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -32,7 +35,7 @@ export class AvailabilityService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.patch<EventDto>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + eventId + '/availabilities', availability, options)
+    return this.http.patch<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -44,7 +47,7 @@ export class AvailabilityService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<AvailabilityDto[]>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + eventId + '/availabilities', options)
+    return this.http.get<AvailabilityDto[]>(this.apiUrl + '/events/' + eventId + '/availabilities', options)
       .pipe(
         map(res => res.map(tmp => new AvailabilityDto(tmp.startDate, tmp.endDate))),
         catchError((error: any) => {
