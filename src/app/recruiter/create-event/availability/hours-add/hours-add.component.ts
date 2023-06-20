@@ -26,12 +26,11 @@ export class HoursAddComponent {
     this.hours = {} as AvailabilityHours;
   }
 
-  get startHour() {
-    return this.hoursAddForm.get('startHour')!;
-  }
-
-  get endHour() {
-    return this.hoursAddForm.get('endHour')!;
+  ngOnInit(): void {
+    this.hoursAddForm = new FormGroup({
+      startHour: new FormControl(this.hours.startHour),
+      endHour: new FormControl(this.hours.endHour),
+    });
   }
 
   open(content: any, availability: Availability): void {
@@ -56,11 +55,12 @@ export class HoursAddComponent {
     }
   }
 
-  ngOnInit(): void {
-    this.hoursAddForm = new FormGroup({
-      startHour: new FormControl(this.hours.startHour),
-      endHour: new FormControl(this.hours.endHour),
-    });
+  get startHour() {
+    return this.hoursAddForm.get('startHour')!;
+  }
+
+  get endHour() {
+    return this.hoursAddForm.get('endHour')!;
   }
 
 }

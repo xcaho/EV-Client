@@ -22,7 +22,7 @@
     pointer-events: none;
     transform-origin: 0 0;
     transition: all .15s ease-out;
-    color: rgba(0,0,0,.6);
+    color: $text-gray-color;
     margin-bottom: 0;
   }
 
@@ -63,11 +63,14 @@
   + .form-label {
     padding-right: 0.625rem;
     &::after {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      font-size: 0.425rem;
       position: absolute;
       right: 0;
-      top: 0.25rem;
-      content: '*';
-      color: red;
+      top: 0.425rem;
+      content: '\f621';
+      color: $text-warn-color;
     }
   }
 }

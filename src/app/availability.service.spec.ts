@@ -1,6 +1,7 @@
 import { AvailabilityService} from "./availability.service";
 import { HttpClient } from '@angular/common/http';
 import {EventDto} from "./common/mainpage/EventDto";
+import { Availability, AvailabilityHours } from "./common/mainpage/Availability";
 
 describe('AvailabilityService', () => {
   let availabilityService: AvailabilityService;
@@ -11,27 +12,278 @@ describe('AvailabilityService', () => {
     availabilityService = new AvailabilityService(httpClientSpy);
   });
 
-  it('should return correct ranges', () => {
-    const hoursList = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30'];
-    const hoursChoice = '10:00';
-    const events = new EventDto('test1', 'test1', '', '', '', 3, 60, 30, 5);
+  describe("updateAvailableHours", () => {
+    it("should update the available hours based on selected hour and day", () => {
+      // Arrange
+      const hoursList = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00"];
+      const selectedHour = "09:00";
+      const selectedDay = "2023-06-11";
+      const availabilities: Availability[] = [
+        new Availability(new Date("2023-06-11"), [
+          new AvailabilityHours("09:00", "10:00"),
+          new AvailabilityHours("10:30", "12:00")
+        ]),
+        new Availability(new Date("2023-06-12"), [
+          new AvailabilityHours("09:00", "12:00")
+        ])
+      ];
+      const event: EventDto = new EventDto(
+        "Event",
+        "Event description",
+        "2023-06-11",
+        "2023-06-12",
+        "2023-06-11",
+        10,
+        30,
+        30,
+        0
+      );
 
-    const expectedRanges = [ '11:30-12:30'];
+      // Act
+      const updatedAvailabilities = availabilityService.updateAvailableHours(
+        hoursList,
+        selectedHour,
+        selectedDay,
+        availabilities,
+        event
+      );
 
-    const result = availabilityService.updateAvailableHours(hoursList, hoursChoice, events);
+      // Assert
+      expect(updatedAvailabilities[0].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[0].hoursList[0].startHour).toBe("10:00");
+      expect(updatedAvailabilities[0].hoursList[0].endHour).toBe("12:00");
 
-    expect(result).toEqual(expectedRanges);
-  });
+      expect(updatedAvailabilities[1].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[1].hoursList[0].startHour).toBe("09:00");
+      expect(updatedAvailabilities[1].hoursList[0].endHour).toBe("12:00");
+    });
 
-  it('should return single hour when no ranges can be created', () => {
-    const hoursList = ['09:00', '09:30', '10:00'];
-    const hoursChoice = '09:00';
-    const events = new EventDto('test1', 'test1', '', '', '', 3, 30, 30, 5);
+    it("should correctly update the available hours when the selected hour is at the beginning of a range", () => {
+      // Arrange
+      const hoursList = ["08:00", "08:30","09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00"];
+      const selectedHour = "08:00"; // Outside survey duration range
+      const selectedDay = "2023-06-11";
+      const availabilities: Availability[] = [
+        new Availability(new Date("2023-06-11"), [
+          new AvailabilityHours("08:00", "10:00"),
+          new AvailabilityHours("10:30", "13:00")
+        ]),
+        new Availability(new Date("2023-06-12"), [
+          new AvailabilityHours("09:00", "12:00")
+        ])
+      ];
+      const event: EventDto = new EventDto(
+        "Event",
+        "Event description",
+        "2023-06-11",
+        "2023-06-12",
+        "2023-06-11",
+        10,
+        60,
+        30,
+        0
+      );
 
-    const expectedRanges = ['10:00'];
+      // Act
+      const updatedAvailabilities = availabilityService.updateAvailableHours(
+        hoursList,
+        selectedHour,
+        selectedDay,
+        availabilities,
+        event
+      );
 
-    const result = availabilityService.updateAvailableHours(hoursList, hoursChoice, events);
+      // Assert
+      expect(updatedAvailabilities[0].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[0].hoursList[0].startHour).toBe("09:30");
+      expect(updatedAvailabilities[0].hoursList[0].endHour).toBe("13:00");
 
-    expect(result).toEqual(expectedRanges);
+      expect(updatedAvailabilities[1].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[1].hoursList[0].startHour).toBe("09:00");
+      expect(updatedAvailabilities[1].hoursList[0].endHour).toBe("12:00");
+    });
+
+    it("should correctly update the available hours when the selected hour is at the end of a range", () => {
+      // Arrange
+      const hoursList = ["08:00", "08:30","09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00"];
+      const selectedHour = "11:30"; // Outside survey duration range
+      const selectedDay = "2023-06-11";
+      const availabilities: Availability[] = [
+        new Availability(new Date("2023-06-11"), [
+          new AvailabilityHours("08:00", "10:00"),
+          new AvailabilityHours("10:30", "13:00")
+        ]),
+        new Availability(new Date("2023-06-12"), [
+          new AvailabilityHours("09:00", "12:00")
+        ])
+      ];
+      const event: EventDto = new EventDto(
+        "Event",
+        "Event description",
+        "2023-06-11",
+        "2023-06-12",
+        "2023-06-11",
+        10,
+        60,
+        30,
+        0
+      );
+
+      // Act
+      const updatedAvailabilities = availabilityService.updateAvailableHours(
+        hoursList,
+        selectedHour,
+        selectedDay,
+        availabilities,
+        event
+      );
+
+      // Assert
+      expect(updatedAvailabilities[0].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[0].hoursList[0].startHour).toBe("08:00");
+      expect(updatedAvailabilities[0].hoursList[0].endHour).toBe("10:00");
+
+      expect(updatedAvailabilities[1].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[1].hoursList[0].startHour).toBe("09:00");
+      expect(updatedAvailabilities[1].hoursList[0].endHour).toBe("12:00");
+    });
+
+    it("should exclude single hours from available ranges", () => {
+      // Arrange
+      const hoursList = ["13:00", "13:30", "14:00", "14:30", "15:00", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
+      const selectedHour = "18:30";
+      const selectedDay = "2023-06-11";
+      const availabilities: Availability[] = [
+        new Availability(new Date("2023-06-11"), [
+          new AvailabilityHours("13:00", "15:00"),
+          new AvailabilityHours("17:00", "20:00")
+        ]),
+        new Availability(new Date("2023-06-12"), [
+          new AvailabilityHours("11:00", "14:00")
+        ])
+      ];
+      const event: EventDto = new EventDto(
+        "Event",
+        "Event description",
+        "2023-06-11",
+        "2023-06-12",
+        "2023-06-11",
+        10,
+        60,
+        30,
+        0
+      );
+
+      // Act
+      const updatedAvailabilities = availabilityService.updateAvailableHours(
+        hoursList,
+        selectedHour,
+        selectedDay,
+        availabilities,
+        event
+      );
+
+      // Assert
+      expect(updatedAvailabilities[0].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[0].hoursList[0].startHour).toBe("13:00");
+      expect(updatedAvailabilities[0].hoursList[0].endHour).toBe("15:00");
+
+      expect(updatedAvailabilities[1].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[1].hoursList[0].startHour).toBe("11:00");
+      expect(updatedAvailabilities[1].hoursList[0].endHour).toBe("14:00");
+    });
+
+    it("should not update availabilities when choosed hour is not in available hoursList", () => {
+      // Arrange
+      const hoursList = ["13:00", "13:30", "14:00", "14:30", "15:00", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
+      const selectedHour = "11:30";
+      const selectedDay = "2023-06-11";
+      const availabilities: Availability[] = [
+        new Availability(new Date("2023-06-11"), [
+          new AvailabilityHours("13:00", "15:00"),
+          new AvailabilityHours("17:00", "20:00")
+        ]),
+        new Availability(new Date("2023-06-12"), [
+          new AvailabilityHours("11:00", "14:00")
+        ])
+      ];
+      const event: EventDto = new EventDto(
+        "Event",
+        "Event description",
+        "2023-06-11",
+        "2023-06-12",
+        "2023-06-11",
+        10,
+        60,
+        30,
+        0
+      );
+
+      // Act
+      const updatedAvailabilities = availabilityService.updateAvailableHours(
+        hoursList,
+        selectedHour,
+        selectedDay,
+        availabilities,
+        event
+      );
+
+      // Assert
+      expect(updatedAvailabilities[0].hoursList.length).toBe(2);
+      expect(updatedAvailabilities[0].hoursList[0].startHour).toBe("13:00");
+      expect(updatedAvailabilities[0].hoursList[0].endHour).toBe("15:00");
+      expect(updatedAvailabilities[0].hoursList[1].startHour).toBe("17:00");
+      expect(updatedAvailabilities[0].hoursList[1].endHour).toBe("20:00");
+
+      expect(updatedAvailabilities[1].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[1].hoursList[0].startHour).toBe("11:00");
+      expect(updatedAvailabilities[1].hoursList[0].endHour).toBe("14:00");
+    });
+
+    it("should corectly update available hour ranges based on choosed hour", () => {
+      // Arrange
+      const hoursList = ["08:00", "08:30","09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00"];
+      const selectedHour = "11:00"; // Outside survey duration range
+      const selectedDay = "2023-06-11";
+      const availabilities: Availability[] = [
+        new Availability(new Date("2023-06-11"), [
+          new AvailabilityHours("08:00", "14:00"),
+        ]),
+        new Availability(new Date("2023-06-12"), [
+          new AvailabilityHours("09:00", "12:00")
+        ])
+      ];
+      const event: EventDto = new EventDto(
+        "Event",
+        "Event description",
+        "2023-06-11",
+        "2023-06-12",
+        "2023-06-11",
+        10,
+        60,
+        30,
+        0
+      );
+
+      // Act
+      const updatedAvailabilities = availabilityService.updateAvailableHours(
+        hoursList,
+        selectedHour,
+        selectedDay,
+        availabilities,
+        event
+      );
+
+      // Assert
+      expect(updatedAvailabilities[0].hoursList.length).toBe(2);
+      expect(updatedAvailabilities[0].hoursList[0].startHour).toBe("08:00");
+      expect(updatedAvailabilities[0].hoursList[0].endHour).toBe("09:30");
+      expect(updatedAvailabilities[0].hoursList[1].startHour).toBe("12:30");
+      expect(updatedAvailabilities[0].hoursList[1].endHour).toBe("14:00");
+
+      expect(updatedAvailabilities[1].hoursList.length).toBe(1);
+      expect(updatedAvailabilities[1].hoursList[0].startHour).toBe("09:00");
+      expect(updatedAvailabilities[1].hoursList[0].endHour).toBe("12:00");
+    });
   });
 });

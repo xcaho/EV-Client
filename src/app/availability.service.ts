@@ -5,6 +5,7 @@ import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {Availability, AvailabilityDto, AvailabilityHours} from "./common/mainpage/Availability";
 import * as _ from "lodash";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,8 @@ export class AvailabilityService {
 
   temporaryAvailabilities?: Availability[]
 
+  apiUrl: string = environment.apiUrl
+
   constructor(private http: HttpClient) {
   }
 
@@ -20,7 +23,7 @@ export class AvailabilityService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.post<EventDto>('http://localhost:8080/events/' + eventId + '/availabilities', availability, options)
+    return this.http.post<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -32,7 +35,7 @@ export class AvailabilityService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.patch<EventDto>('http://localhost:8080/events/' + eventId + '/availabilities', availability, options)
+    return this.http.patch<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -44,7 +47,7 @@ export class AvailabilityService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<AvailabilityDto[]>('http://localhost:8080/events/' + eventId + '/availabilities', options)
+    return this.http.get<AvailabilityDto[]>(this.apiUrl + '/events/' + eventId + '/availabilities', options)
       .pipe(
         map(res => res.map(tmp => new AvailabilityDto(tmp.startDate, tmp.endDate))),
         catchError((error: any) => {
@@ -148,8 +151,12 @@ export class AvailabilityService {
     availabilities.forEach(availability => {
       if (availability.date.toDateString() == dayToExclude.toDateString()) {
         ranges.forEach(range => {
-          const [startHour, endHour] = range.split('-');
-          newAvailabilityHours.push(new AvailabilityHours(startHour, endHour))
+          if (range.indexOf("-") > -1){
+            const [startHour, endHour] = range.split('-');
+            if (this.getHourDiff(startHour, endHour) >= event.surveyDuration){
+              newAvailabilityHours.push(new AvailabilityHours(startHour, endHour))
+            }
+          }
         })
         indexToSwap = availabilities.indexOf(availability)
       }

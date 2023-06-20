@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {EventDto} from "./common/mainpage/EventDto";
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
-import {AvailabilityDto} from "./common/mainpage/Availability";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,8 @@ export class EventService {
 
   temporaryEvent?: EventDto
 
+  apiUrl: string = environment.apiUrl
+
   constructor(private http: HttpClient) {
   }
 
@@ -19,7 +21,19 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.post<EventDto>('http://localhost:8080/events', event, options)
+    return this.http.post<EventDto>(this.apiUrl + '/events', event, options)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  modifyEvent(event: EventDto): Observable<EventDto> {
+    const headers = {"Content-Type": "application/json"};
+    const options = {"headers": headers};
+
+    return this.http.patch<EventDto>(this.apiUrl + '/events/' + event.id, event, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -31,8 +45,21 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<EventDto[]>('http://localhost:8080/events', options)
+    return this.http.get<EventDto[]>(this.apiUrl + '/events', options)
       .pipe(
+        map(events => events.map(event => new EventDto(
+          event.name,
+          event.description,
+          event.researchStartDate,
+          event.researchEndDate,
+          event.endDate,
+          event.maxUsers,
+          event.surveyDuration,
+          event.surveyBreakTime,
+          event.slotsTaken,
+          event.id,
+          event.active
+        ))),
         catchError((error: any) => {
           return throwError(error);
         })
@@ -43,7 +70,7 @@ export class EventService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<EventDto>('http://localhost:8080/events/' + id, options)
+    return this.http.get<EventDto>(this.apiUrl + '/events/' + id, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

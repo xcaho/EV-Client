@@ -41,7 +41,6 @@ export class AvailabilityComponent {
 
   goBack() {
     this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
-    this.router.navigate(['/create'])
   }
 
   private generateDates(startDate: Date, endDate: Date) {
