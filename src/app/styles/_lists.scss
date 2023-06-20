@@ -19,6 +19,12 @@ dd {
   background-color: $bg-dark;
 }
 
+@media (max-width: 767px) {
+  .list-group-item:hover {
+    background-color: #fff;
+  }
+}
+
 .li-header {
   background-color: transparent;
 }
@@ -29,4 +35,10 @@ dd {
 
 .li-header:hover {
   background-color: inherit;
+}
+
+@media (max-width: 767px) {
+  .list-group-item:hover {
+    background-color: #fff;
+  }
 }

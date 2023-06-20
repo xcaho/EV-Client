@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
@@ -17,7 +17,8 @@ export class DefiningEventComponent {
   textAreaValue: string = '';
 
   constructor(private eventService: EventService,
-              private router: Router) {
+              private router: Router,
+              private elementRef: ElementRef) {
 
     this.event = {} as EventDto
   }
@@ -56,6 +57,10 @@ export class DefiningEventComponent {
 
     this.eventService.setTemporaryEvent(this.event)
     this.router.navigate(['/availability'])
+    const element = this.elementRef.nativeElement.querySelector("#maincontent");
+    if (element) {
+      element.scrollIntoView({ block: 'start' });
+    }
   }
 
   goBack() {

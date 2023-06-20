@@ -1,4 +1,4 @@
-<div class="h64 flex-center border-bottom border-secondary mb-5">
+<div class="h64 flex-center border-bottom border-secondary mb-4">
   <div class="container-xxl d-flex flex-wrap justify-content-between">
     <h1 class="h2 mb-0">{{formEventName}}</h1>
   </div>
@@ -23,9 +23,9 @@
       </dl>
       <div class="row">
         <p class="mb-1">W tych terminach możesz się umówić na badanie</p>
-        <ul class="ms-3">
+        <ul>
           <ng-container *ngFor="let availability of availabilityList">
-            <li>{{availability.dayOfWeek}}, {{availability.dateFormatted}}: {{availability.hoursList}}</li>
+            <li class="ms-4">{{availability.dayOfWeek}}, {{availability.dateFormatted}}: {{availability.hoursList}}</li>
           </ng-container>
         </ul>
       </div>
@@ -75,8 +75,8 @@
             </label>
           </div>
         </div>
-        <div class="col-auto ms-auto mt-3">
-          <button class="btn btn-primary" (click)="save()">Zapisz się</button>
+        <div class="col-12 col-sm-auto ms-auto mt-3">
+          <button class="w-100 btn btn-primary" (click)="save()">Zapisz się</button>
         </div>
       </form>
     </section>

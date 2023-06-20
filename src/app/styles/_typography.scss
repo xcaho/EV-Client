@@ -9,3 +9,11 @@ h1{
 .text-secondary {
   color: $text-secondary !important;
 }
+
+.invalid-feedback {
+  color: $text-warn-color;
+}
+
+.form-control, .form-label, .form-text {
+  color: $text-gray-color;
+}
