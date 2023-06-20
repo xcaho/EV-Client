@@ -4,6 +4,7 @@ import {catchError} from "rxjs/operators";
 import {SurveyDto} from "./common/mainpage/SurveyDto";
 import {HttpClient} from "@angular/common/http";
 import {ConfirmationDto} from "./common/mainpage/ConfirmationDto";
+import {environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,8 @@ export class SurveyService {
 
   temporaryConfirmation?: ConfirmationDto
 
+  apiUrl: string = environment.apiUrl
+
   constructor(private http: HttpClient) {
   }
 
@@ -19,7 +22,7 @@ export class SurveyService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<SurveyDto>('https://easy-visit-edea476c86ab.herokuapp.com/surveys/' + code, options)
+    return this.http.get<SurveyDto>(this.apiUrl + '/surveys/' + code, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -31,7 +34,7 @@ export class SurveyService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.get<SurveyDto[]>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + eventId + '/surveys', options)
+    return this.http.get<SurveyDto[]>(this.apiUrl + '/events/' + eventId + '/surveys', options)
       .pipe(
         map(res => res.map(tmp => new SurveyDto(
           tmp.id, tmp.code, tmp.date, tmp.surveyState, tmp.eventId))),
@@ -45,7 +48,7 @@ export class SurveyService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.patch<SurveyDto>('https://easy-visit-edea476c86ab.herokuapp.com/surveys/' + survey.id, survey, options)
+    return this.http.patch<SurveyDto>(this.apiUrl + '/surveys/' + survey.id, survey, options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -56,7 +59,7 @@ export class SurveyService {
     const headers = {"Content-Type": "application/json"};
     const options = {"headers": headers};
 
-    return this.http.post<SurveyDto>('https://easy-visit-edea476c86ab.herokuapp.com/events/' + eventId + '/surveys', options)
+    return this.http.post<SurveyDto>(this.apiUrl + '/events/' + eventId + '/surveys', options)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
