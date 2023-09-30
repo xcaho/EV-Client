@@ -29,6 +29,7 @@ export class SurveyRegistrationComponent {
   public selectedHour: string = '';
   public filteredHoursList: any[] = [];
   private updatedAvailabilityList: any[] = [];
+  private endHours: any[] = [];
   public formEventName: string = "";
   public formSurveyDuration: number = 0;
   public formEventEndDate: string = "";
@@ -97,7 +98,7 @@ export class SurveyRegistrationComponent {
   save() {
     if (this.validate()) {
       const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
-        this.selectedHour, this.selectedDay, this.availabilityList, this.event);
+        this.selectedHour, this.selectedDay, this.availabilityList, this.event, this.endHours);
 
       let date: Date = new Date(this.selectedDay)
       const [hours, minutes] = this.selectedHour.split(':').map(Number);
@@ -153,6 +154,9 @@ export class SurveyRegistrationComponent {
     if (selectedDayIndex !== -1) {
       this.availabilityList[selectedDayIndex].hoursList.forEach((hourItem) => {
         const {startHour, endHour} = hourItem;
+
+        this.endHours.push(endHour)
+
         const [startHourValue, startMinuteValue] = startHour.split(':').map(part => parseInt(part, 10));
         const [endHourValue, endMinuteValue] = endHour.split(':').map(part => parseInt(part, 10));
 
