@@ -18,12 +18,11 @@
     <section class="col-12">
       <h2 class="h5 mb-3">Szczegóły dotyczące wydarzenia "{{event.name}}"</h2>
       <dl class="row gap">
-        <div class="col-12 col-sm-6 col-lg-4">
+        <div class="col-12 col-sm-6 col-lg-4"
+             *ngIf="event.description !== ''">
           <div class="bg-white px-3 py-2">
             <dt>Opis:</dt>
-            <dd *ngIf="event.description !== ''">{{event.description}}</dd>
-            <dd *ngIf="event.description === ''" title="Brak opisu spotkania">–<span
-              class="d-none">Brak opisu spotkania</span></dd>
+            <dd>{{event.description}}</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
@@ -84,37 +83,43 @@
     </section>
     <section class="col-12">
       <h2 class="h5 mt-4 mb-3" id="listTitle">Lista kodów</h2>
-      <ul class="list-group d-none d-md-block" role="table" aria-labelledby="listTitle">
-        <li class="list-group-item p-3 li-header d-block" role="rowgroup">
-          <div class="row" role="row">
-            <div class="col-3" role="columnheader">Status:</div>
-            <div class="col-4" role="columnheader">Kod:</div>
-            <div class="col-4" role="columnheader">Data spotkania:</div>
-            <div class="col-1 text-end sr-only" role="columnheader">Akcje:</div>
-          </div>
-        </li>
-        <li class="list-group-item d-block" role="rowgroup" *ngFor="let survey of surveyList; let i=index">
-          <div class="row" role="row">
-            <div class="col-3" role="cell">
+      <table class="list-group d-none d-md-block" aria-labelledby="listTitle">
+        <caption class="sr-only">Lista kodów</caption>
+        <thead class="list-group-item p-3 li-header d-block">
+          <tr class="row">
+            <th class="col-3">Status:</th>
+            <th class="col-4">Kod:</th>
+            <th class="col-4">Data spotkania:</th>
+            <th class="col-1 text-end sr-only">Akcje:</th>
+          </tr>
+        </thead>
+        <tbody class="list-group-item d-block" *ngFor="let survey of surveyList; let i=index">
+          <tr class="row">
+            <td class="col-3">
               <ng-container *ngIf="survey.surveyState === 'USED'">Użyty</ng-container>
               <ng-container *ngIf="survey.surveyState === 'UNUSED'">Nieużyty</ng-container>
               <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączony</ng-container>
-            </div>
-            <div class="col-4" role="cell">
+            </td>
+            <td class="col-4">
               <span id="kod{{survey.id}}" style="display:inline-block; min-width: 125px;">{{survey.code}}</span>
               <button class="btn btn-icon btn-list fa-solid fa-copy" title="Skopiuj link do spotkania - {{survey.code}}"
                       (click)="copyToClipboard(survey.code)">
-                <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
+                <span class="sr-only">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
-            </div>
-            <div class="col-4" role="cell" *ngIf="survey.date.toISOString() != '1970-01-01T00:00:00.000Z'">{{survey.getDateFormatted()}}</div>
-            <div class="col-4" role="cell" *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z'" title="Spotkanie nie zostało jeszcze umówione"><span
+            </td>
+            <td class="col-4"
+                *ngIf="survey.date.toISOString() != '1970-01-01T00:00:00.000Z'">
+              {{survey.getDateFormatted()}}
+            </td>
+            <td class="col-4"
+                *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z'"
+                title="Spotkanie nie zostało jeszcze umówione">
+              <span class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
+            </td>
+            <td class="col-4" *ngIf="survey.date === null" title="Spotkanie nie zostało jeszcze umówione"><span
               class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
-            </div>
-            <div class="col-4" role="cell" *ngIf="survey.date === null" title="Spotkanie nie zostało jeszcze umówione"><span
-              class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
-            </div>
-            <div class="col-1 text-end" role="cell">
+            </td>
+            <td class="col-1 text-end">
               <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'USED'">
@@ -127,10 +132,10 @@
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Dezaktywuj kod</span>
               </button>
-            </div>
-          </div>
-        </li>
-      </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
         <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let survey of surveyList; let i=index">
           <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">

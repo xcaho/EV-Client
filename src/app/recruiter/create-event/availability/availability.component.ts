@@ -26,6 +26,7 @@ export class AvailabilityComponent {
   }
 
   ngOnInit() {
+    document.getElementById('focusReset')?.focus();
     this.event = this.eventService.getTemporaryEvent()
     if(!this.event) {
       this.goBack()

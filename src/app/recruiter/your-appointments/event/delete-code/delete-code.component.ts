@@ -19,6 +19,7 @@ export class DeleteCodeComponent {
   }
 
   ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
   }
 
   open(content: any, survey: SurveyDto, surveyList: SurveyDto[]): void {
