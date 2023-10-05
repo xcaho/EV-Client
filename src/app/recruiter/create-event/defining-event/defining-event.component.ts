@@ -15,20 +15,38 @@ export class DefiningEventComponent {
   reactiveForm!: FormGroup;
   event: EventDto;
   textAreaValue: string = '';
+  public minDate: string = '';
+  public todayDate: Date = new Date();
+  hours: string[] = [];
+  minutes: string[] = [];
 
   constructor(private eventService: EventService,
               private router: Router,
               private elementRef: ElementRef) {
-
     this.event = {} as EventDto
+    this.generateHours();
   }
 
   ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
     this.initFormGroup()
     this.event = this.eventService.getTemporaryEvent()
     if (this.event) {
       this.patchForm()
     }
+  }
+
+  generateHours() {
+    let time: string[] = [];
+    for (let hour = 0; hour <= 2; hour++) {
+      this.hours.push(hour.toString().padStart(2, '0'));
+      for (let minute = 0; minute <= 45; minute += 15) {
+        this.minutes.push(minute.toString().padStart(2, '0'));
+        time.push(hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0'))
+      }
+    }
+    time.shift();
+    return time;
   }
 
   public validate(form: FormGroupDirective): void {
@@ -59,7 +77,7 @@ export class DefiningEventComponent {
     this.router.navigate(['/availability'])
     const element = this.elementRef.nativeElement.querySelector("#maincontent");
     if (element) {
-      element.scrollIntoView({ block: 'start' });
+      element.scrollIntoView({block: 'start'});
     }
   }
 
@@ -105,13 +123,25 @@ export class DefiningEventComponent {
       maxUsers: new FormControl(this.event.maxUsers, [
         Validators.required,
         Validators.min(1),
-        Validators.max(20),
+        Validators.max(100),
       ]),
       researchStartDate: new FormControl(this.event.researchStartDate, [
         Validators.required,]),
       researchEndDate: new FormControl(this.event.researchEndDate, [
         Validators.required,]),
     });
+  }
+
+  public onDateChange(event: any) {
+    console.log(event.target.value)
+    this.minDate = event.target.value;
+  }
+
+  public dateToFormat(date: Date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return (year + '-' + month + '-' + day)
   }
 
   get name() {

@@ -6,3 +6,8 @@
 @import "forms";
 @import "typography";
 @import "utilities";
+
+*:focus {
+  outline: 3px solid black !important;
+  outline-offset: 2px !important;
+}

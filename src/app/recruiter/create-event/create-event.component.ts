@@ -7,7 +7,9 @@ import {Component, Input} from '@angular/core';
 })
 
 export class CreateEventComponent {
-
   @Input() isEdit: boolean = false
 
+  ngOnInit() {
+    document.getElementById('focusReset')?.focus();
+  }
 }

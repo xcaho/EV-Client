@@ -7,11 +7,10 @@ li {
 .list-group {
   box-shadow: 2px 2px 40px rgba(0, 0, 0, 0.1);
   a {
-    //padding: 1rem 1rem;
-    //display: flex;
-    //justify-content: space-between;
     color:$text-dark;
     text-decoration: none;
+    position: relative;
+    z-index: 99999;
   }
   .list-group-item:first-child {
     border-top-left-radius: 0.25rem;

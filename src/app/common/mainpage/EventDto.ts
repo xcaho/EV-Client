@@ -12,9 +12,17 @@ export class EventDto {
   public slotsTaken: number = 0
   public active: boolean = true
 
-  public constructor(name: string, description: string, researchStartDate: string, researchEndDate: string,
-                     endDate: string, maxUsers: number, surveyDuration: number, surveyBreakTime: number,
-                     slotsTaken: number, id: number = 0, active: boolean = true) {
+  public constructor(name: string,
+                     description: string,
+                     researchStartDate: string,
+                     researchEndDate: string,
+                     endDate: string,
+                     maxUsers: number,
+                     surveyDuration: number,
+                     surveyBreakTime: number,
+                     slotsTaken: number,
+                     id: number = 0,
+                     active: boolean = true) {
     this.name = name;
     this.description = description;
     this.researchStartDate = researchStartDate;
@@ -29,6 +37,6 @@ export class EventDto {
   }
 
   public isActive() {
-    return this.active ? "Aktywny" : "Nieaktywny"
+    return this.active ? "Aktywne" : "Nieakywne"
   }
 }

@@ -23,7 +23,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
         CommonModule,
         ReactiveFormsModule,
         RouterLink,
-        FontAwesomeModule
+        FontAwesomeModule,
     ]
 })
 export class CreateEventModule { }

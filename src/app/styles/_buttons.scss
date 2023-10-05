@@ -11,9 +11,9 @@
     border-color: transparent !important;
   }
   &:focus, &:focus-visible, &:active {
-    outline: $primary-color-hover;
-    outline: 2px solid $text-dark !important;
-    outline-offset:1px;
+    //outline: $primary-color-hover;
+    //outline: 2px solid $text-dark !important;
+    //outline-offset:1px;
     box-shadow: unset !important;
     color:$text-primary !important;
   }
@@ -28,9 +28,9 @@
     border-color: transparent !important;
   }
   &:focus, &:focus-visible, &:active {
-    outline: $primary-color-hover;
-    outline: 2px solid $text-dark !important;
-    outline-offset:1px;
+    //outline: $primary-color-hover;
+    //outline: 2px solid $text-dark !important;
+    //outline-offset:1px;
     box-shadow: unset !important;
     color:$text-primary !important;
   }
