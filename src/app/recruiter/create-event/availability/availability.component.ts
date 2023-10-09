@@ -16,6 +16,7 @@ import {AvailabilityService} from "../../../availability.service";
 export class AvailabilityComponent {
   @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
 
+  isEdit: boolean = false;
   availabilityList: Availability[] = [];
   event!: EventDto;
   plus = faPlus;
@@ -28,6 +29,7 @@ export class AvailabilityComponent {
   ngOnInit() {
     document.getElementById('focusReset')?.focus();
     this.event = this.eventService.getTemporaryEvent()
+    this.isEdit = this.eventService.getIsEdit()
     if(!this.event) {
       this.goBack()
     }
@@ -56,22 +58,41 @@ export class AvailabilityComponent {
   }
 
   submit() {
-    this.eventService.createEvent(this.event).subscribe(
-      response => {
+    if (this.isEdit) {
 
-        console.log("Succesfully added: " + JSON.stringify(response));
-        this.saveAvailability(response.id)
+      this.eventService.modifyEvent(this.event).subscribe(
+        response => {
 
-      }, exception => {
-        console.log(exception.error.errorsMap)
-      }
-    )
+          console.log("Succesfully added: " + JSON.stringify(response));
+          this.saveAvailability(response.id)
+
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
+
+    } else {
+
+      this.eventService.createEvent(this.event).subscribe(
+        response => {
+
+          console.log("Succesfully added: " + JSON.stringify(response));
+          this.saveAvailability(response.id)
+
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
+    }
   }
 
   private saveAvailability(eventId: number) {
 
     let availabilityDtoList: AvailabilityDto[] = this.availabilityService.convertAvailabilityToDto(this.availabilityList)
-    this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
+
+    if (this.isEdit) {
+
+    this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
       response => {
 
         console.log("Successfully added: " + JSON.stringify(response))
@@ -83,6 +104,22 @@ export class AvailabilityComponent {
         console.log(exception.error.errorsMap)
       }
     )
+
+    } else {
+
+      this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
+        response => {
+
+          console.log("Successfully added: " + JSON.stringify(response))
+          this.eventService.clearTemporaryEvent()
+          this.availabilityService.clearTemporaryAvailabilities()
+          this.router.navigate(['/appointments'])
+
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
+    }
   }
 
   private addOneDay(currentDate: Date) {

@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {DateValidator} from "../../../shared/validators/date-validator";
 
@@ -12,7 +12,7 @@ import {DateValidator} from "../../../shared/validators/date-validator";
   styleUrls: ['./defining-event.component.scss']
 })
 export class DefiningEventComponent {
-  @Input() isEdit: boolean = false;
+  isEdit: boolean = false;
   reactiveForm!: FormGroup;
   event: EventDto;
   textAreaValue: string = '';
@@ -20,20 +20,41 @@ export class DefiningEventComponent {
   todayDate: Date = new Date();
   hours: string[] = [];
   minutes: string[] = [];
+  eventId: number = 0;
 
   constructor(private eventService: EventService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.event = {} as EventDto
     this.generateHours();
   }
 
   ngOnInit(): void {
     document.getElementById('focusReset')?.focus();
-    this.initFormGroup();
-    this.event = this.eventService.getTemporaryEvent();
+    this.initFormGroup()
+    this.event = this.eventService.getTemporaryEvent()
 
+    if (this.router.url.includes('edit')) {
+      this.eventService.setIsEdit(true)
+    }
+
+    this.isEdit = this.eventService.getIsEdit()
+
+    //fill form initally, case when service returned an event
     if (this.event) {
       this.patchForm()
+    }
+
+    if (this.isEdit) {
+      this.eventId = Number(this.route.snapshot.paramMap.get('id'))
+    }
+
+    //fill form by fetching from the server, case when service didn't return an event
+    if (!this.event) {
+      this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
+        this.event = eventDto
+        this.patchForm()
+      })
     }
   }
 
@@ -72,7 +93,8 @@ export class DefiningEventComponent {
       formContent.maxUsers,
       EventUtils.convertTimeToMinutes(formContent.surveyDuration),
       formContent.surveyBreakTime,
-      formContent.slotsTaken)
+      0,
+      this.eventId)
 
     this.eventService.setTemporaryEvent(this.event)
     this.router.navigate(['/availability'])

@@ -20,7 +20,7 @@ export class EventDto {
                      maxUsers: number,
                      surveyDuration: number,
                      surveyBreakTime: number,
-                     slotsTaken: number,
+                     slotsTaken: number = 0,
                      id: number = 0,
                      active: boolean = true) {
     this.name = name;

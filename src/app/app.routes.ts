@@ -12,6 +12,7 @@ import {ErrorComponent} from "./common/error/error.component";
 const appRoute: Routes = [
   {path: 'appointments', component: YourAppointmentsComponent},
   {path: 'availability', component: AvailabilityComponent},
+  {path: 'edit/:id/availability', component: AvailabilityComponent},
   {path: 'create', component: CreateEventComponent},
   {path: 'event/:id', component: EventComponent},
   {path: 'edit/:id', component: EditEventComponent},

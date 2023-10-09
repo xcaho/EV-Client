@@ -10,6 +10,8 @@ import {environment} from "../environments/environment";
 })
 export class EventService {
 
+  isEdit: boolean = false
+
   temporaryEvent?: EventDto
 
   apiUrl: string = environment.apiUrl
@@ -88,5 +90,13 @@ export class EventService {
 
   clearTemporaryEvent() {
     this.temporaryEvent = undefined
+  }
+
+  getIsEdit(): boolean {
+    return this.isEdit;
+  }
+
+  setIsEdit(isEdit: boolean) {
+    this.isEdit = isEdit;
   }
 }
