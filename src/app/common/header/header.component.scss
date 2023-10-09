@@ -1,6 +1,11 @@
 @import 'src/app/app.component.scss';
 @import 'src/app/styles/app';
 
+*:focus {
+  outline: 3px solid #ededed !important;
+  outline-offset: 1px !important;
+}
+
 header {
   background: $bg-primary;
 }
@@ -66,4 +71,12 @@ header {
     height: 0.125rem;
     margin: 0.125rem 0;
   }
+}
+
+.skiplink {
+  position: absolute;
+  top: calc(-0.5rem + 3px);
+  left: calc(-0.75rem + 3px);
+  z-index: 99999;
+  color: $text-dark !important;
 }

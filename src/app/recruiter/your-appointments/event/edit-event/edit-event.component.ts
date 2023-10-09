@@ -15,4 +15,8 @@ export class EditEventComponent {
     });
   }
 
+  ngOnInit() {
+    document.getElementById('focusReset')?.focus();
+  }
+
 }

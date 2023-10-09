@@ -53,7 +53,7 @@
     color: $text-primary;
     transition: all .2s ease-out;
   }
-  .form-control[type="date" i]:focus, .form-control[type="date" i]:valid, .form-control[type="time" i]:focus, .form-control[type="time" i]:valid {
+  .form-control:valid, .form-control[type="date" i]:focus, .form-control[type="date" i]:valid, .form-control[type="time" i]:focus, .form-control[type="time" i]:valid {
     color: $text-dark;
     transition: all .2s ease-out;
   }

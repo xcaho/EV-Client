@@ -35,6 +35,7 @@ export class EventComponent {
   }
 
   ngOnInit() {
+    document.getElementById('focusReset')?.focus();
     this.route.params.subscribe(params => {
       this.eventId = params['id'];
     });

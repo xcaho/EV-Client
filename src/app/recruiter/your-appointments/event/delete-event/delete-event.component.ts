@@ -2,8 +2,7 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {EventDto} from "../../../../common/mainpage/EventDto";
 import {EventService} from "../../../../event.service";
-import {SurveyDto, SurveyState} from "../../../../common/mainpage/SurveyDto";
-import {SurveyService} from "../../../../survey.service";
+import {SurveyDto} from "../../../../common/mainpage/SurveyDto";
 
 @Component({
   selector: 'app-delete-event',
@@ -16,13 +15,14 @@ export class DeleteEventComponent {
   event: EventDto;
   surveyList: SurveyDto[] = [];
 
-  constructor(private modalService: NgbModal, private eventService: EventService,
-              private surveyService: SurveyService) {
+  constructor(private modalService: NgbModal,
+              private eventService: EventService) {
 
     this.event = {} as EventDto
   }
 
   ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
   }
 
   open(content: any, event: EventDto, surveyList: SurveyDto[]): void {
