@@ -146,7 +146,7 @@ export class DefiningEventComponent {
   }
 
   public onDateChange(event: any) {
-    if (this.researchStartDate.value > this.dateToFormat(this.todayDate, false)) {
+    if (this.researchStartDate.value >= this.dateToFormat(this.todayDate, false)) {
       this.minDate = event.target.value;
       this.researchEndDate.updateValueAndValidity();
     }
