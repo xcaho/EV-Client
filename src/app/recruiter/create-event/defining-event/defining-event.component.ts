@@ -1,10 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {DateValidator} from "../../../shared/validators/date-validator";
+import {AvailabilityService} from "../../../availability.service";
 
 @Component({
   selector: 'app-defining-event',
@@ -23,6 +24,7 @@ export class DefiningEventComponent {
   eventId: number = 0;
 
   constructor(private eventService: EventService,
+              private availabilityService: AvailabilityService,
               private router: Router,
               private route: ActivatedRoute) {
     this.event = {} as EventDto
@@ -32,25 +34,20 @@ export class DefiningEventComponent {
   ngOnInit(): void {
     document.getElementById('focusReset')?.focus();
     this.initFormGroup()
+
     this.event = this.eventService.getTemporaryEvent()
+    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
+    this.eventId = EventUtils.getIdFromRoute(this.route)
 
-    if (this.router.url.includes('edit')) {
-      this.eventService.setIsEdit(true)
-    }
-
-    this.isEdit = this.eventService.getIsEdit()
-
-    //fill form initally, case when service returned an event
+    //fill form initally, case when event exists locally
     if (this.event) {
       this.patchForm()
+      return
     }
 
     if (this.isEdit) {
-      this.eventId = Number(this.route.snapshot.paramMap.get('id'))
-    }
 
-    //fill form by fetching from the server, case when service didn't return an event
-    if (!this.event) {
+      //fill form by fetching from the server, case when event doesn't exist locally, and it's edit mode
       this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
         this.event = eventDto
         this.patchForm()
@@ -71,14 +68,25 @@ export class DefiningEventComponent {
     return time;
   }
 
-  public validate(form: FormGroupDirective): void {
+  public goToAvailability(form: FormGroupDirective) {
+
+    this.validate()
+    this.saveEvent(form)
+
+    if (this.isEdit) {
+      this.router.navigate( ['/edit/' + this.event.id + '/availability'])
+    } else {
+      this.router.navigate(['/availability'])
+    }
+  }
+
+  public validate(): void {
     if (this.reactiveForm.invalid) {
       for (const control of Object.keys(this.reactiveForm.controls)) {
         this.reactiveForm.controls[control].markAsTouched();
       }
       return;
     }
-    this.saveEvent(form);
   }
 
   private saveEvent(f: FormGroupDirective) {
@@ -97,15 +105,11 @@ export class DefiningEventComponent {
       this.eventId)
 
     this.eventService.setTemporaryEvent(this.event)
-    this.router.navigate(['/availability'])
   }
 
   goBack() {
-    if (this.isEdit) {
-      this.router.navigate(['/event/', this.event.id])
-    } else {
-      this.router.navigate(['/appointments'])
-    }
+    this.eventService.clearTemporaryEvent();
+    this.availabilityService.clearTemporaryAvailabilities();
   }
 
   private patchForm() {

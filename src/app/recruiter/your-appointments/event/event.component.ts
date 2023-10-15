@@ -65,8 +65,6 @@ export class EventComponent {
 
   goToEdit() {
     this.eventService.setIsEdit(true)
-    this.eventService.setTemporaryEvent(this.event)
-    this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
   }
 
 }

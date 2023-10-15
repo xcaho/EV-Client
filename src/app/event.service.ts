@@ -4,6 +4,7 @@ import {EventDto} from "./common/mainpage/EventDto";
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {environment} from "../environments/environment";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root',
@@ -78,6 +79,14 @@ export class EventService {
           return throwError(error);
         })
       )
+  }
+
+  getIsEditConsideringRouter(router: Router): boolean {
+    if (router.url.includes('edit')) {
+      this.setIsEdit(true)
+    }
+
+    return this.isEdit;
   }
 
   getTemporaryEvent(): EventDto {
