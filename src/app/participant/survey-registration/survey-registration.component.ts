@@ -131,6 +131,11 @@ export class SurveyRegistrationComponent {
       )
 
       this.router.navigate(['register/' + this.surveyCode + '/confirmation'])
+    }, (exception) => {
+
+      if (exception.status == 409) {
+        console.log("mazurek działasz chłopie")
+      }
     })
    console.log(updatedAvailabilites);
   }
