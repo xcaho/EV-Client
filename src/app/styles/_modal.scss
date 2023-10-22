@@ -1,9 +1,17 @@
+.modal {
+  padding-top: 3rem;
+}
+
 .modal-content {
   background-color: $bg-secondary !important;
 }
 
 .modal-header, .modal-body, .modal-footer {
   border-color: #B5B0C5 !important;
+}
+
+.modal-header {
+  padding: 0.625rem 1rem;
 }
 
 .modal-footer {

@@ -8,7 +8,4 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export class DefiningEventModule {
-  ngOnInit() {
-    document.getElementById('focusReset')?.focus();
-  }
 }

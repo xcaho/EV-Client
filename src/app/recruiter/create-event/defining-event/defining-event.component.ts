@@ -1,9 +1,10 @@
-import {Component, ElementRef, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
 import {Router} from "@angular/router";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
+import {DateValidator} from "../../../shared/validators/date-validator";
 
 @Component({
   selector: 'app-defining-event',
@@ -15,28 +16,28 @@ export class DefiningEventComponent {
   reactiveForm!: FormGroup;
   event: EventDto;
   textAreaValue: string = '';
-  public minDate: string = '';
-  public todayDate: Date = new Date();
+  minDate: Date = new Date();
+  todayDate: Date = new Date();
   hours: string[] = [];
   minutes: string[] = [];
 
   constructor(private eventService: EventService,
-              private router: Router,
-              private elementRef: ElementRef) {
+              private router: Router) {
     this.event = {} as EventDto
     this.generateHours();
   }
 
   ngOnInit(): void {
     document.getElementById('focusReset')?.focus();
-    this.initFormGroup()
-    this.event = this.eventService.getTemporaryEvent()
+    this.initFormGroup();
+    this.event = this.eventService.getTemporaryEvent();
+
     if (this.event) {
       this.patchForm()
     }
   }
 
-  generateHours() {
+  public generateHours() {
     let time: string[] = [];
     for (let hour = 0; hour <= 2; hour++) {
       this.hours.push(hour.toString().padStart(2, '0'));
@@ -59,7 +60,7 @@ export class DefiningEventComponent {
     this.saveEvent(form);
   }
 
-  saveEvent(f: FormGroupDirective) {
+  private saveEvent(f: FormGroupDirective) {
     let formContent = f.value
 
     this.event = new EventDto(
@@ -75,10 +76,6 @@ export class DefiningEventComponent {
 
     this.eventService.setTemporaryEvent(this.event)
     this.router.navigate(['/availability'])
-    const element = this.elementRef.nativeElement.querySelector("#maincontent");
-    if (element) {
-      element.scrollIntoView({block: 'start'});
-    }
   }
 
   goBack() {
@@ -118,7 +115,8 @@ export class DefiningEventComponent {
         Validators.required
       ]),
       endDate: new FormControl(this.event.endDate, [
-        Validators.required
+        Validators.required,
+        DateValidator
       ]),
       maxUsers: new FormControl(this.event.maxUsers, [
         Validators.required,
@@ -126,22 +124,48 @@ export class DefiningEventComponent {
         Validators.max(100),
       ]),
       researchStartDate: new FormControl(this.event.researchStartDate, [
-        Validators.required,]),
+        Validators.required,
+        DateValidator]),
       researchEndDate: new FormControl(this.event.researchEndDate, [
-        Validators.required,]),
+        Validators.required,
+        DateValidator]),
     });
   }
 
-  public onDateChange(event: any) {
-    console.log(event.target.value)
-    this.minDate = event.target.value;
+  public dateToFormat(date: Date, readonly: boolean) {
+    const dateFormatted = new Date(date);
+    const year = dateFormatted?.getFullYear();
+    const month = (dateFormatted.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateFormatted?.getDate().toString().padStart(2, '0');
+
+    if (readonly) {
+      return (Number(day)-1 + '.' + month + '.' + year)
+    }
+
+    return (year + '-' + month + '-' + day)
   }
 
-  public dateToFormat(date: Date) {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return (year + '-' + month + '-' + day)
+  public onDateChange(event: any) {
+    if (this.researchStartDate.value >= this.dateToFormat(this.todayDate, false)) {
+      this.minDate = event.target.value;
+      this.researchEndDate.updateValueAndValidity();
+    }
+
+    if (this.researchEndDate.value < this.researchStartDate.value) {
+      this.researchEndDate.setErrors({minDate: true})
+
+    } else {
+      this.researchEndDate.setErrors(null)
+    }
+  }
+
+  public minDateValidate() {
+    if (this.researchEndDate.value < this.minDate) {
+      this.researchEndDate.setErrors({minDate: true})
+    }
+    else {
+      this.researchEndDate.setErrors(null)
+    }
   }
 
   get name() {
@@ -175,5 +199,4 @@ export class DefiningEventComponent {
   get researchEndDate() {
     return this.reactiveForm.get('researchEndDate')!;
   }
-
 }
