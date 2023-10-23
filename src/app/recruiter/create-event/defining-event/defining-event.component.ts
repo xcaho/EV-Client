@@ -108,8 +108,10 @@ export class DefiningEventComponent {
     let noErrors: boolean = true;
 
     Object.keys(this.reactiveForm.controls).forEach(key => {
-      if (this.reactiveForm.get(key)?.invalid)
+      if (this.reactiveForm.get(key)?.invalid) {
+        this.reactiveForm.get(key)?.markAsTouched();
         noErrors = false;
+      }
     })
 
     return noErrors;
