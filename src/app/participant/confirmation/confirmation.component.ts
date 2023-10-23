@@ -8,16 +8,15 @@ import {SurveyService} from "../../survey.service";
   styleUrls: ['./confirmation.component.scss']
 })
 export class ConfirmationComponent {
-
-  confirmation!: ConfirmationDto
-
-  formEventName: string = ""
-  formEventDate: string = ""
+  confirmation!: ConfirmationDto;
+  formEventName: string = "";
+  formEventDate: string = "";
 
   constructor(private surveyService: SurveyService) {
   }
 
   ngOnInit() {
+    document.getElementById('focusReset')?.focus();
     this.confirmation = this.surveyService.getTemporaryConfirmation()
     this.formEventName = this.confirmation.eventName
     this.formEventDate = this.confirmation.dateFormatted

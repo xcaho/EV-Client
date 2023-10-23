@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MenuService} from "../../menu.service";
 import {ResolveEnd, Router} from "@angular/router";
 
@@ -8,7 +8,7 @@ import {ResolveEnd, Router} from "@angular/router";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  displayMenu$ = this.menuService.displayMenu$;
+  public displayMenu$ = this.menuService.displayMenu$;
 
   constructor(public menuService: MenuService,
               private router: Router) {

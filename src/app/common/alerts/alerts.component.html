@@ -1,0 +1,19 @@
+<div class="alert"
+     *ngIf="message"
+     aria-live="polite"
+     [ngClass]="{'alert-success': message.startsWith('success'),
+                 'alert-danger': message.startsWith('danger'),
+                 'alert-warning': message.startsWith('warning'),
+                 'alert-info': message.startsWith('info')}">
+  <div class="alert-wrapper container-xxl"
+       role="alert">
+    <p class="mb-0">{{ message.substring(message.indexOf(':') + 2) }}</p>
+    <button type="button"
+            class="btn-close"
+            id="alert-btn"
+            (click)="closeAlert()"
+    >
+      <span class="sr-only">Zamknij alert</span>
+    </button>
+  </div>
+</div>

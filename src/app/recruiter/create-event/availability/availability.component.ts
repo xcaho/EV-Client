@@ -7,6 +7,7 @@ import {HoursAddComponent} from "./hours-add/hours-add.component";
 import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {AvailabilityService} from "../../../availability.service";
+import {AlertService} from "../../../common/alerts/service/alert.service";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {firstValueFrom} from "rxjs";
 
@@ -25,8 +26,12 @@ export class AvailabilityComponent {
   trash = faTrash;
   eventId: number = 0;
 
-  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
-              private modalService: NgbModal, private router: Router, private route: ActivatedRoute) {
+  constructor(private eventService: EventService,
+              private availabilityService: AvailabilityService,
+              private modalService: NgbModal,
+              private router: Router,
+              private route: ActivatedRoute,
+              private alertService: AlertService) {
   }
 
   async ngOnInit() {
@@ -135,16 +140,14 @@ export class AvailabilityComponent {
       this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
 
-          console.log("Successfully added: " + JSON.stringify(response))
-          this.eventService.clearTemporaryEvent()
-          this.availabilityService.clearTemporaryAvailabilities()
-          this.router.navigate(['/appointments'])
+        this.eventService.clearTemporaryEvent()
+        this.availabilityService.clearTemporaryAvailabilities()
+        this.alertService.showSuccess('Pomyślnie dodano wydarzenie')
+        this.router.navigate(['/appointments'])
 
-        }, exception => {
-          console.log(exception.error.errorsMap)
-        }
-      )
-    }
+      }, exception => {
+      }
+    )
   }
 
   private addOneDay(currentDate: Date) {
@@ -160,5 +163,4 @@ export class AvailabilityComponent {
       }
     })
   }
-
 }

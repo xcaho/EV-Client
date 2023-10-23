@@ -12,6 +12,7 @@ import {ClipboardService} from 'ngx-clipboard';
 import {DeleteCodeComponent} from "./delete-code/delete-code.component";
 import {DeleteEventComponent} from "./delete-event/delete-event.component";
 import {environment} from "../../../../environments/environment";
+import {AlertService} from "../../../common/alerts/service/alert.service";
 
 @Component({
   selector: 'app-event',
@@ -28,8 +29,13 @@ export class EventComponent {
   surveyDurationHHMM = "00:00";
   trash = faTrash;
 
-  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
-              private surveyService: SurveyService, public router: Router, private route: ActivatedRoute, private clipboardService: ClipboardService) {
+  constructor(private eventService: EventService,
+              private availabilityService: AvailabilityService,
+              private surveyService: SurveyService,
+              public router: Router,
+              private route: ActivatedRoute,
+              private clipboardService: ClipboardService,
+              private alertService: AlertService) {
 
     this.event = {} as EventDto
   }
@@ -41,17 +47,14 @@ export class EventComponent {
     });
 
     this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
-      console.log(eventDto);
       this.event = eventDto;
       this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
 
       this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
-        console.log(this.availabilityList)
         this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
       });
 
       this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
-        console.log(surveys);
         this.surveyList = surveys;
       })
     }, () => {
@@ -61,6 +64,7 @@ export class EventComponent {
 
   copyToClipboard(code: string) {
     this.clipboardService.copyFromContent(environment.selfUrl + '/register/' + code);
+    this.alertService.showInfo('Skopiowano kod spotkania: ' + code)
   }
 
   goToEdit() {

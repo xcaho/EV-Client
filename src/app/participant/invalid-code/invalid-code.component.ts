@@ -27,6 +27,7 @@ export class InvalidCodeComponent {
   }
 
   ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
     this.fetchSurvey()
   }
 
