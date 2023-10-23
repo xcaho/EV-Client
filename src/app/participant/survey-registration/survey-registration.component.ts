@@ -8,9 +8,9 @@ import {AvailabilityService} from "../../availability.service";
 import {SurveyService} from "../../survey.service";
 import {SurveyDto} from "../../shared/dtos/SurveyDto";
 import {ConfirmationDto} from "../../shared/dtos/ConfirmationDto";
-import {AlertService} from "../../common/alerts/service/alert.service";
 import {TitleService} from "../../shared/services/title.service";
 import {SurveyState} from "../../shared/enums/survey-state";
+import {AlertService} from "../../common/alerts/service/alert.service";
 
 @Component({
   selector: 'app-survey-registration',

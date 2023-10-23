@@ -1,6 +1,5 @@
 import {AbstractControl} from "@angular/forms";
-import {EventService} from "../../event.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 
 export class EventUtils {
 
