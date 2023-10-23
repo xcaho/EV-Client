@@ -19,6 +19,7 @@ export class YourAppointmentsComponent {
 
   goToCreate() {
     this.eventService.clearTemporaryEvent()
+    this.eventService.setIsEdit(false)
     this.availabilityService.clearTemporaryAvailabilities()
   }
 

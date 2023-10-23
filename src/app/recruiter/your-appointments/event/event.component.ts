@@ -63,4 +63,8 @@ export class EventComponent {
     this.clipboardService.copyFromContent(environment.selfUrl + '/register/' + code);
   }
 
+  goToEdit() {
+    this.eventService.setIsEdit(true)
+  }
+
 }

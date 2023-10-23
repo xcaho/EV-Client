@@ -4,11 +4,14 @@ import {EventDto} from "./common/mainpage/EventDto";
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {environment} from "../environments/environment";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
+
+  isEdit: boolean = false
 
   temporaryEvent?: EventDto
 
@@ -78,6 +81,14 @@ export class EventService {
       )
   }
 
+  getIsEditConsideringRouter(router: Router): boolean {
+    if (router.url.includes('edit')) {
+      this.setIsEdit(true)
+    }
+
+    return this.isEdit;
+  }
+
   getTemporaryEvent(): EventDto {
     return <EventDto>this.temporaryEvent;
   }
@@ -88,5 +99,13 @@ export class EventService {
 
   clearTemporaryEvent() {
     this.temporaryEvent = undefined
+  }
+
+  getIsEdit(): boolean {
+    return this.isEdit;
+  }
+
+  setIsEdit(isEdit: boolean) {
+    this.isEdit = isEdit;
   }
 }

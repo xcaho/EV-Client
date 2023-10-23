@@ -1,10 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../common/mainpage/EventDto";
 import {EventService} from "../../../event.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {DateValidator} from "../../../shared/validators/date-validator";
+import {AvailabilityService} from "../../../availability.service";
 
 @Component({
   selector: 'app-defining-event',
@@ -12,7 +13,7 @@ import {DateValidator} from "../../../shared/validators/date-validator";
   styleUrls: ['./defining-event.component.scss']
 })
 export class DefiningEventComponent {
-  @Input() isEdit: boolean = false;
+  isEdit: boolean = false;
   reactiveForm!: FormGroup;
   event: EventDto;
   textAreaValue: string = '';
@@ -20,20 +21,37 @@ export class DefiningEventComponent {
   todayDate: Date = new Date();
   hours: string[] = [];
   minutes: string[] = [];
+  eventId: number = 0;
 
   constructor(private eventService: EventService,
-              private router: Router) {
+              private availabilityService: AvailabilityService,
+              private router: Router,
+              private route: ActivatedRoute) {
     this.event = {} as EventDto
     this.generateHours();
   }
 
   ngOnInit(): void {
     document.getElementById('focusReset')?.focus();
-    this.initFormGroup();
-    this.event = this.eventService.getTemporaryEvent();
+    this.initFormGroup()
 
+    this.event = this.eventService.getTemporaryEvent()
+    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
+    this.eventId = EventUtils.getIdFromRoute(this.route)
+
+    //fill form initally, case when event exists locally
     if (this.event) {
       this.patchForm()
+      return
+    }
+
+    if (this.isEdit) {
+
+      //fill form by fetching from the server, case when event doesn't exist locally, and it's edit mode
+      this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
+        this.event = eventDto
+        this.patchForm()
+      })
     }
   }
 
@@ -50,14 +68,25 @@ export class DefiningEventComponent {
     return time;
   }
 
-  public validate(form: FormGroupDirective): void {
+  public goToAvailability(form: FormGroupDirective) {
+
+    this.validate()
+    this.saveEvent(form)
+
+    if (this.isEdit) {
+      this.router.navigate( ['/edit/' + this.event.id + '/availability'])
+    } else {
+      this.router.navigate(['/availability'])
+    }
+  }
+
+  public validate(): void {
     if (this.reactiveForm.invalid) {
       for (const control of Object.keys(this.reactiveForm.controls)) {
         this.reactiveForm.controls[control].markAsTouched();
       }
       return;
     }
-    this.saveEvent(form);
   }
 
   private saveEvent(f: FormGroupDirective) {
@@ -72,18 +101,15 @@ export class DefiningEventComponent {
       formContent.maxUsers,
       EventUtils.convertTimeToMinutes(formContent.surveyDuration),
       formContent.surveyBreakTime,
-      formContent.slotsTaken)
+      0,
+      this.eventId)
 
     this.eventService.setTemporaryEvent(this.event)
-    this.router.navigate(['/availability'])
   }
 
   goBack() {
-    if (this.isEdit) {
-      this.router.navigate(['/event/', this.event.id])
-    } else {
-      this.router.navigate(['/appointments'])
-    }
+    this.eventService.clearTemporaryEvent();
+    this.availabilityService.clearTemporaryAvailabilities();
   }
 
   private patchForm() {

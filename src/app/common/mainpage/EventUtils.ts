@@ -1,4 +1,6 @@
 import {AbstractControl} from "@angular/forms";
+import {EventService} from "../../event.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 export class EventUtils {
 
@@ -28,5 +30,9 @@ export class EventUtils {
       return {invalidTime: true};
     }
     return null;
+  }
+
+  static getIdFromRoute(route: ActivatedRoute): number {
+    return Number(route.snapshot.paramMap.get('id'))
   }
 }

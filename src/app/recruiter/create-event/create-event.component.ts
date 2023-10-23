@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-create-event',
@@ -7,7 +7,6 @@ import {Component, Input} from '@angular/core';
 })
 
 export class CreateEventComponent {
-  @Input() isEdit: boolean = false
 
   ngOnInit() {
     document.getElementById('focusReset')?.focus();
