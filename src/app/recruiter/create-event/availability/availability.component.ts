@@ -123,31 +123,32 @@ export class AvailabilityComponent {
     if (this.isEdit) {
 
       this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
-      response => {
+        response => {
 
-        console.log("Successfully modified: " + JSON.stringify(response))
-        this.eventService.clearTemporaryEvent()
-        this.availabilityService.clearTemporaryAvailabilities()
-        this.router.navigate(['/appointments'])
+          console.log("Successfully modified: " + JSON.stringify(response))
+          this.eventService.clearTemporaryEvent()
+          this.availabilityService.clearTemporaryAvailabilities()
+          this.router.navigate(['/appointments'])
 
-      }, exception => {
-        console.log(exception.error.errorsMap)
-      }
-    )
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
 
     } else {
 
       this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
 
-        this.eventService.clearTemporaryEvent()
-        this.availabilityService.clearTemporaryAvailabilities()
-        this.alertService.showSuccess('Pomyślnie dodano wydarzenie')
-        this.router.navigate(['/appointments'])
+          this.eventService.clearTemporaryEvent()
+          this.availabilityService.clearTemporaryAvailabilities()
+          this.alertService.showSuccess('Pomyślnie dodano wydarzenie')
+          this.router.navigate(['/appointments'])
 
-      }, exception => {
-      }
-    )
+        }, exception => {
+        }
+      )
+    }
   }
 
   private addOneDay(currentDate: Date) {
