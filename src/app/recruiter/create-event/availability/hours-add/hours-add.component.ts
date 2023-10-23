@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {Availability, AvailabilityHours} from "../../../../common/mainpage/Availability";
+import {Availability, AvailabilityHours} from "../../../../shared/dtos/Availability";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
@@ -12,11 +12,10 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
 export class HoursAddComponent {
   @ViewChild('content') content: ElementRef | undefined;
-
-  availability: any;
-  hoursAddForm: FormGroup;
-  hours: AvailabilityHours;
-  modalRef: NgbModalRef = null!;
+  private availability: any;
+  public hoursAddForm: FormGroup;
+  private hours: AvailabilityHours;
+  private modalRef: NgbModalRef = null!;
 
   constructor(private modalService: NgbModal, private fb: FormBuilder) {
     this.hoursAddForm = fb.group({

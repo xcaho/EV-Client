@@ -1,19 +1,16 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {EventDto} from "../../common/mainpage/EventDto";
+import {EventDto} from "../../shared/dtos/EventDto";
 import {EventService} from "../../event.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Availability} from "../../common/mainpage/Availability";
+import {Availability} from "../../shared/dtos/Availability";
 import {AvailabilityService} from "../../availability.service";
 import {SurveyService} from "../../survey.service";
-import {SurveyDto, SurveyState} from "../../common/mainpage/SurveyDto";
-import {ConfirmationDto} from "../../common/mainpage/ConfirmationDto";
-
-export interface Registration {
-  dayChoice: FormControl<string | null>;
-  hourChoice: FormControl<string | null>;
-  consents: FormControl<number | null>
-}
+import {SurveyDto} from "../../shared/dtos/SurveyDto";
+import {ConfirmationDto} from "../../shared/dtos/ConfirmationDto";
+import {TitleService} from "../../shared/services/title.service";
+import {SurveyState} from "../../shared/enums/survey-state";
+import {AlertService} from "../../common/alerts/service/alert.service";
 
 @Component({
   selector: 'app-survey-registration',
@@ -22,44 +19,47 @@ export interface Registration {
 })
 
 export class SurveyRegistrationComponent {
-
-  survey!: SurveyDto;
-  event!: EventDto;
-  availabilityList: Availability[] = [];
-  isFetching: boolean = false;
-  surveyCode!: string;
-  registrationForm: FormGroup;
-  selectedDay: string = "2077-01-01";
-  selectedHour: string = "00:00";
-  filteredHoursList: any[] = [];
-  updatedAvailabilityList: any[] = [];
-
-  formEventName: string = "";
-
-  formSurveyDuration: number = 0;
-
-  formEventEndDate: string = "";
+  private survey!: SurveyDto;
+  private event!: EventDto;
+  public availabilityList: Availability[] = [];
+  private isFetching: boolean = false;
+  private surveyCode!: string;
+  public form!: FormGroup;
+  public selectedDay: string = '';
+  public selectedHour: string = '';
+  public filteredHoursList: any[] = [];
+  private updatedAvailabilityList: any[] = [];
+  public formEventName: string = "";
+  public formSurveyDuration: number = 0;
+  public formEventEndDate: string = "";
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private surveyService: SurveyService,
               private route: ActivatedRoute,
-              private router: Router) {
-
-    this.registrationForm = new FormGroup({
-      dayChoice: new FormControl(''),
-      hourChoice: new FormControl(''),
-      consents: new FormControl()
-    })
+              private router: Router,
+              private alertService: AlertService,
+              private titleService: TitleService) {
 
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
     });
+
   }
 
   ngOnInit(): void {
     this.fetchSurvey()
-    this.setFormValidators();
+    document.getElementById('focusReset')?.focus();
+    this.titleService.setTitle('Rejestracja na badanie');
+    this.initFormGroup();
+  }
+
+  private initFormGroup() {
+    this.form = new FormGroup({
+      dayChoice: new FormControl(null, [Validators.required]),
+      hourChoice: new FormControl(null, [Validators.required]),
+      consents: new FormControl(false, [Validators.requiredTrue])
+    })
   }
 
   private fetchSurvey() {
@@ -67,7 +67,6 @@ export class SurveyRegistrationComponent {
       this.survey = surveyDto
       this.fetchEvent(this.survey.eventId);
     }, (error) => {
-      console.log(error)
       this.router.navigate(['/404'])
     })
   }
@@ -89,16 +88,6 @@ export class SurveyRegistrationComponent {
     });
   }
 
-  private setFormValidators(): void {
-    const dayChoiceControl = this.registrationForm.get('dayChoice');
-    const hourChoiceControl = this.registrationForm.get('hourChoice');
-    const consentsControl = this.registrationForm.get('consents');
-
-    dayChoiceControl?.setValidators([Validators.required]);
-    hourChoiceControl?.setValidators([Validators.required, Validators.min(1)]);
-    consentsControl?.setValidators([Validators.required]);
-  }
-
   private fetchAvailabilityList(): void {
     this.availabilityService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
       this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList)
@@ -106,33 +95,51 @@ export class SurveyRegistrationComponent {
   }
 
   save() {
-    console.log(this.updatedAvailabilityList)
-   // @ts-ignore
-    const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
-      this.selectedHour, this.selectedDay, this.availabilityList, this.event);
+    if (this.validate()) {
+      const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
+        this.selectedHour, this.selectedDay, this.availabilityList, this.event);
 
-    let date: Date = new Date(this.selectedDay)
-    const [hours, minutes] = this.selectedHour.split(':').map(Number);
-    date.setHours(hours, minutes)
-    this.survey.date = date
-    this.survey.surveyState = SurveyState.USED
+      let date: Date = new Date(this.selectedDay)
+      const [hours, minutes] = this.selectedHour.split(':').map(Number);
+      date.setHours(hours, minutes)
+      this.survey.date = date
+      this.survey.surveyState = SurveyState.USED
 
-    this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-      console.log(survey)
-      this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
+      this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
+        this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
 
-      this.availabilityService.patchAvailabilityList(this.availabilityService.convertAvailabilityToDto(
-        updatedAvailabilites), this.event.id).subscribe(
-        (response) => {
-          console.log(response)
-        }, (exception) => {
-          console.log(exception)
+        this.availabilityService.patchAvailabilityList(this.availabilityService.convertAvailabilityToDto(
+          updatedAvailabilites), this.event.id).subscribe(
+          (response) => {
+          }, (exception) => {
+          }
+        )
+
+        this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+      }, (exception) => {
+
+        if (exception.status === 409) {
+          this.alertService.showError('Wybrany termin już jest zajęty, wybierz inny lub odśwież stronę.');
         }
-      )
+      })
+    } else {
+      this.alertService.showError('Uzupełnij wymagane pola.');
+    }
+  }
 
-      this.router.navigate(['register/' + this.surveyCode + '/confirmation'])
+  private validate(): boolean {
+    let noErrors: boolean = true;
+
+    Object.keys(this.form.controls).forEach(key => {
+      if (this.form.get(key)?.invalid) {
+        this.form.get(key)?.markAsTouched();
+        this.form.get(key)?.markAsDirty();
+        this.form.get(key)?.updateValueAndValidity();
+        noErrors = false;
+      }
     })
-   console.log(updatedAvailabilites);
+
+    return noErrors;
   }
 
   filterHoursList(): void {
@@ -186,17 +193,15 @@ export class SurveyRegistrationComponent {
     }
   }
 
-
   get dayChoice() {
-    return this.registrationForm.get('dayChoice');
+    return this.form.get('dayChoice')!;
   }
 
   get hourChoice() {
-    return this.registrationForm.get('hourChoice');
+    return this.form.get('hourChoice')!;
   }
 
   get consents() {
-    return this.registrationForm.get('consents');
+    return this.form.get('consents')!;
   }
-
 }

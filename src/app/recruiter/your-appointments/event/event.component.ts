@@ -1,17 +1,19 @@
 import {Component, ViewChild} from '@angular/core';
-import {EventDto} from "../../../common/mainpage/EventDto";
+import {EventDto} from "../../../shared/dtos/EventDto";
 import {ActivatedRoute, Router} from '@angular/router';
-import {Availability} from "../../../common/mainpage/Availability";
+import {Availability} from "../../../shared/dtos/Availability";
 import {EventService} from "../../../event.service";
 import {AvailabilityService} from "../../../availability.service";
-import {EventUtils} from "../../../common/mainpage/EventUtils";
+import {EventUtils} from "../../../shared/utils/EventUtils";
 import {SurveyService} from "../../../survey.service";
-import {SurveyDto} from "../../../common/mainpage/SurveyDto";
+import {SurveyDto} from "../../../shared/dtos/SurveyDto";
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {ClipboardService} from 'ngx-clipboard';
 import {DeleteCodeComponent} from "./delete-code/delete-code.component";
 import {DeleteEventComponent} from "./delete-event/delete-event.component";
 import {environment} from "../../../../environments/environment";
+import {TitleService} from "../../../shared/services/title.service";
+import {AlertService} from "../../../common/alerts/service/alert.service";
 
 @Component({
   selector: 'app-event',
@@ -28,8 +30,14 @@ export class EventComponent {
   surveyDurationHHMM = "00:00";
   trash = faTrash;
 
-  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
-              private surveyService: SurveyService, public router: Router, private route: ActivatedRoute, private clipboardService: ClipboardService) {
+  constructor(private eventService: EventService,
+              private availabilityService: AvailabilityService,
+              private surveyService: SurveyService,
+              public router: Router,
+              private route: ActivatedRoute,
+              private clipboardService: ClipboardService,
+              private alertService: AlertService,
+              private titleService: TitleService) {
 
     this.event = {} as EventDto
   }
@@ -41,17 +49,15 @@ export class EventComponent {
     });
 
     this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
-      console.log(eventDto);
       this.event = eventDto;
+      this.titleService.setTitle('Szczegóły wydarzenia ' + this.event.name);
       this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
 
       this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
-        console.log(this.availabilityList)
         this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
       });
 
       this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
-        console.log(surveys);
         this.surveyList = surveys;
       })
     }, () => {
@@ -61,6 +67,11 @@ export class EventComponent {
 
   copyToClipboard(code: string) {
     this.clipboardService.copyFromContent(environment.selfUrl + '/register/' + code);
+    this.alertService.showInfo('Skopiowano kod spotkania: ' + code)
+  }
+
+  goToEdit() {
+    this.eventService.setIsEdit(true)
   }
 
 }

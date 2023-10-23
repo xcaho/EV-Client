@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {EventService} from "../../event.service";
 import {SurveyService} from "../../survey.service";
-import {SurveyDto} from "../../common/mainpage/SurveyDto";
-import {EventDto} from "../../common/mainpage/EventDto";
+import {SurveyDto} from "../../shared/dtos/SurveyDto";
+import {EventDto} from "../../shared/dtos/EventDto";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -11,10 +11,10 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./invalid-code.component.scss']
 })
 export class InvalidCodeComponent {
-  survey: SurveyDto;
-  event: EventDto;
-  surveyCode!: string;
-  isFetching: boolean = false;
+  public event: EventDto;
+  private survey: SurveyDto;
+  private surveyCode!: string;
+  private isFetching: boolean = false;
 
   constructor(private eventService: EventService, private surveyService: SurveyService, private route: ActivatedRoute,
               private router: Router) {
@@ -27,6 +27,7 @@ export class InvalidCodeComponent {
   }
 
   ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
     this.fetchSurvey()
   }
 
@@ -47,5 +48,4 @@ export class InvalidCodeComponent {
       this.router.navigate(['/404'])
     })
   }
-
 }

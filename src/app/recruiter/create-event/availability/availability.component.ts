@@ -1,12 +1,15 @@
 import {Component, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {EventService} from "../../../event.service";
-import {Router} from "@angular/router";
-import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Availability, AvailabilityDto, AvailabilityHours} from "../../../shared/dtos/Availability";
 import {HoursAddComponent} from "./hours-add/hours-add.component";
 import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {EventDto} from "../../../common/mainpage/EventDto";
+import {EventDto} from "../../../shared/dtos/EventDto";
 import {AvailabilityService} from "../../../availability.service";
+import {firstValueFrom} from "rxjs";
+import {AlertService} from "../../../common/alerts/service/alert.service";
+import {EventUtils} from "../../../shared/utils/EventUtils";
 
 @Component({
   selector: 'app-availability',
@@ -15,31 +18,59 @@ import {AvailabilityService} from "../../../availability.service";
 })
 export class AvailabilityComponent {
   @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
+  public isEdit: boolean = false;
+  public availabilityList: Availability[] = [];
+  public event!: EventDto;
+  public plus = faPlus;
+  public trash = faTrash;
+  private eventId: number = 0;
 
-  availabilityList: Availability[] = [];
-  event!: EventDto;
-  plus = faPlus;
-  trash = faTrash;
-
-  constructor(private eventService: EventService, private availabilityService: AvailabilityService,
-              private modalService: NgbModal, private router: Router) {
+  constructor(private eventService: EventService,
+              private availabilityService: AvailabilityService,
+              private modalService: NgbModal,
+              private router: Router,
+              private route: ActivatedRoute,
+              private alertService: AlertService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     document.getElementById('focusReset')?.focus();
+
     this.event = this.eventService.getTemporaryEvent()
-    if(!this.event) {
-      this.goBack()
+    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
+    this.eventId = EventUtils.getIdFromRoute(this.route)
+
+    if (this.event == undefined && this.isEdit) {
+      this.event = await firstValueFrom(this.eventService.getEvent(this.eventId))
     }
 
-    let list = this.availabilityService.getTemporaryAvailabilities()
-    if (!list || list.length == 0) {
-      this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate))
+    let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities()
+    this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate))
+
+    if (!temporaryAvailabilities || temporaryAvailabilities.length == 0) {
+
+      if (this.isEdit) {
+
+        this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
+          this.includeAvailabilities(this.availabilityService.mapFromDto(availabilityDtoList))
+        })
+      }
+
     } else {
-      this.availabilityList = list
+
+      this.includeAvailabilities(temporaryAvailabilities)
     }
   }
 
+  includeAvailabilities(oldAvailabilities: Availability[]) {
+
+    oldAvailabilities.forEach(oldAvailability => {
+      let index = this.availabilityList.findIndex(newAvailability => newAvailability.date.toDateString() == oldAvailability.date.toDateString())
+      if (index != -1) {
+        Object.assign(this.availabilityList[index], oldAvailability)
+      }
+    })
+  }
   goBack() {
     this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
   }
@@ -56,33 +87,67 @@ export class AvailabilityComponent {
   }
 
   submit() {
-    this.eventService.createEvent(this.event).subscribe(
-      response => {
+    if (this.isEdit) {
 
-        console.log("Succesfully added: " + JSON.stringify(response));
-        this.saveAvailability(response.id)
+      this.eventService.modifyEvent(this.event).subscribe(
+        response => {
 
-      }, exception => {
-        console.log(exception.error.errorsMap)
-      }
-    )
+          console.log("Succesfully modified: " + JSON.stringify(response));
+          this.saveAvailability(response.id)
+
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
+
+    } else {
+
+      this.eventService.createEvent(this.event).subscribe(
+        response => {
+
+          console.log("Succesfully added: " + JSON.stringify(response));
+          this.saveAvailability(response.id)
+
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
+    }
   }
 
   private saveAvailability(eventId: number) {
 
     let availabilityDtoList: AvailabilityDto[] = this.availabilityService.convertAvailabilityToDto(this.availabilityList)
-    this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
-      response => {
 
-        console.log("Successfully added: " + JSON.stringify(response))
-        this.eventService.clearTemporaryEvent()
-        this.availabilityService.clearTemporaryAvailabilities()
-        this.router.navigate(['/appointments'])
+    if (this.isEdit) {
 
-      }, exception => {
-        console.log(exception.error.errorsMap)
-      }
-    )
+      this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
+        response => {
+
+          console.log("Successfully modified: " + JSON.stringify(response))
+          this.eventService.clearTemporaryEvent()
+          this.availabilityService.clearTemporaryAvailabilities()
+          this.router.navigate(['/appointments'])
+
+        }, exception => {
+          console.log(exception.error.errorsMap)
+        }
+      )
+
+    } else {
+
+      this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
+        response => {
+
+          this.eventService.clearTemporaryEvent()
+          this.availabilityService.clearTemporaryAvailabilities()
+          this.alertService.showSuccess('Pomyślnie dodano wydarzenie')
+          this.router.navigate(['/appointments'])
+
+        }, exception => {
+        }
+      )
+    }
   }
 
   private addOneDay(currentDate: Date) {
@@ -98,5 +163,4 @@ export class AvailabilityComponent {
       }
     })
   }
-
 }

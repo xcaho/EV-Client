@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {TitleService} from "../../shared/services/title.service";
 
 @Component({
   selector: 'app-error',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class ErrorComponent {
 
+  constructor(private titleService: TitleService) {
+  }
+
+  ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
+    this.titleService.setTitle('Strona nie znaleziona');
+  }
 }

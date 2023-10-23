@@ -8,7 +8,7 @@
         <button class="w-100 btn btn-outline-primary" (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">Zamknij wydarzenie</button>
       </div>
       <div class="col-6 col-sm-auto">
-        <a class="w-100 btn btn-primary" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>
+        <a class="w-100 btn btn-primary" (click)="goToEdit()" [routerLink]="['/edit/', this.event.id]">Edytuj wydarzenie</a>
       </div>
     </div>
   </div>

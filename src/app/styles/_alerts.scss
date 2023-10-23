@@ -1,0 +1,26 @@
+.alert {
+  z-index: 99999;
+  position: fixed !important;
+  top:0;
+  left: 0;
+  width: 100%;
+  border-radius: 0;
+  padding: 0;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+
+  .alert-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 0 !important;
+    min-height: 4.25rem;
+    padding: 0.975rem 1rem;
+    gap: 2rem;
+
+    p {
+      color: $text-dark;
+    }
+  }
+}

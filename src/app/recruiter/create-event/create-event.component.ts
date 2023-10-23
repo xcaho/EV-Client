@@ -1,4 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
+import {TextChangeService} from "../../shared/services/text-change.service";
+import {TitleService} from "../../shared/services/title.service";
 
 @Component({
   selector: 'app-create-event',
@@ -7,9 +9,17 @@ import {Component, Input} from '@angular/core';
 })
 
 export class CreateEventComponent {
-  @Input() isEdit: boolean = false
+  public h1: string = 'Tworzenie wydarzenia';
+
+  constructor(private textChangeService: TextChangeService,
+              private titleService: TitleService) {
+  }
 
   ngOnInit() {
     document.getElementById('focusReset')?.focus();
+    this.titleService.setTitle('Definiowanie wydarzenia');
+    this.textChangeService.h1$.subscribe(h1 => {
+      this.h1 = h1;
+    })
   }
 }

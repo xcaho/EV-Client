@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {EventService} from '../../event.service';
-import {EventDto} from "../../common/mainpage/EventDto";
+import {EventDto} from "../../shared/dtos/EventDto";
 import {AvailabilityService} from "../../availability.service";
+import {TitleService} from "../../shared/services/title.service";
 
 @Component({
   selector: 'app-your-appointments',
@@ -14,16 +15,19 @@ export class YourAppointmentsComponent {
   isFetching: boolean = false;
 
   constructor(private eventService: EventService,
-              private availabilityService: AvailabilityService,) {
+              private availabilityService: AvailabilityService,
+              private titleService: TitleService) {
   }
 
   goToCreate() {
     this.eventService.clearTemporaryEvent()
+    this.eventService.setIsEdit(false)
     this.availabilityService.clearTemporaryAvailabilities()
   }
 
   ngOnInit() {
     document.getElementById('focusReset')?.focus();
+    this.titleService.setTitle('Lista wydarzeń');
     this.isFetching = true;
     this.eventService.getEvents().subscribe((events) => {
       this.events = this.eventSort(events);

@@ -10,18 +10,54 @@ import {InvalidCodeComponent} from "./participant/invalid-code/invalid-code.comp
 import {ErrorComponent} from "./common/error/error.component";
 
 const appRoute: Routes = [
-  {path: 'appointments', component: YourAppointmentsComponent},
-  {path: 'availability', component: AvailabilityComponent},
-  {path: 'create', component: CreateEventComponent},
-  {path: 'event/:id', component: EventComponent},
-  {path: 'edit/:id', component: EditEventComponent},
-  {path: '', redirectTo: 'appointments', pathMatch: 'full'},
-  {path: 'register/:code', component: SurveyRegistrationComponent},
-  {path: 'register/:code/confirmation', component: ConfirmationComponent},
-  {path: 'register/:code/invalid-code', component: InvalidCodeComponent},
-  {path: '404', component: ErrorComponent},
-  {path: '**', redirectTo: '/404'}
+  {
+    path: 'appointments',
+    component: YourAppointmentsComponent
+  },
+  {
+    path: 'availability',
+    component: AvailabilityComponent
+  },
+  {
+    path: 'edit/:id/availability',
+    component: AvailabilityComponent
+  },
+  {
+    path: 'create',
+    component: CreateEventComponent
+  },
+  {
+    path: 'event/:id',
+    component: EventComponent
+  },
+  {
+    path: 'edit/:id',
+    component: EditEventComponent
+  },
+  {
+    path: '',
+    redirectTo: 'appointments',
+    pathMatch: 'full'
+  },
+  {
+    path: 'register/:code',
+    component: SurveyRegistrationComponent},
+  {
+    path: 'register/:code/confirmation',
+    component: ConfirmationComponent
+  },
+  {
+    path: 'register/:code/invalid-code',
+    component: InvalidCodeComponent
+  },
+  {
+    path: '404',
+    component: ErrorComponent,
+  },
+  {
+    path: '**',
+    redirectTo: '/404',
+  }
 ]
-
 
 export const appRoutes: Routes = appRoute;
