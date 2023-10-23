@@ -22,6 +22,8 @@ import {ErrorComponent} from './common/error/error.component';
 import {appRoutes} from './app.routes';
 import {DeleteCodeComponent} from './recruiter/your-appointments/event/delete-code/delete-code.component';
 import { DeleteEventComponent } from './recruiter/your-appointments/event/delete-event/delete-event.component';
+import { AlertsComponent } from './common/alerts/alerts.component';
+import {AlertService} from "./common/alerts/service/alert.service";
 
 
 @NgModule({
@@ -39,7 +41,8 @@ import { DeleteEventComponent } from './recruiter/your-appointments/event/delete
     InvalidCodeComponent,
     ErrorComponent,
     DeleteCodeComponent,
-    DeleteEventComponent
+    DeleteEventComponent,
+    AlertsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,9 +52,9 @@ import { DeleteEventComponent } from './recruiter/your-appointments/event/delete
     RouterModule.forRoot(appRoutes),
     ReactiveFormsModule,
     CreateEventModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
-  providers: [MenuService],
+  providers: [MenuService, AlertService],
   bootstrap: [AppComponent]
 })
 

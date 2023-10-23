@@ -8,6 +8,7 @@ import {AvailabilityService} from "../../availability.service";
 import {SurveyService} from "../../survey.service";
 import {SurveyDto, SurveyState} from "../../common/mainpage/SurveyDto";
 import {ConfirmationDto} from "../../common/mainpage/ConfirmationDto";
+import {AlertService} from "../../common/alerts/service/alert.service";
 
 export interface Registration {
   dayChoice: FormControl<string | null>;
@@ -33,18 +34,16 @@ export class SurveyRegistrationComponent {
   selectedHour: string = "00:00";
   filteredHoursList: any[] = [];
   updatedAvailabilityList: any[] = [];
-
   formEventName: string = "";
-
   formSurveyDuration: number = 0;
-
   formEventEndDate: string = "";
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private surveyService: SurveyService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private alertService: AlertService) {
 
     this.registrationForm = new FormGroup({
       dayChoice: new FormControl(''),
@@ -55,11 +54,21 @@ export class SurveyRegistrationComponent {
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
     });
+
   }
 
   ngOnInit(): void {
+    document.getElementById('focusReset')?.focus();
     this.fetchSurvey()
     this.setFormValidators();
+  }
+
+  showSuccessAlert() {
+    this.alertService.showSuccess('Zapis udany.');
+  }
+
+  showErrorAlert() {
+    this.alertService.showError('To jest alert błędu.');
   }
 
   private fetchSurvey() {
@@ -67,7 +76,6 @@ export class SurveyRegistrationComponent {
       this.survey = surveyDto
       this.fetchEvent(this.survey.eventId);
     }, (error) => {
-      console.log(error)
       this.router.navigate(['/404'])
     })
   }
@@ -106,8 +114,6 @@ export class SurveyRegistrationComponent {
   }
 
   save() {
-    console.log(this.updatedAvailabilityList)
-   // @ts-ignore
     const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
       this.selectedHour, this.selectedDay, this.availabilityList, this.event);
 
@@ -118,21 +124,23 @@ export class SurveyRegistrationComponent {
     this.survey.surveyState = SurveyState.USED
 
     this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-      console.log(survey)
       this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
 
       this.availabilityService.patchAvailabilityList(this.availabilityService.convertAvailabilityToDto(
         updatedAvailabilites), this.event.id).subscribe(
         (response) => {
-          console.log(response)
         }, (exception) => {
-          console.log(exception)
         }
       )
 
-      this.router.navigate(['register/' + this.surveyCode + '/confirmation'])
+      this.showSuccessAlert();
+      this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+    }, (exception) => {
+
+      if (exception.status == 409) {
+        console.log("mazurek działasz chłopie")
+      }
     })
-   console.log(updatedAvailabilites);
   }
 
   filterHoursList(): void {
@@ -186,7 +194,6 @@ export class SurveyRegistrationComponent {
     }
   }
 
-
   get dayChoice() {
     return this.registrationForm.get('dayChoice');
   }
@@ -198,5 +205,4 @@ export class SurveyRegistrationComponent {
   get consents() {
     return this.registrationForm.get('consents');
   }
-
 }
