@@ -1,8 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {EventDto} from "../../../../common/mainpage/EventDto";
+import {EventDto} from "../../../../shared/dtos/EventDto";
 import {EventService} from "../../../../event.service";
-import {SurveyDto} from "../../../../common/mainpage/SurveyDto";
+import {SurveyDto} from "../../../../shared/dtos/SurveyDto";
 import {AlertService} from "../../../../common/alerts/service/alert.service";
 
 @Component({
@@ -21,10 +21,6 @@ export class DeleteEventComponent {
               private alertService: AlertService) {
 
     this.event = {} as EventDto
-  }
-
-  ngOnInit(): void {
-    document.getElementById('focusReset')?.focus();
   }
 
   open(content: any, event: EventDto, surveyList: SurveyDto[]): void {

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {TextChangeService} from "../../../../shared/services/text-change.service";
 
 @Component({
   selector: 'app-edit-event',
@@ -9,7 +10,8 @@ import {ActivatedRoute} from '@angular/router';
 export class EditEventComponent {
   eventId: number = -1;
 
-  constructor(public route: ActivatedRoute) {
+  constructor(public route: ActivatedRoute,
+              private textChangeService: TextChangeService) {
     this.route.params.subscribe(params => {
       this.eventId = params['id'];
     });
@@ -17,6 +19,7 @@ export class EditEventComponent {
 
   ngOnInit() {
     document.getElementById('focusReset')?.focus();
+    this.textChangeService.setH1('Edycja wydarzenia');
+    this.textChangeService.setH2('Edytuj szczegóły wydarzenia');
   }
-
 }

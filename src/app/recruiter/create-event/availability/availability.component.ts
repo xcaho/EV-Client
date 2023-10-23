@@ -2,14 +2,14 @@ import {Component, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {EventService} from "../../../event.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Availability, AvailabilityDto, AvailabilityHours} from "../../../common/mainpage/Availability";
+import {Availability, AvailabilityDto, AvailabilityHours} from "../../../shared/dtos/Availability";
 import {HoursAddComponent} from "./hours-add/hours-add.component";
 import {faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {EventDto} from "../../../common/mainpage/EventDto";
+import {EventDto} from "../../../shared/dtos/EventDto";
 import {AvailabilityService} from "../../../availability.service";
-import {AlertService} from "../../../common/alerts/service/alert.service";
-import {EventUtils} from "../../../common/mainpage/EventUtils";
 import {firstValueFrom} from "rxjs";
+import {AlertService} from "../../../common/alerts/service/alert.service";
+import {EventUtils} from "../../../shared/utils/EventUtils";
 
 @Component({
   selector: 'app-availability',
@@ -18,13 +18,12 @@ import {firstValueFrom} from "rxjs";
 })
 export class AvailabilityComponent {
   @ViewChild(HoursAddComponent) hoursAddComponent!: HoursAddComponent;
-
-  isEdit: boolean = false;
-  availabilityList: Availability[] = [];
-  event!: EventDto;
-  plus = faPlus;
-  trash = faTrash;
-  eventId: number = 0;
+  public isEdit: boolean = false;
+  public availabilityList: Availability[] = [];
+  public event!: EventDto;
+  public plus = faPlus;
+  public trash = faTrash;
+  private eventId: number = 0;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,

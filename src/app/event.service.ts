@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {EventDto} from "./common/mainpage/EventDto";
+import {EventDto} from "./shared/dtos/EventDto";
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {environment} from "../environments/environment";

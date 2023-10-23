@@ -1,7 +1,9 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {SurveyService} from "../../../../survey.service";
-import {SurveyDto, SurveyState} from "../../../../common/mainpage/SurveyDto";
+import {SurveyDto} from "../../../../shared/dtos/SurveyDto";
+import {AlertService} from "../../../../common/alerts/service/alert.service";
+import {SurveyState} from "../../../../shared/enums/survey-state";
 
 @Component({
   selector: 'app-delete-code',
@@ -14,12 +16,10 @@ export class DeleteCodeComponent {
   survey: SurveyDto;
   surveyList: SurveyDto[] = [];
 
-  constructor(private modalService: NgbModal, private surveyService: SurveyService) {
+  constructor(private modalService: NgbModal,
+              private surveyService: SurveyService,
+              private alertService: AlertService) {
     this.survey = {} as SurveyDto
-  }
-
-  ngOnInit(): void {
-    document.getElementById('focusReset')?.focus();
   }
 
   open(content: any, survey: SurveyDto, surveyList: SurveyDto[]): void {
@@ -32,18 +32,18 @@ export class DeleteCodeComponent {
     this.survey.surveyState = SurveyState.INACTIVE
 
     this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-      console.log(survey)
       this.survey.date = new Date(0)
 
       this.generateNewCode()
       this.closeModal()
+
+      this.alertService.showSuccess('Dezktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
     })
 
   }
 
   generateNewCode() {
     this.surveyService.saveSurvey(this.survey.eventId).subscribe((survey) => {
-      console.log(survey)
       survey.date = new Date(0)
       this.surveyList.push(survey)
     })
@@ -52,5 +52,4 @@ export class DeleteCodeComponent {
   closeModal(): void {
     this.modalRef.dismiss();
   }
-
 }

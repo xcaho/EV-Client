@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import axios from 'axios';
 import {Router} from "@angular/router";
+import {TitleService} from "./shared/services/title.service";
 
 
 @Component({
@@ -9,12 +10,17 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'easyvisit';
+  title: string = 'Portal do zarządzania badaniami';
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.title$.subscribe(newTitle => {
+      this.title = newTitle;
+    })
+
     axios.interceptors.response.use(
       (response) => {
         console.log(response)
