@@ -1,7 +1,7 @@
 import { AvailabilityService} from "./availability.service";
 import { HttpClient } from '@angular/common/http';
-import {EventDto} from "./common/mainpage/EventDto";
-import { Availability, AvailabilityHours } from "./common/mainpage/Availability";
+import {EventDto} from "./shared/dtos/EventDto";
+import { Availability, AvailabilityHours } from "./shared/dtos/Availability";
 
 describe('AvailabilityService', () => {
   let availabilityService: AvailabilityService;

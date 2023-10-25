@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HeaderComponent} from './common/header/header.component';
@@ -21,8 +21,8 @@ import {InvalidCodeComponent} from './participant/invalid-code/invalid-code.comp
 import {ErrorComponent} from './common/error/error.component';
 import {appRoutes} from './app.routes';
 import {DeleteCodeComponent} from './recruiter/your-appointments/event/delete-code/delete-code.component';
-import { DeleteEventComponent } from './recruiter/your-appointments/event/delete-event/delete-event.component';
-import { AlertsComponent } from './common/alerts/alerts.component';
+import {DeleteEventComponent} from './recruiter/your-appointments/event/delete-event/delete-event.component';
+import {AlertsComponent} from "./common/alerts/alerts.component";
 import {AlertService} from "./common/alerts/service/alert.service";
 
 
@@ -54,7 +54,11 @@ import {AlertService} from "./common/alerts/service/alert.service";
     CreateEventModule,
     FontAwesomeModule,
   ],
-  providers: [MenuService, AlertService],
+  providers: [
+    MenuService,
+    AlertService,
+    Title,
+  ],
   bootstrap: [AppComponent]
 })
 

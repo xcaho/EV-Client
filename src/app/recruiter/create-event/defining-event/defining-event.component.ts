@@ -1,11 +1,14 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
-import {EventDto} from "../../../common/mainpage/EventDto";
+import {EventDto} from "../../../shared/dtos/EventDto";
 import {EventService} from "../../../event.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EventUtils} from "../../../common/mainpage/EventUtils";
+import {EventUtils} from "../../../shared/utils/EventUtils";
 import {DateValidator} from "../../../shared/validators/date-validator";
 import {AvailabilityService} from "../../../availability.service";
+import {TextChangeService} from "../../../shared/services/text-change.service";
+import {TimeValidator} from "../../../shared/validators/time-validator";
+import {AlertService} from "../../../common/alerts/service/alert.service";
 
 @Component({
   selector: 'app-defining-event',
@@ -13,26 +16,33 @@ import {AvailabilityService} from "../../../availability.service";
   styleUrls: ['./defining-event.component.scss']
 })
 export class DefiningEventComponent {
-  isEdit: boolean = false;
-  reactiveForm!: FormGroup;
-  event: EventDto;
-  textAreaValue: string = '';
-  minDate: Date = new Date();
-  todayDate: Date = new Date();
-  hours: string[] = [];
-  minutes: string[] = [];
-  eventId: number = 0;
+  public isEdit: boolean = false;
+  public reactiveForm!: FormGroup;
+  private event: EventDto;
+  public textAreaValue: string = '';
+  public researchStartDateMin: Date = new Date();
+  public researchEndDateMin: Date = new Date();
+  public endDateMin: Date = new Date();
+  private hours: string[] = [];
+  private minutes: string[] = [];
+  public eventId: number = 0;
+  public h2: string = 'Zdefiniuj nowe wydarzenie';
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private textChangeService: TextChangeService,
+              private alertService: AlertService) {
     this.event = {} as EventDto
     this.generateHours();
   }
 
   ngOnInit(): void {
     document.getElementById('focusReset')?.focus();
+    this.textChangeService.h2$.subscribe(h2 => {
+      this.h2 = h2;
+    })
     this.initFormGroup()
 
     this.event = this.eventService.getTemporaryEvent()
@@ -49,8 +59,20 @@ export class DefiningEventComponent {
 
       //fill form by fetching from the server, case when event doesn't exist locally, and it's edit mode
       this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
-        this.event = eventDto
-        this.patchForm()
+        this.event = eventDto;
+        this.patchForm();
+
+        this.researchStartDateMin = new Date(this.event.researchStartDate);
+        this.researchEndDateMin = new Date(this.event.researchStartDate);
+        const today = new Date();
+
+        if (this.researchStartDateMin < today) {
+          this.researchStartDate.clearValidators();
+          this.researchStartDate.updateValueAndValidity();
+          this.endDate.clearValidators();
+          this.endDate.updateValueAndValidity();
+          this.editableDateValidation();
+        }
       })
     }
   }
@@ -69,24 +91,30 @@ export class DefiningEventComponent {
   }
 
   public goToAvailability(form: FormGroupDirective) {
+    if (this.validate()){
+      this.saveEvent(form);
 
-    this.validate()
-    this.saveEvent(form)
-
-    if (this.isEdit) {
-      this.router.navigate( ['/edit/' + this.event.id + '/availability'])
+      if (this.isEdit) {
+        this.router.navigate(['/edit/' + this.event.id + '/availability'])
+      } else {
+        this.router.navigate(['/availability'])
+      }
     } else {
-      this.router.navigate(['/availability'])
+      this.alertService.showError('Uzupełnij wszystkie wymagane pola.')
     }
   }
 
-  public validate(): void {
-    if (this.reactiveForm.invalid) {
-      for (const control of Object.keys(this.reactiveForm.controls)) {
-        this.reactiveForm.controls[control].markAsTouched();
+  public validate(): boolean {
+    let noErrors: boolean = true;
+
+    Object.keys(this.reactiveForm.controls).forEach(key => {
+      if (this.reactiveForm.get(key)?.invalid) {
+        this.reactiveForm.get(key)?.markAsTouched();
+        noErrors = false;
       }
-      return;
-    }
+    })
+
+    return noErrors;
   }
 
   private saveEvent(f: FormGroupDirective) {
@@ -135,7 +163,7 @@ export class DefiningEventComponent {
       ]),
       surveyDuration: new FormControl(this.event.surveyDuration, [
         Validators.required,
-        EventUtils.validateTime
+        TimeValidator
       ]),
       surveyBreakTime: new FormControl(this.event.surveyBreakTime, [
         Validators.required
@@ -165,31 +193,59 @@ export class DefiningEventComponent {
     const day = dateFormatted?.getDate().toString().padStart(2, '0');
 
     if (readonly) {
-      return (Number(day)-1 + '.' + month + '.' + year)
+      return (Number(day) - 1 + '.' + month + '.' + year)
     }
 
     return (year + '-' + month + '-' + day)
   }
 
   public onDateChange(event: any) {
-    if (this.researchStartDate.value >= this.dateToFormat(this.todayDate, false)) {
-      this.minDate = event.target.value;
+    if (this.researchStartDate.value >= this.dateToFormat(this.researchStartDateMin, false)) {
+      this.researchEndDateMin = event.target.value;
       this.researchEndDate.updateValueAndValidity();
     }
 
     if (this.researchEndDate.value < this.researchStartDate.value) {
       this.researchEndDate.setErrors({minDate: true})
+      this.researchEndDate.markAsTouched()
 
     } else {
       this.researchEndDate.setErrors(null)
     }
   }
 
-  public minDateValidate() {
-    if (this.researchEndDate.value < this.minDate) {
-      this.researchEndDate.setErrors({minDate: true})
+  public editableDateValidation() {
+    if (this.isEdit) {
+      const today: Date = new Date();
+      const modelResearchStartDate: Date = new Date(this.event.researchStartDate);
+      const modelEndDate: Date = new Date(this.event.endDate);
+      const formValueResearchStartDate: Date = new Date(this.researchStartDate.value);
+      const formValueEndDate: Date = new Date(this.endDate.value);
+
+      if (modelResearchStartDate < today) {
+        this.researchStartDate.clearValidators();
+        this.researchStartDate.updateValueAndValidity();
+      }
+
+      if (modelEndDate < today) {
+        this.endDate.clearValidators();
+        this.endDate.updateValueAndValidity();
+      }
+
+      if (formValueResearchStartDate < modelResearchStartDate) {
+        this.researchStartDate.setErrors({'invalidDate': true})
+      }
+
+      if (formValueEndDate < modelEndDate) {
+        this.endDate.setErrors({'invalidDate': true})
+      }
     }
-    else {
+  }
+
+  public minDateValidate() {
+    if (this.researchEndDate.value < this.researchEndDateMin) {
+      this.researchEndDate.setErrors({minDate: true})
+    } else {
       this.researchEndDate.setErrors(null)
     }
   }

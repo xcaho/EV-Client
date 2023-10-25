@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {map, Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
-import {SurveyDto} from "./common/mainpage/SurveyDto";
+import {SurveyDto} from "./shared/dtos/SurveyDto";
 import {HttpClient} from "@angular/common/http";
-import {ConfirmationDto} from "./common/mainpage/ConfirmationDto";
+import {ConfirmationDto} from "./shared/dtos/ConfirmationDto";
 import {environment} from "../environments/environment";
 
 @Injectable({
