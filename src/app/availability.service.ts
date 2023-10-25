@@ -93,7 +93,8 @@ export class AvailabilityService {
   }
 
   updateAvailableHours(hoursList: string[], selectedHour: string, selectedDay: string, availabilities: Availability[],
-                       event: EventDto): Availability[] {
+                       event: EventDto, endHours: string[]): Availability[] {
+
     const totalLength = event.surveyDuration + event.surveyBreakTime;
     const totalLengthDate = new Date();
     totalLengthDate.setHours(Math.floor(totalLength / 60), totalLength % 60);
@@ -122,12 +123,24 @@ export class AvailabilityService {
     let startHour = updatedHoursList[0];
     let endHour = updatedHoursList[0];
 
+    endHours.pop()
+
     for (let i = 1; i<updatedHoursList.length; i++){
       const currentHour = updatedHoursList[i];
-      const diff = this.getHourDiff(endHour, currentHour);
+      let diff = this.getHourDiff(endHour, currentHour);
 
       if(diff == 30) {
-        endHour = currentHour;
+        if(endHours.includes(endHour)){
+          if (startHour !== endHour) {
+            ranges.push(`${startHour}-${endHour}`);
+          } else {
+            ranges.push(startHour);
+          }
+          startHour = currentHour
+          endHour = currentHour
+        } else {
+          endHour = currentHour;
+        }
       } else {
         if (startHour !== endHour) {
           ranges.push(`${startHour}-${endHour}`);
