@@ -212,11 +212,29 @@
     </div>
     <div class="d-flex justify-content-between flex-wrap row">
       <div class="col-6 col-md-auto">
-        <button class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" type="button" *ngIf="isEdit" (click)=goBack() [routerLink]="['/event/', this.eventId]" aria-label="Anuluj edytowanie wydarzenia">Anuluj</button>
-        <button class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" type="button" *ngIf="!isEdit" (click)=goBack() [routerLink]="['/appointments']" aria-label="Anuluj tworzenie wydarzenia">Anuluj</button>
+        <button type="button"
+                class="w-100 my-2 my-md-0 btn btn-outline-primary"
+                *ngIf="isEdit"
+                (click)=goBack()
+                [routerLink]="['/event/', this.eventId]"
+                aria-label="Anuluj edytowanie wydarzenia">
+          Anuluj
+        </button>
+        <button type="button"
+                class="w-100 my-2 my-md-0 btn btn-outline-primary"
+                *ngIf="!isEdit"
+                (click)=goBack()
+                [routerLink]="['/appointments']"
+                aria-label="Anuluj tworzenie wydarzenia">
+          Anuluj
+        </button>
       </div>
       <div class="col-6 col-md-auto">
-        <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit" (click)="goToAvailability(form)">Dalej</button>
+        <button type="submit"
+                class="w-100 my-2 my-md-0 btn btn-primary"
+                (click)="goToAvailability(form)">
+          Dalej
+        </button>
       </div>
     </div>
   </form>
