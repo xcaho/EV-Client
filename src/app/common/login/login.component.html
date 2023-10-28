@@ -31,23 +31,23 @@
           </div>
           <div class="form-outline mb-3">
             <input type="password"
-                   id="passwd"
-                   name="passwd"
-                   formControlName="passwd"
+                   id="password"
+                   name="password"
+                   formControlName="password"
                    required
                    class="form-control"
-                   [class.is-invalid]="passwd.invalid && (passwd.dirty || passwd.touched)">
-            <label for="passwd"
+                   [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+            <label for="password"
                    class="form-label">
               Hasło
             </label>
-            <div *ngIf="passwd.invalid && (passwd.dirty || passwd.touched)" class="invalid-feedback">
-              <p *ngIf="passwd.errors?.['required']"
+            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback">
+              <p *ngIf="password.errors?.['required']"
                  id="passwdError"
                  class="mb-0">
                 Podaj hasło
               </p>
-              <p *ngIf="passwd.errors?.['wrongPasswd']"
+              <p *ngIf="password.errors?.['wrongPasswd']"
                  id="passwdError2"
                  class="mb-0">
                 Hasło jest niepoprawne

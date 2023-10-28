@@ -22,7 +22,7 @@ export class LoginComponent {
   private initFormGroup() {
     this.formGroup = new FormGroup({
       login: new FormControl('', [Validators.required]),
-      passwd: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
     })
   }
 
@@ -43,9 +43,11 @@ export class LoginComponent {
     if (this.validateForm()) {
       this.authService.login(this.formGroup.value).subscribe(result => {
         if (result.success) {
-          alert(result.message)
+          console.log('success')
+          console.log(result.message)
         } else {
-          alert(result.message)
+          console.log('fail')
+          console.log(result.message)
         }
       })
     }
@@ -55,7 +57,7 @@ export class LoginComponent {
     return this.formGroup.get('login')!;
   }
 
-  get passwd() {
-    return this.formGroup.get('passwd')!;
+  get password() {
+    return this.formGroup.get('password')!;
   }
 }
