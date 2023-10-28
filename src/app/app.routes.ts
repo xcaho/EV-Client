@@ -8,8 +8,13 @@ import {SurveyRegistrationComponent} from "./participant/survey-registration/sur
 import {ConfirmationComponent} from "./participant/confirmation/confirmation.component";
 import {InvalidCodeComponent} from "./participant/invalid-code/invalid-code.component";
 import {ErrorComponent} from "./common/error/error.component";
+import {LoginComponent} from "./common/login/login.component";
 
 const appRoute: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'appointments',
     component: YourAppointmentsComponent
