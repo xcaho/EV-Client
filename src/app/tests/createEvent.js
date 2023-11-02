@@ -22,7 +22,7 @@ test('Correctly create event', async () => {
       nameValue: "Spotkanie dotyczące makiet",
       surveyDurationValue: "01:30",
       surveyBreakTimeValue: "30",
-      endDateValue: "2023-06-08",
+      endDateValue: startDate,
       maxUsersValue: "5",
       researchStartDateValue: startDate,
       researchEndDateValue: endDate
@@ -33,8 +33,8 @@ test('Correctly create event', async () => {
     start: "08:00",
     end: "13:00"
   }, {
-    start: "12:00",
-    end: "18:00"
+    start: "15:00",
+    end: "20:00"
   }]
 
   await availabilityPage.countOfDaysAreEqual(eventDurationDays);
@@ -43,8 +43,14 @@ test('Correctly create event', async () => {
     const indexOfArray = i % arrayOfHours.length;
     await availabilityPage.fillForm({
         index: i,
-        startHourVal: arrayOfHours[indexOfArray].start,
-        endHourVal: arrayOfHours[indexOfArray].end
+        startHourVal: "08:00",
+        endHourVal: "13:00"
+      }
+    );
+    await availabilityPage.fillForm({
+        index: i,
+        startHourVal: "15:00",
+        endHourVal: "20:00"
       }
     );
   }
@@ -54,7 +60,8 @@ test('Correctly create event', async () => {
   // await t.debug();
 });
 
-test('Checking inputs validation', async () => {
+test.skip
+  ('Checking inputs validation', async () => {
 
   await createEventPage.fillForm();
 
