@@ -2,7 +2,8 @@
   "name": "easyvisit",
   "version": "0.0.0",
   "scripts": {
-    "demoTest": "testcafe chrome src/app/tests/createEvent.js",
+    "createEventTest": "testcafe chrome src/app/tests/tests/createEvent.js",
+    "surveyRegistrationTest": "testcafe chrome src/app/tests/tests/surveyRegistration.js",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

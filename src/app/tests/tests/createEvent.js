@@ -1,6 +1,6 @@
 import {t, Selector} from 'testcafe';
-import createEvent from "./pageObjects/createEvent";
-import availabilityAdd from "./pageObjects/availability";
+import createEvent from "../pageObjects/createEvent";
+import availabilityAdd from "../pageObjects/availability";
 import {format, addDays} from 'date-fns'
 
 const createEventPage = createEvent();
@@ -12,7 +12,8 @@ fixture('Getting Started')
     await t.click(Selector("#id1"));
   });
 
-test('Correctly create event', async () => {
+test
+('Correctly create event', async () => {
   const eventDurationDays = 5;
   const startDate = format(new Date(), 'yyyy-MM-dd');
   const endDate = format(addDays(new Date(startDate), eventDurationDays - 1), 'yyyy-MM-dd');
@@ -60,8 +61,8 @@ test('Correctly create event', async () => {
   // await t.debug();
 });
 
-test.skip
-  ('Checking inputs validation', async () => {
+test
+('Checking inputs validation', async () => {
 
   await createEventPage.fillForm();
 
