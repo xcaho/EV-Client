@@ -1,6 +1,5 @@
 import {t, Selector} from "testcafe";
 import surveyRegistration from "../pageObjects/surveyRegistration"
-import {format} from "date-fns";
 
 const surveyRegistrationPage = surveyRegistration();
 

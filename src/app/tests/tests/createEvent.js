@@ -30,18 +30,18 @@ test
     });
   await createEventPage.submit();
 
-  const arrayOfHours = [{
-    start: "08:00",
-    end: "13:00"
-  }, {
-    start: "15:00",
-    end: "20:00"
-  }]
+  //const arrayOfHours = [{
+  //  start: "08:00",
+  //  end: "13:00"
+  //}, {
+  //  start: "15:00",
+  //  end: "20:00"
+  //}]
 
   await availabilityPage.countOfDaysAreEqual(eventDurationDays);
 
   for (let i = 0; i < eventDurationDays; i++) {
-    const indexOfArray = i % arrayOfHours.length;
+    //const indexOfArray = i % arrayOfHours.length;
     await availabilityPage.fillForm({
         index: i,
         startHourVal: "08:00",
@@ -68,6 +68,6 @@ test
 
   await createEventPage.submit();
 
-  await createEventPage.validaton();
+  await createEventPage.validation();
 
 });

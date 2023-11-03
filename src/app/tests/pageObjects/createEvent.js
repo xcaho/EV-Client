@@ -51,7 +51,7 @@ const createEvent = () => ({
     await t.click(submitBtn)
   },
 
-  validaton: async () => {
+  validation: async () => {
     await t
       .expect(nameError.exists).ok()
       .expect(durationError.exists).ok()
