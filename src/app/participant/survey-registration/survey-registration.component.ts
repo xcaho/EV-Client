@@ -66,13 +66,13 @@ export class SurveyRegistrationComponent {
   private fetchSurvey() {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
       this.survey = surveyDto
-      this.fetchEvent(this.survey.eventId, true);
+      this.shouldNavigate(this.survey.eventId, true);
     }, (error) => {
       this.router.navigate(['/404'])
     })
   }
 
-  private fetchEvent(eventId: number, navigate: boolean): void {
+  private shouldNavigate(eventId: number, navigate: boolean): void {
     this.isFetching = true;
     this.eventService.getEvent(eventId).subscribe((event) => {
       this.event = event;
@@ -120,17 +120,21 @@ export class SurveyRegistrationComponent {
       }, (exception) => {
 
         if (exception.status === 409) {
-          this.alertService.showError('Wybrany termin już jest zajęty, wybierz inny lub odśwież stronę.');
-          this.fetchEvent(this.survey.eventId, false);
-          this.form.get('dayChoice')?.setValue('');
-          this.form.get('dayChoice')?.updateValueAndValidity();
-          this.form.get('hourChoice')?.setValue('');
-          this.form.get('hourChoice')?.updateValueAndValidity();
+          this.handleHttp409();
         }
       })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.');
     }
+  }
+
+  private handleHttp409() {
+    this.alertService.showError('Wybrany termin już jest zajęty, wybierz inny.');
+    this.shouldNavigate(this.survey.eventId, false);
+    this.form.get('dayChoice')?.setValue('');
+    this.form.get('dayChoice')?.updateValueAndValidity();
+    this.form.get('hourChoice')?.setValue('');
+    this.form.get('hourChoice')?.updateValueAndValidity();
   }
 
   private validate(): boolean {
