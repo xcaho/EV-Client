@@ -1,0 +1,73 @@
+<div class="h64 flex-center border-bottom border-secondary mb-4">
+  <div class="container-xxl">
+    <h1 class="h2 mb-0">Logowanie</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-4">
+  <div class="row justify-content-center">
+    <section class="col-12 col-sm-8 col-md-6 col-lg-4">
+      <form [formGroup]="formGroup">
+        <fieldset class="form">
+          <legend class="h5 mb-3">Panel logowania</legend>
+          <div class="form-outline mb-3">
+            <input type="text"
+                   id="login"
+                   name="login"
+                   formControlName="login"
+                   required
+                   class="form-control"
+                   [class.is-invalid]="login.invalid && (login.dirty || login.touched)">
+            <label for="login"
+                   class="form-label">
+              Login
+            </label>
+            <div *ngIf="login.invalid && (login.dirty || login.touched)" class="invalid-feedback">
+              <p *ngIf="login.errors?.['required']"
+                 id="loginError"
+                 class="mb-0">
+                Podaj login
+              </p>
+            </div>
+          </div>
+          <div class="form-outline mb-3">
+            <input type="password"
+                   id="password"
+                   name="password"
+                   formControlName="password"
+                   required
+                   class="form-control"
+                   [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+            <label for="password"
+                   class="form-label">
+              Hasło
+            </label>
+            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback">
+              <p *ngIf="password.errors?.['required']"
+                 id="passwdError"
+                 class="mb-0">
+                Podaj hasło
+              </p>
+              <p *ngIf="password.errors?.['wrongPasswd']"
+                 id="passwdError2"
+                 class="mb-0">
+                Hasło jest niepoprawne
+              </p>
+            </div>
+          </div>
+        </fieldset>
+        <div class="d-flex justify-content-between">
+          <a href="#"
+             class="btn btn-outline-primary">
+            Przypomnij hasło
+          </a>
+          <button type="submit"
+                  class="btn btn-primary"
+                  (click)="loginProcess()"
+          >
+            Zaloguj
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

@@ -24,6 +24,7 @@ import {DeleteCodeComponent} from './recruiter/your-appointments/event/delete-co
 import {DeleteEventComponent} from './recruiter/your-appointments/event/delete-event/delete-event.component';
 import {AlertsComponent} from "./common/alerts/alerts.component";
 import {AlertService} from "./common/alerts/service/alert.service";
+import { LoginComponent } from './common/login/login.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import {AlertService} from "./common/alerts/service/alert.service";
     ErrorComponent,
     DeleteCodeComponent,
     DeleteEventComponent,
-    AlertsComponent
+    AlertsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

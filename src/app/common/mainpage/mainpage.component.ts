@@ -11,7 +11,11 @@ export class MainpageComponent {
   constructor(private router: Router, private menuService: MenuService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        const shouldDisplayMenu = !event.url.includes('register') && !event.url.includes('confirmation') && !event.url.includes('invalid-code') && !event.url.includes('404');
+        const shouldDisplayMenu = !event.url.includes('register') &&
+          !event.url.includes('confirmation') &&
+          !event.url.includes('invalid-code') &&
+          !event.url.includes('login') &&
+          !event.url.includes('404');
         this.menuService.setDisplayMenu(shouldDisplayMenu);
       }
     });

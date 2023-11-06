@@ -21,40 +21,41 @@
          aria-label="Przejdź do strony głównej">
         easy <span class="smaller">visit</span>
       </a>
-        <button *ngIf="displayMenu$ | async"
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-          <span class="navbar-toggler-icon"></span>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse mb-2 mb-lg-0"
-             id="navbarSupportedContent">
-          <ul *ngIf="displayMenu$ | async"
-              class="navbar-nav me-auto mt-2 mt-lg-0">
-            <li class="nav-item"
-                [routerLinkActive]="['active']">
-              <a class="nav-link ps-2"
-                 routerLink="appointments">Lista wydarzeń
-              </a>
-            </li>
-          </ul>
-          <div class="spacer"></div>
-<!--          <a href="#" class="d-block ms-auto log-out text-end">Wyloguj się</a>-->
-            <p *ngIf="displayMenu$ | async"
-               class="d-block ms-auto text-white text-end mb-0">
-              Rola: rekruter
-            </p>
-            <p *ngIf="!(displayMenu$ | async)"
-               class="d-block ms-auto text-white text-end mb-0">
-              Rola: rekrutowany
-            </p>
-        </div>
+      <button *ngIf="displayMenu$ | async"
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarList"
+              aria-controls="navbarList"
+              aria-expanded="false"
+              aria-label="Otwórz menu">
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse mb-2 mb-lg-0"
+           id="navbarList">
+        <ul *ngIf="displayMenu$ | async"
+            class="navbar-nav me-auto mt-2 mt-lg-0">
+          <li class="nav-item"
+              [routerLinkActive]="['active']">
+            <a class="nav-link ps-2"
+               routerLink="appointments">
+              Lista wydarzeń
+            </a>
+          </li>
+        </ul>
+        <div class="spacer"></div>
+        <!--          <a href="#" class="d-block ms-auto log-out text-end">Wyloguj się</a>-->
+        <p *ngIf="displayMenu$ | async"
+           class="d-block ms-auto text-white text-end mb-0">
+          Rola: rekruter
+        </p>
+        <p *ngIf="!(displayMenu$ | async)"
+           class="d-block ms-auto text-white text-end mb-0">
+          Rola: rekrutowany
+        </p>
+      </div>
     </nav>
   </div>
   <app-alerts></app-alerts>

@@ -5,7 +5,10 @@
         <ng-container *ngIf="this.survey.surveyState === 'USED'">Odwołaj spotkanie</ng-container>
         <ng-container *ngIf="this.survey.surveyState === 'UNUSED'">Dezaktywuj kod</ng-container>
       </h3>
-      <button type="button" class="btn-close" aria-label="Zamknij modal" (click)="closeModal()">
+      <button type="button"
+              class="btn-close"
+              aria-label="Zamknij modal"
+              (click)="closeModal()">
         <span class="d-none">Zamknij modal</span>
       </button>
     </div>
@@ -22,11 +25,18 @@
     <div class="modal-footer px-0">
       <div class="w-100 row m-0 justify-content-between">
         <div class="col-6 col-sm-auto">
-          <button type="button" class="w-100 btn btn-outline-primary" (click)="closeModal()">Anuluj
+          <button type="button"
+                  class="w-100 btn btn-outline-primary"
+                  (click)="closeModal()">
+            Anuluj
           </button>
         </div>
         <div class="col-6 col-sm-auto">
-          <button type="submit" class="w-100 btn btn-primary" (click)="deactivateCode()">Generuj kod</button>
+          <button type="submit"
+                  class="w-100 btn btn-primary"
+                  (click)="deactivateCode()">
+            Generuj kod
+          </button>
         </div>
       </div>
     </div>

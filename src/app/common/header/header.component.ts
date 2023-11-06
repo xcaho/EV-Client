@@ -9,6 +9,7 @@ import {ResolveEnd, Router} from "@angular/router";
 })
 export class HeaderComponent {
   public displayMenu$ = this.menuService.displayMenu$;
+  public route: string | undefined;
 
   constructor(public menuService: MenuService,
               private router: Router) {
@@ -18,6 +19,4 @@ export class HeaderComponent {
       }
     })
   }
-
-  public route: string | undefined;
 }

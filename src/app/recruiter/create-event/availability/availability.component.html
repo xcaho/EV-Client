@@ -26,11 +26,28 @@
       </div>
       <div class="justify-content-between flex-wrap row">
         <div class="col-6 col-md-auto">
-          <button class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" type="button" (click)="goBack()" *ngIf="isEdit" [routerLink]="['/edit/', this.event.id]">Wstecz</button>
-          <button class="w-100 my-2 my-md-0 btn btn-outline-primary text-uppercase" type="button" (click)="goBack()" *ngIf="!isEdit" [routerLink]="['/create']">Wstecz</button>
+          <button type="button"
+                  class="w-100 my-2 my-md-0 btn btn-outline-primary"
+                  (click)="goBack()"
+                  *ngIf="isEdit"
+                  [routerLink]="['/edit/', this.event.id]">
+            Wstecz
+          </button>
+          <button type="button"
+                  class="w-100 my-2 my-md-0 btn btn-outline-primary"
+                  (click)="goBack()"
+                  *ngIf="!isEdit"
+                  [routerLink]="['/create']">
+            Wstecz
+          </button>
         </div>
         <div class="col-6 col-md-auto">
-          <button class="w-100 my-2 my-md-0 btn btn-primary text-uppercase" type="submit" (click)="submit()" aria-label="Zapisz wydarzenie">Zapisz</button>
+          <button type="submit"
+                  class="w-100 my-2 my-md-0 btn btn-primary"
+                  (click)="submit()"
+                  aria-label="Zapisz wydarzenie">
+            Zapisz
+          </button>
         </div>
       </div>
     </section>

@@ -102,7 +102,9 @@
             </td>
             <td class="col-4">
               <span id="kod{{survey.id}}" style="display:inline-block; min-width: 125px;">{{survey.code}}</span>
-              <button class="btn btn-icon btn-list fa-solid fa-copy" title="Skopiuj link do spotkania - {{survey.code}}"
+              <button type="button"
+                      class="btn btn-icon btn-list fa-solid fa-copy"
+                      title="Skopiuj link do spotkania - {{survey.code}}"
                       (click)="copyToClipboard(survey.code)">
                 <span class="sr-only">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
@@ -120,13 +122,17 @@
               class="sr-only">Spotkanie nie zostało jeszcze umówione</span>–
             </td>
             <td class="col-1 text-end">
-              <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Odwołaj spotkanie"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'USED'">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
-              <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Dezaktywuj kod"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
                       *ngIf="survey.surveyState === 'UNUSED'">
                 <fa-icon [icon]="trash"></fa-icon>
@@ -154,17 +160,23 @@
             </dd>
             <dt class="col-5 col-sm-4 text-end">Akcje:</dt>
             <dd class="col-7 col-sm-8">
-              <button class="btn btn-icon fa-solid fa-copy" title="Skopiuj link do spotkania - {{survey.code}}"
+              <button type="button"
+                      class="btn btn-icon fa-solid fa-copy"
+                      title="Skopiuj link do spotkania - {{survey.code}}"
                       (click)="copyToClipboard(survey.code)">
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
-              <button type="button" class="btn btn-icon btn-list" title="Odwołaj spotkanie"
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Odwołaj spotkanie"
                       *ngIf="survey.surveyState === 'USED'"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash"></fa-icon>
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
-              <button type="button" class="btn btn-icon btn-list" title="Dezaktywuj kod"
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Dezaktywuj kod"
                       *ngIf="survey.surveyState === 'UNUSED'"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
                 <fa-icon [icon]="trash"></fa-icon>
