@@ -3,6 +3,7 @@ import {EventService} from '../../event.service';
 import {EventDto} from "../../shared/dtos/EventDto";
 import {AvailabilityService} from "../../availability.service";
 import {TitleService} from "../../shared/services/title.service";
+import {FormatDate} from "../../shared/utils/format-date";
 
 @Component({
   selector: 'app-your-appointments',
@@ -10,13 +11,14 @@ import {TitleService} from "../../shared/services/title.service";
   styleUrls: ['./your-appointments.component.scss']
 })
 export class YourAppointmentsComponent {
-
-  events: EventDto[] = [];
-  isFetching: boolean = false;
+  public events: EventDto[] = [];
+  public isFetching: boolean = false;
+  public formatDate = FormatDate;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              ) {
   }
 
   goToCreate() {
