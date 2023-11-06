@@ -66,13 +66,13 @@ export class SurveyRegistrationComponent {
   private fetchSurvey() {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
       this.survey = surveyDto
-      this.shouldNavigate(this.survey.eventId, true);
+      this.fetchEvent(this.survey.eventId, true);
     }, (error) => {
       this.router.navigate(['/404'])
     })
   }
 
-  private shouldNavigate(eventId: number, navigate: boolean): void {
+  private fetchEvent(eventId: number, shouldNavigate: boolean): void {
     this.isFetching = true;
     this.eventService.getEvent(eventId).subscribe((event) => {
       this.event = event;
@@ -80,7 +80,7 @@ export class SurveyRegistrationComponent {
       this.formSurveyDuration = event.surveyDuration
       this.formEventEndDate = event.endDate
 
-      if (navigate && this.survey.surveyState !== SurveyState.UNUSED || this.event.slotsTaken === this.event.maxUsers) {
+      if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED || this.event.slotsTaken === this.event.maxUsers) {
         this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
       }
 
@@ -130,7 +130,7 @@ export class SurveyRegistrationComponent {
 
   private handleHttp409() {
     this.alertService.showError('Wybrany termin już jest zajęty, wybierz inny.');
-    this.shouldNavigate(this.survey.eventId, false);
+    this.fetchEvent(this.survey.eventId, false);
     this.form.get('dayChoice')?.setValue('');
     this.form.get('dayChoice')?.updateValueAndValidity();
     this.form.get('hourChoice')?.setValue('');
