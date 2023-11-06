@@ -54,7 +54,7 @@ export class LoginComponent {
     if (this.validateForm()) {
       this.authService.login(this.formGroup.value).subscribe(result => {
         if (result.success) {
-          this.alertService.showSuccess('Zarejestrowano pomyślnie.')
+          this.alertService.showSuccess('Zalogowano pomyślnie.')
           console.log('success')
           console.log(result.message)
         } else {
