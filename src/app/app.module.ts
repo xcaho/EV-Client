@@ -24,8 +24,8 @@ import {DeleteCodeComponent} from './recruiter/your-appointments/event/delete-co
 import {DeleteEventComponent} from './recruiter/your-appointments/event/delete-event/delete-event.component';
 import {AlertsComponent} from "./common/alerts/alerts.component";
 import {AlertService} from "./common/alerts/service/alert.service";
-import { LoginComponent } from './common/login/login.component';
-import { RegisterComponent } from './common/register/register.component';
+import {LoginComponent} from './common/login/login.component';
+import {RegisterComponent} from './common/register/register.component';
 
 
 @NgModule({

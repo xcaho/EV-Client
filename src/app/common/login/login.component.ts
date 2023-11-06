@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import {AlertService} from "../alerts/service/alert.service";
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private titleService: TitleService,
+    private alertService: AlertService,
   ) {
   }
 
@@ -52,13 +54,17 @@ export class LoginComponent {
     if (this.validateForm()) {
       this.authService.login(this.formGroup.value).subscribe(result => {
         if (result.success) {
+          this.alertService.showSuccess('Zarejestrowano pomyślnie.')
           console.log('success')
           console.log(result.message)
         } else {
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
           console.log('fail')
           console.log(result.message)
         }
       })
+    } else {
+      this.alertService.showError('Uzupełnij wymagane pola.')
     }
   }
 

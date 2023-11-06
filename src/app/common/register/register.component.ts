@@ -5,6 +5,7 @@ import {EmailValidator} from "../../shared/validators/email-validator";
 import {PasswordValidator} from "../../shared/validators/password-validator";
 import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import {AlertService} from "../alerts/service/alert.service";
 
 @Component({
   selector: 'app-register',
@@ -22,6 +23,7 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private titleService: TitleService,
+    private alertService: AlertService,
   ) {
   }
 
@@ -55,13 +57,17 @@ export class RegisterComponent {
     if (this.validateForm()) {
       this.authService.create(this.formGroup.value).subscribe(result => {
         if (result.success) {
+          this.alertService.showSuccess('Zarejestrowano pomyślnie.')
           console.log('success')
           console.log(result.message)
         } else {
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
           console.log('fail')
           console.log(result.message)
         }
       })
+    } else {
+      this.alertService.showError('Uzupełnij wymagane pola.')
     }
   }
 
