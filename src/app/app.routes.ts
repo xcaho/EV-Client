@@ -10,6 +10,7 @@ import {InvalidCodeComponent} from "./participant/invalid-code/invalid-code.comp
 import {ErrorComponent} from "./common/error/error.component";
 import {LoginComponent} from "./common/login/login.component";
 import {RegisterComponent} from "./common/register/register.component";
+
 const appRoute: Routes = [
   {
     path: 'login',
@@ -33,7 +34,7 @@ const appRoute: Routes = [
   },
   {
     path: 'create',
-    component: CreateEventComponent
+    component: CreateEventComponent,
   },
   {
     path: 'event/:id',

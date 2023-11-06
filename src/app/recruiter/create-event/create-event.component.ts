@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {TextChangeService} from "../../shared/services/text-change.service";
 import {TitleService} from "../../shared/services/title.service";
 
@@ -10,9 +10,21 @@ import {TitleService} from "../../shared/services/title.service";
 
 export class CreateEventComponent {
   public h1: string = 'Tworzenie wydarzenia';
+  public isFormDirty: boolean = false;
 
   constructor(private textChangeService: TextChangeService,
               private titleService: TitleService) {
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  notification($event: any): void {
+    if (this.isFormDirty) {
+      $event.returnValue = 'Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?';
+    }
+  }
+
+  onFormDirtyChange(isFormDirty: boolean) {
+    this.isFormDirty = isFormDirty;
   }
 
   ngOnInit() {
