@@ -6,16 +6,18 @@
   background-color: $bg-primary;
   color: $text-primary;
   border-color: $primary-color;
+
   &:hover, &:focus, &:focus-visible, &:active, .active {
     background-color: $primary-color-hover !important;
     border-color: transparent !important;
   }
+
   &:focus, &:focus-visible, &:active {
     //outline: $primary-color-hover;
     //outline: 2px solid $text-dark !important;
     //outline-offset:1px;
     box-shadow: unset !important;
-    color:$text-primary !important;
+    color: $text-primary !important;
   }
 }
 
@@ -23,16 +25,18 @@
   background-color: $bg-secondary;
   color: $text-secondary;
   border-color: $primary-color;
+
   &:hover, &:focus, &:focus-visible, &:active, .active {
     background-color: $primary-color-hover !important;
     border-color: transparent !important;
   }
+
   &:focus, &:focus-visible, &:active {
     //outline: $primary-color-hover;
     //outline: 2px solid $text-dark !important;
     //outline-offset:1px;
     box-shadow: unset !important;
-    color:$text-primary !important;
+    color: $text-primary !important;
   }
 }
 
@@ -41,12 +45,14 @@
   color: $primary-color;
   border: 2px solid transparent;
   font-family: "Font Awesome 6 Free";
-  i::before{
+
+  i::before {
     font-weight: 900 !important;
   }
+
   &:hover {
     background-color: #B5B0C5;
-    color:$text-dark;
+    color: $text-dark;
   }
 }
 
@@ -56,4 +62,22 @@
   opacity: 0.75;
   margin-right: -0.75rem;
   box-shadow: none !important;
+}
+
+.show-passwd-btn {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  height: calc(2.325rem - 1.5px);
+  width: 2.375rem;
+  padding: 0 0.5rem;
+  border: 0;
+  border-left: 1px solid $border-color;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+//przesunięcie ikony błędu w inpucie, który zawiera guzik w sobie
+.input-with-button {
+  background-position: right calc(0.375em + 2.75rem) center !important;
 }

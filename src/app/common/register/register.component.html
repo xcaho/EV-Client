@@ -1,6 +1,6 @@
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl">
-    <h1 class="h2 mb-0">Logowanie</h1>
+    <h1 class="h2 mb-0">Rejestracja</h1>
   </div>
 </div>
 <div class="main-content container-xxl mb-4">
@@ -8,34 +8,42 @@
     <section class="col-12 col-sm-8 col-md-6 col-lg-4">
       <form [formGroup]="formGroup">
         <fieldset class="form">
-          <legend class="h5 mb-3">Panel logowania</legend>
+          <legend class="h5 mb-3">Formularz rejestracji</legend>
           <div class="form-outline mb-3">
-            <input type="text"
-                   id="login"
-                   name="login"
-                   formControlName="login"
-                   aria-describedby="loginError"
+            <input type="email"
+                   id="email"
+                   name="email"
+                   [(ngModel)]="isEmailEmpty"
+                   [ngClass]="{'active': isEmailEmpty}"
+                   formControlName="email"
+                   aria-describedby="emailError emailError2 emailHelper"
                    required
-                   class="form-control"
-                   [class.is-invalid]="login.invalid && (login.dirty || login.touched)">
-            <label for="login"
+                   class="form-control input-mail"
+                   [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
+            <label for="email"
                    class="form-label">
-              Login
+              E-mail
             </label>
-            <div *ngIf="login.invalid && (login.dirty || login.touched)" class="invalid-feedback">
-              <p *ngIf="login.errors?.['required']"
-                 id="loginError"
+            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
+              <p *ngIf="email.errors?.['required']"
+                 id="emailError"
                  class="mb-0">
-                Podaj login
+                Podaj e-mail
+              </p>
+              <p *ngIf="email.errors?.['invalidEmail']"
+                 id="emailError2"
+                 class="mb-0">
+                Podaj e-mail w formacie: mail@domena.com
               </p>
             </div>
+            <p id="emailHelper" class="form-text">Format: mail@domena.com</p>
           </div>
           <div class="form-outline mb-3">
             <input [type]="passwdShown ? 'text': 'password'"
                    id="password"
                    name="password"
                    formControlName="password"
-                   aria-describedby="passwdError"
+                   aria-describedby="passwdError passwdError2 passwdError3 passwdError4 passwdHelper passwdHints"
                    required
                    class="form-control input-with-button"
                    [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
@@ -63,24 +71,44 @@
                  class="mb-0">
                 Podaj hasło
               </p>
-              <p *ngIf="password.errors?.['wrongPasswd']"
+              <p *ngIf="password.errors?.['invalidPasswordMin8']"
                  id="passwdError2"
                  class="mb-0">
-                Hasło jest niepoprawne
+                Hasło musi zawierać co najmniej 8 znaków.
+              </p>
+              <p *ngIf="password.errors?.['invalidPasswordDigit']"
+                 id="passwdError3"
+                 class="mb-0">
+                Hasło musi składać się z co najmniej 1 cyfry.
+              </p>
+              <p *ngIf="password.errors?.['invalidPasswordLetter']"
+                 id="passwdError4"
+                 class="mb-0">
+                Hasło musi składać się z co najmniej 1 litery.
               </p>
             </div>
+            <p id="passwdHelper" class="form-text mb-0">
+              Hasło musi zawierać:
+            </p>
+            <ul class="ps-3" id="passwdHints">
+              <li class="form-text">
+                co najmniej 8 znaków
+              </li>
+              <li class="form-text">
+                co najmniej jedną literę
+              </li>
+              <li class="form-text">
+                co najmniej jedną liczbę
+              </li>
+            </ul>
           </div>
         </fieldset>
-        <div class="d-flex justify-content-between">
-          <a href="#"
-             class="btn btn-outline-primary">
-            Przypomnij hasło
-          </a>
+        <div class="d-flex justify-content-end">
           <button type="submit"
                   class="btn btn-primary"
                   (click)="save()"
           >
-            Zaloguj
+            Zarejestruj się
           </button>
         </div>
       </form>

@@ -9,6 +9,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  create(data: any): Observable<any> {
+    return this.http.post('http://localhost:8080/api/admin/register', data)
+  }
+
   login(data: any): Observable<any> {
     return this.http.post('http://localhost:8080/api/admin/login', data)
   }
