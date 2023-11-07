@@ -19,10 +19,8 @@ export class SurveyService {
   }
 
   getSurvey(code: string): Observable<SurveyDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<SurveyDto>(this.apiUrl + '/surveys/' + code, options)
+    return this.http.get<SurveyDto>(this.apiUrl + '/surveys/' + code)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -31,10 +29,8 @@ export class SurveyService {
   }
 
   getSurveys(eventId: number): Observable<SurveyDto[]> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<SurveyDto[]>(this.apiUrl + '/events/' + eventId + '/surveys', options)
+    return this.http.get<SurveyDto[]>(this.apiUrl + '/events/' + eventId + '/surveys')
       .pipe(
         map(res => res.map(tmp => new SurveyDto(
           tmp.id, tmp.code, tmp.date, tmp.surveyState, tmp.eventId))),
@@ -45,10 +41,8 @@ export class SurveyService {
   }
 
   modifySurvey(survey: SurveyDto): Observable<SurveyDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.patch<SurveyDto>(this.apiUrl + '/surveys/' + survey.id, survey, options)
+    return this.http.patch<SurveyDto>(this.apiUrl + '/surveys/' + survey.id, survey)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -56,10 +50,8 @@ export class SurveyService {
       )
   }
   saveSurvey(eventId: number): Observable<SurveyDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.post<SurveyDto>(this.apiUrl + '/events/' + eventId + '/surveys', options)
+    return this.http.post<SurveyDto>(this.apiUrl + '/events/' + eventId + '/surveys', null)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

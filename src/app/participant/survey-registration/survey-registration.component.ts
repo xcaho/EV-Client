@@ -23,7 +23,6 @@ export class SurveyRegistrationComponent {
   private survey!: SurveyDto;
   private event!: EventDto;
   public availabilityList: Availability[] = [];
-  private isFetching: boolean = false;
   private surveyCode!: string;
   public form!: FormGroup;
   public selectedDay: string = '';
@@ -74,7 +73,6 @@ export class SurveyRegistrationComponent {
   }
 
   private fetchEvent(eventId: number, shouldNavigate: boolean): void {
-    this.isFetching = true;
     this.eventService.getEvent(eventId).subscribe((event) => {
       this.event = event;
       this.formEventName = event.name
@@ -86,7 +84,6 @@ export class SurveyRegistrationComponent {
       }
 
       this.fetchAvailabilityList();
-      this.isFetching = false;
     });
   }
 
@@ -98,8 +95,6 @@ export class SurveyRegistrationComponent {
 
   save() {
     if (this.validate()) {
-      const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
-        this.selectedHour, this.selectedDay, this.availabilityList, this.event, this.endHours);
 
       let date: Date = new Date(this.selectedDay)
       const [hours, minutes] = this.selectedHour.split(':').map(Number);
@@ -108,16 +103,10 @@ export class SurveyRegistrationComponent {
       this.survey.surveyState = SurveyState.USED
 
       this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
+
         this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
-
-        this.availabilityService.patchAvailabilityList(this.availabilityService.convertAvailabilityToDto(
-          updatedAvailabilites), this.event.id).subscribe(
-          (response) => {
-          }, (exception) => {
-          }
-        )
-
         this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+
       }, (exception) => {
 
         if (exception.status === 409) {

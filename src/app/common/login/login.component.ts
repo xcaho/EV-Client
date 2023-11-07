@@ -4,6 +4,7 @@ import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
+import {User} from "../../shared/dtos/User";
 
 @Component({
   selector: 'app-login',
@@ -52,18 +53,28 @@ export class LoginComponent {
 
   public save() {
     if (this.validateForm()) {
-      this.authService.login(this.formGroup.value).subscribe(result => {
-        if (result.success) {
+
+      let formGroupValue = this.formGroup.value
+      let user = new User(formGroupValue.login, formGroupValue.password)
+
+      this.authService.login(user).subscribe(result => {
+
+        if (result.token) {
+
           this.alertService.showSuccess('Zalogowano pomyślnie.')
           console.log('success')
-          console.log(result.message)
+          let token = result.token
+          console.log(token)
+          localStorage.setItem('token', token)
+
         } else {
+
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
           console.log('fail')
-          console.log(result.message)
         }
       })
     } else {
+
       this.alertService.showError('Uzupełnij wymagane pola.')
     }
   }

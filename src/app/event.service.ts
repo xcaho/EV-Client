@@ -21,10 +21,8 @@ export class EventService {
   }
 
   createEvent(event: EventDto): Observable<EventDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.post<EventDto>(this.apiUrl + '/events', event, options)
+    return this.http.post<EventDto>(this.apiUrl + '/events', event)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -33,10 +31,8 @@ export class EventService {
   }
 
   modifyEvent(event: EventDto): Observable<EventDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.patch<EventDto>(this.apiUrl + '/events/' + event.id, event, options)
+    return this.http.patch<EventDto>(this.apiUrl + '/events/' + event.id, event)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -45,10 +41,8 @@ export class EventService {
   }
 
   getEvents(): Observable<EventDto[]> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<EventDto[]>(this.apiUrl + '/events', options)
+    return this.http.get<EventDto[]>(this.apiUrl + '/events')
       .pipe(
         map(events => events.map(event => new EventDto(
           event.name,
@@ -70,10 +64,8 @@ export class EventService {
   }
 
   getEvent(id: number): Observable<EventDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<EventDto>(this.apiUrl + '/events/' + id, options)
+    return this.http.get<EventDto>(this.apiUrl + '/events/' + id)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
