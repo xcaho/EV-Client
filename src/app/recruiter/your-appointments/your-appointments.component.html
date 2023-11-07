@@ -15,10 +15,10 @@
 </div>
 <div class="main-content container-xxl mb-4">
   <div class="row justify-content-center">
-    <section class="col-12 col-md-8 col-lg-6"
+    <section class="col-12 col-md-8 col-lg-6 d-flex flex-column justify-content-center align-items-center"
              *ngIf="!isFetching && !events[0]">
       <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplanowanych wydarzeń</p>
-      <a class="col-12 col-md-4 btn btn-outline-primary offset-md-4"
+      <a class="btn btn-outline-primary w-auto"
          (click)="goToCreate()"
          [routerLink]="['/create']">
         Dodaj wydarzenie
@@ -86,6 +86,10 @@
           </div>
         </li>
       </ul>
+    </section>
+    <section class="col-12" *ngIf="hasErrors">
+      <p class="h4 text-dark text-center mb-1">Wystąpił błąd.</p>
+      <p class="text-dark text-center mb-3">Skontakuj się z administratorem lub spróbuj ponownie.</p>
     </section>
   </div>
 </div>

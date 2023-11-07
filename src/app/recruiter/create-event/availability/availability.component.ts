@@ -40,35 +40,29 @@ export class AvailabilityComponent {
 
   async ngOnInit() {
     document.getElementById('focusReset')?.focus();
-
-    this.event = this.eventService.getTemporaryEvent()
-    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
-    this.eventId = EventUtils.getIdFromRoute(this.route)
+    this.event = this.eventService.getTemporaryEvent();
+    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
+    this.eventId = EventUtils.getIdFromRoute(this.route);
 
     if (this.event == undefined && this.isEdit) {
-      this.event = await firstValueFrom(this.eventService.getEvent(this.eventId))
+      this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
     }
 
-    let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities()
-    this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate))
+    let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities();
+    this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate));
 
     if (!temporaryAvailabilities || temporaryAvailabilities.length == 0) {
-
       if (this.isEdit) {
-
         this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
           this.includeAvailabilities(this.availabilityService.mapFromDto(availabilityDtoList))
         })
       }
-
     } else {
-
       this.includeAvailabilities(temporaryAvailabilities)
     }
   }
 
   includeAvailabilities(oldAvailabilities: Availability[]) {
-
     oldAvailabilities.forEach(oldAvailability => {
       let index = this.availabilityList.findIndex(newAvailability => newAvailability.date.toDateString() == oldAvailability.date.toDateString())
       if (index != -1) {
@@ -76,6 +70,7 @@ export class AvailabilityComponent {
       }
     })
   }
+
   goBack() {
     this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
   }
@@ -91,65 +86,49 @@ export class AvailabilityComponent {
     }
   }
 
-  submit() {
+  public submit() {
     if (this.isEdit) {
-
       this.eventService.modifyEvent(this.event).subscribe(
         response => {
-
-          console.log("Succesfully modified: " + JSON.stringify(response));
           this.saveAvailability(response.id)
-
-        }, exception => {
-          console.log(exception.error.errorsMap)
+        }, error => {
+          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
       )
 
     } else {
-
       this.eventService.createEvent(this.event).subscribe(
         response => {
-
-          console.log("Succesfully added: " + JSON.stringify(response));
-          this.saveAvailability(response.id)
-
-        }, exception => {
-          console.log(exception.error.errorsMap)
+          this.saveAvailability(response.id);
+        }, error => {
+          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
       )
     }
   }
 
   private saveAvailability(eventId: number) {
-
     let availabilityDtoList: AvailabilityDto[] = this.availabilityService.convertAvailabilityToDto(this.availabilityList)
 
     if (this.isEdit) {
-
       this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
-
-          console.log("Successfully modified: " + JSON.stringify(response))
-          this.eventService.clearTemporaryEvent()
-          this.availabilityService.clearTemporaryAvailabilities()
-          this.router.navigate(['/appointments'])
-
-        }, exception => {
-          console.log(exception.error.errorsMap)
+          this.eventService.clearTemporaryEvent();
+          this.availabilityService.clearTemporaryAvailabilities();
+          this.router.navigate(['/appointments']);
+        }, error => {
+          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
       )
-
     } else {
-
       this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
-
-          this.eventService.clearTemporaryEvent()
-          this.availabilityService.clearTemporaryAvailabilities()
-          this.alertService.showSuccess('Pomyślnie dodano wydarzenie')
-          this.router.navigate(['/appointments'])
-
-        }, exception => {
+          this.eventService.clearTemporaryEvent();
+          this.availabilityService.clearTemporaryAvailabilities();
+          this.alertService.showSuccess('Pomyślnie dodano wydarzenie');
+          this.router.navigate(['/appointments']);
+        }, error => {
+          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
       )
     }
@@ -161,7 +140,7 @@ export class AvailabilityComponent {
     return date
   }
 
-  removeHour (availability: Availability, hours: any): void {
+  public removeHour (availability: Availability, hours: any): void {
     availability.hoursList.forEach((itemList, index) => {
       if (itemList === hours) {
         availability.hoursList.splice(index, 1)
