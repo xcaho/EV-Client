@@ -43,6 +43,13 @@
     }
   }
 
+  .input-mail.active {
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+
   textarea.form-control.active, select:valid {
     + .form-label {
       transform: translateY(-1rem) translateY(0.1rem) scale(.8);

@@ -1,9 +1,9 @@
-import {TimeValidator} from './time-validator';
+import {EmailValidator} from './email-validator';
 import {FormControl} from "@angular/forms";
 
-describe('TimeValidator', () => {
+describe('EmailValidator', () => {
   it('should create an instance', () => {
     const control = new FormControl('');
-    expect(TimeValidator(control)).toBeNull();
+    expect(EmailValidator(control)).toBeNull();
   });
 });

@@ -23,12 +23,12 @@ import {AlertService} from "../../../common/alerts/service/alert.service";
 export class EventComponent {
   @ViewChild(DeleteCodeComponent) deleteCodeComponent!: DeleteCodeComponent;
   @ViewChild(DeleteEventComponent) deleteEventComponent!: DeleteEventComponent;
-  availabilityList: Availability[] = [];
-  surveyList: SurveyDto[] = []
-  event: EventDto;
-  eventId: number = -1
-  surveyDurationHHMM = "00:00";
-  trash = faTrash;
+  public availabilityList: Availability[] = [];
+  public surveyList: SurveyDto[] = []
+  public event: EventDto;
+  private eventId: number = -1;
+  public surveyDurationHHMM = "00:00";
+  public trash = faTrash;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
