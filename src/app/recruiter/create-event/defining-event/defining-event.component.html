@@ -1,8 +1,8 @@
 <section>
   <form [formGroup]="reactiveForm" #form="ngForm">
     <fieldset>
-      <legend class="h5 mb-3">{{h2}}</legend>
-      <div class="form-outline mb-3">
+      <legend class="h5 mb-4">{{h2}}</legend>
+      <div class="form-outline mb-4">
         <input type="text"
                id="name"
                name="name"
@@ -22,7 +22,7 @@
           </p>
         </div>
       </div>
-      <div class="mb-3 form-outline">
+      <div class="mb-4 form-outline">
             <textarea type="text"
                       [(ngModel)]="textAreaValue"
                       [ngClass]="{'active': textAreaValue}"
@@ -47,7 +47,7 @@
       </div>
       <div class="row">
         <div class="col-12 col-sm-6">
-          <div class="mb-3 form-outline">
+          <div class="mb-4 form-outline">
             <select class="form-select"
                     id="surveyDuration"
                     required
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="mb-3 form-outline">
+          <div class="mb-4 form-outline">
             <select class="form-select"
                     id="surveyBreakTime"
                     required
@@ -93,7 +93,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="mb-3 form-outline">
+          <div class="mb-4 form-outline">
             <input type="date"
                    id="endDate"
                    name="endDate"
@@ -120,7 +120,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="mb-3 form-outline">
+          <div class="mb-4 form-outline">
             <input type="number"
                    id="maxUsers"
                    name="maxUsers"
@@ -151,7 +151,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="mb-3 form-outline">
+          <div class="mb-4 form-outline">
             <input type="date"
                    id="researchStartDate"
                    name="researchStartDate"
@@ -177,7 +177,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="mb-3 form-outline">
+          <div class="mb-4 form-outline">
             <input type="date"
                    id="researchEndDate"
                    name="researchEndDate"
@@ -218,7 +218,6 @@
                 class="w-100 my-2 my-md-0 btn btn-outline-primary"
                 *ngIf="isEdit"
                 (click)=goBack()
-                [routerLink]="['/event/', this.eventId]"
                 aria-label="Anuluj edytowanie wydarzenia">
           Anuluj
         </button>
@@ -226,7 +225,6 @@
                 class="w-100 my-2 my-md-0 btn btn-outline-primary"
                 *ngIf="!isEdit"
                 (click)=goBack()
-                [routerLink]="['/appointments']"
                 aria-label="Anuluj tworzenie wydarzenia">
           Anuluj
         </button>

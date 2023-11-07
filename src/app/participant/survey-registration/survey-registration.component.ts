@@ -11,6 +11,7 @@ import {ConfirmationDto} from "../../shared/dtos/ConfirmationDto";
 import {TitleService} from "../../shared/services/title.service";
 import {SurveyState} from "../../shared/enums/survey-state";
 import {AlertService} from "../../common/alerts/service/alert.service";
+import {FormatDate} from "../../shared/utils/format-date";
 
 @Component({
   selector: 'app-survey-registration',
@@ -33,6 +34,7 @@ export class SurveyRegistrationComponent {
   public formEventName: string = "";
   public formSurveyDuration: number = 0;
   public formEventEndDate: string = "";
+  public formatDate = FormatDate;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -45,7 +47,6 @@ export class SurveyRegistrationComponent {
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
     });
-
   }
 
   ngOnInit(): void {

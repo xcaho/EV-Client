@@ -14,6 +14,7 @@ import {DeleteEventComponent} from "./delete-event/delete-event.component";
 import {environment} from "../../../../environments/environment";
 import {TitleService} from "../../../shared/services/title.service";
 import {AlertService} from "../../../common/alerts/service/alert.service";
+import {FormatDate} from "../../../shared/utils/format-date";
 
 @Component({
   selector: 'app-event',
@@ -29,6 +30,7 @@ export class EventComponent {
   private eventId: number = -1;
   public surveyDurationHHMM = "00:00";
   public trash = faTrash;
+  public formatDate = FormatDate;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,

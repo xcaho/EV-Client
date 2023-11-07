@@ -39,28 +39,29 @@
             *ngFor="let event of events">
           <a [routerLink]="['/event/', event.id]"
              class="p-3 d-block">
-          <div class="row">
-            <div class="col-2">
-              <span aria-labelledby="Status-Title"></span> {{ event.isActive() }}
-            </div>
-            <div class="col-3">
-              <span aria-labelledby="Nazwa-Title"></span> {{ event.name }}
-            </div>
-            <div class="col-2 col-lg-3">
-              <span aria-labelledby="Trwanie-Title"></span>
-              <span class="text-nowrap">
+            <div class="row">
+              <div class="col-2">
+                <span aria-labelledby="Status-Title"></span> {{ event.isActive() }}
+              </div>
+              <div class="col-3">
+                <span aria-labelledby="Nazwa-Title"></span> {{ event.name }}
+              </div>
+              <div class="col-2 col-lg-3">
+                <span aria-labelledby="Trwanie-Title"></span>
+                <span class="text-nowrap">
                 <span aria-label="Od"></span>
-                {{ event.researchStartDate }}</span>
-              <span aria-label="do"></span> -
-              <span class="text-nowrap">{{ event.researchEndDate }}</span>
+                  {{ formatDate(event.researchStartDate) }}
+                </span>
+                <span aria-label="do"></span> -
+                <span class="text-nowrap">{{ formatDate(event.researchEndDate) }}</span>
+              </div>
+              <div class="col-3">
+                <span aria-labelledby="Koniec-Title"></span> {{ formatDate(event.endDate) }}
+              </div>
+              <div class="col-1 text-end">
+                <span aria-labelledby="Sloty-Title"></span> {{ event.slotsTaken }}/{{ event.maxUsers }}
+              </div>
             </div>
-            <div class="col-3">
-              <span aria-labelledby="Koniec-Title"></span> {{ event.endDate }}
-            </div>
-            <div class="col-1 text-end">
-              <span aria-labelledby="Sloty-Title"></span> {{ event.slotsTaken }}/{{ event.maxUsers }}
-            </div>
-          </div>
           </a>
         </li>
       </ul>
@@ -73,14 +74,15 @@
             <dt class="col-5 col-sm-4 text-end">Nazwa wydarzenia:</dt>
             <dd class="col-7 col-sm-8">{{ event.name }}</dd>
             <dt class="col-5 col-sm-4 text-end">Czas trwania:</dt>
-            <dd class="col-7 col-sm-8">{{ event.researchStartDate }} - {{ event.researchEndDate }}</dd>
+            <dd class="col-7 col-sm-8">{{ formatDate(event.researchStartDate) }} - {{ formatDate(event.researchEndDate) }}</dd>
             <dt class="col-5 col-sm-4 text-end">Data zakończenia zapisów:</dt>
-            <dd class="col-7 col-sm-8">{{ event.endDate }}</dd>
+            <dd class="col-7 col-sm-8">{{ formatDate(event.endDate) }}</dd>
             <dt class="col-5 col-sm-4 text-end">Sloty:</dt>
             <dd class="col-7 col-sm-8">{{ event.slotsTaken }}/{{ event.maxUsers }}</dd>
           </dl>
           <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
-            <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0" [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
+            <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0"
+               [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
           </div>
         </li>
       </ul>

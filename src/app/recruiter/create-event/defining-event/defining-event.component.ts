@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../shared/dtos/EventDto";
 import {EventService} from "../../../event.service";
@@ -27,6 +27,7 @@ export class DefiningEventComponent {
   private minutes: string[] = [];
   public eventId: number = 0;
   public h2: string = 'Zdefiniuj nowe wydarzenie';
+  @Output() formDirtyChange = new EventEmitter<boolean>();
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -43,7 +44,11 @@ export class DefiningEventComponent {
     this.textChangeService.h2$.subscribe(h2 => {
       this.h2 = h2;
     })
-    this.initFormGroup()
+    this.initFormGroup();
+
+    this.reactiveForm.valueChanges.subscribe(() => {
+      this.formDirtyChange.emit(this.reactiveForm.dirty);
+    })
 
     this.event = this.eventService.getTemporaryEvent()
     this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
@@ -91,7 +96,7 @@ export class DefiningEventComponent {
   }
 
   public goToAvailability(form: FormGroupDirective) {
-    if (this.validate()){
+    if (this.validate()) {
       this.saveEvent(form);
 
       if (this.isEdit) {
@@ -136,8 +141,25 @@ export class DefiningEventComponent {
   }
 
   goBack() {
-    this.eventService.clearTemporaryEvent();
-    this.availabilityService.clearTemporaryAvailabilities();
+    if (this.reactiveForm.dirty) {
+      if (window.confirm('Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?')) {
+        this.eventService.clearTemporaryEvent();
+        this.availabilityService.clearTemporaryAvailabilities();
+        if (this.isEdit) {
+          this.router.navigate(['/event/', this.eventId]).then();
+        } else {
+          this.router.navigate(['/appointments']).then();
+        }
+      }
+    } else {
+      this.eventService.clearTemporaryEvent();
+      this.availabilityService.clearTemporaryAvailabilities();
+      if (this.isEdit) {
+        this.router.navigate(['/event/', this.eventId]).then();
+      } else {
+        this.router.navigate(['/appointments']).then();
+      }
+    }
   }
 
   private patchForm() {

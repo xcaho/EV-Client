@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, HostListener, Input, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {EventService} from "../../../event.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -31,6 +31,11 @@ export class AvailabilityComponent {
               private router: Router,
               private route: ActivatedRoute,
               private alertService: AlertService) {
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  notification($event: any): void {
+      $event.returnValue = 'Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?';
   }
 
   async ngOnInit() {
