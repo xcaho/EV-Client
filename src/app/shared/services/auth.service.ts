@@ -36,6 +36,10 @@ export class AuthService {
     return this.http.post<AuthDto>('http://localhost:8080/auth/login', user)
       .pipe(
           catchError((error: any) => {
+            if (error.status === 403) {
+              this.alertService.showError('Błędne dane logowania.');
+              return throwError(error);
+            }
               this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
               return throwError(error);
           })
