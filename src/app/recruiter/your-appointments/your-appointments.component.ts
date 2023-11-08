@@ -13,12 +13,13 @@ import {FormatDate} from "../../shared/utils/format-date";
 export class YourAppointmentsComponent {
   public events: EventDto[] = [];
   public isFetching: boolean = false;
+  public hasErrors: boolean = false;
   public formatDate = FormatDate;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
-              ) {
+  ) {
   }
 
   goToCreate() {
@@ -32,9 +33,12 @@ export class YourAppointmentsComponent {
     this.titleService.setTitle('Lista wydarzeń');
     this.isFetching = true;
     this.eventService.getEvents().subscribe((events) => {
-      this.events = this.eventSort(events);
-      this.isFetching = false;
-    });
+        this.events = this.eventSort(events);
+        this.isFetching = false;
+      },
+      () => {
+        this.hasErrors = true;
+      });
   }
 
   eventSort(events: EventDto[]): EventDto[] {

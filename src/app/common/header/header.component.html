@@ -17,7 +17,7 @@
         </li>
       </ul>
       <a [routerLink]="['/appointments']"
-         class="navbar-brand"
+         class="navbar-brand me-auto"
          aria-label="Przejdź do strony głównej">
         easy <span class="smaller">visit</span>
       </a>
@@ -37,24 +37,29 @@
            id="navbarList">
         <ul *ngIf="displayMenu$ | async"
             class="navbar-nav me-auto mt-2 mt-lg-0">
-          <li class="nav-item"
+          <li class="nav-item d-flex"
               [routerLinkActive]="['active']">
-            <a class="nav-link ps-2"
+            <a class="nav-link px-2"
                routerLink="appointments">
               Lista wydarzeń
             </a>
           </li>
         </ul>
         <div class="spacer"></div>
-        <!--          <a href="#" class="d-block ms-auto log-out text-end">Wyloguj się</a>-->
         <p *ngIf="displayMenu$ | async"
-           class="d-block ms-auto text-white text-end mb-0">
+           class="d-block ms-auto text-white text-end mb-0 me-lg-4">
           Rola: rekruter
         </p>
         <p *ngIf="!(displayMenu$ | async)"
            class="d-block ms-auto text-white text-end mb-0">
           Rola: rekrutowany
         </p>
+        <div class="d-flex justify-content-end">
+          <a href="#"
+             class="log-out text-end">
+            Wyloguj się
+          </a>
+        </div>
       </div>
     </nav>
   </div>
