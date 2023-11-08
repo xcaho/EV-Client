@@ -4,6 +4,8 @@ import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
+import {User} from "../../shared/dtos/User";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -21,6 +23,7 @@ export class LoginComponent {
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
+    private router: Router,
   ) {
   }
 
@@ -52,19 +55,23 @@ export class LoginComponent {
 
   public save() {
     if (this.validateForm()) {
-      this.authService.login(this.formGroup.value).subscribe(result => {
-        if (result.success) {
-          this.alertService.showSuccess('Zalogowano pomyślnie.')
-          console.log('success')
-          console.log(result.message)
+
+      let formGroupValue = this.formGroup.value
+      let user = new User(formGroupValue.login, formGroupValue.password)
+
+      this.authService.login(user).subscribe(result => {
+        if (result.token) {
+          this.alertService.showSuccess('Zalogowano pomyślnie.');
+          this.authService.saveToken(result.token)
+          let token = result.token;
+          localStorage.setItem('token', token);
+          this.router.navigate(['/appointments']);
         } else {
-          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
-          console.log('fail')
-          console.log(result.message)
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
         }
       })
     } else {
-      this.alertService.showError('Uzupełnij wymagane pola.')
+      this.alertService.showError('Uzupełnij wymagane pola.');
     }
   }
 

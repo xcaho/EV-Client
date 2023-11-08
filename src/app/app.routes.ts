@@ -46,7 +46,7 @@ const appRoute: Routes = [
   },
   {
     path: '',
-    redirectTo: 'appointments',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {

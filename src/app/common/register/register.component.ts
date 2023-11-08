@@ -6,6 +6,8 @@ import {PasswordValidator} from "../../shared/validators/password-validator";
 import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
+import {User} from "../../shared/dtos/User";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -24,6 +26,7 @@ export class RegisterComponent {
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
+    private router: Router,
   ) {
   }
 
@@ -55,15 +58,21 @@ export class RegisterComponent {
 
   public save() {
     if (this.validateForm()) {
-      this.authService.create(this.formGroup.value).subscribe(result => {
-        if (result.success) {
-          this.alertService.showSuccess('Zarejestrowano pomyślnie.')
-          console.log('success')
-          console.log(result.message)
+
+      let formGroupValue = this.formGroup.value
+      let user = new User(formGroupValue.email, formGroupValue.password)
+
+      this.authService.create(user).subscribe(result => {
+
+        if (result.token) {
+          let token = result.token;
+          localStorage.setItem('token', token);
+          this.alertService.showSuccess('Pomyślnie utworzono konto.')
+          this.router.navigate(['login']);
+
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
           console.log('fail')
-          console.log(result.message)
         }
       })
     } else {

@@ -6,7 +6,7 @@ import {HeaderComponent} from './common/header/header.component';
 import {FooterComponent} from './common/footer/footer.component';
 import {MainpageComponent} from './common/mainpage/mainpage.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {CreateEventComponent} from './recruiter/create-event/create-event.component';
 import {YourAppointmentsComponent} from './recruiter/your-appointments/your-appointments.component';
 import {RouterModule} from '@angular/router';
@@ -26,6 +26,7 @@ import {AlertsComponent} from "./common/alerts/alerts.component";
 import {AlertService} from "./common/alerts/service/alert.service";
 import {LoginComponent} from './common/login/login.component';
 import {RegisterComponent} from './common/register/register.component';
+import {TokenInterceptorService} from "./token-interceptor.service";
 
 
 @NgModule({
@@ -62,6 +63,11 @@ import {RegisterComponent} from './common/register/register.component';
     MenuService,
     AlertService,
     Title,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

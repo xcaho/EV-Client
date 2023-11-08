@@ -20,10 +20,8 @@ export class AvailabilityService {
   }
 
   saveAvailabilityList(availability: AvailabilityDto[], eventId: number) {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.post<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
+    return this.http.post<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -32,10 +30,8 @@ export class AvailabilityService {
   }
 
   patchAvailabilityList(availability: AvailabilityDto[], eventId: number) {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.patch<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
+    return this.http.patch<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -44,10 +40,8 @@ export class AvailabilityService {
   }
 
   getAvailabilityList(eventId: number): Observable<AvailabilityDto[]> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<AvailabilityDto[]>(this.apiUrl + '/events/' + eventId + '/availabilities', options)
+    return this.http.get<AvailabilityDto[]>(this.apiUrl + '/events/' + eventId + '/availabilities')
       .pipe(
         map(res => res.map(tmp => new AvailabilityDto(tmp.startDate, tmp.endDate))),
         catchError((error: any) => {

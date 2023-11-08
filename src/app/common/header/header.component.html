@@ -55,7 +55,9 @@
           Rola: rekrutowany
         </p>
         <div class="d-flex justify-content-end">
-          <a href="#"
+          <a [routerLink]="['/login']"
+             (click)="deleteToken()"
+             *ngIf="authService.isLoggedIn()"
              class="log-out text-end">
             Wyloguj się
           </a>

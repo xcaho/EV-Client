@@ -37,7 +37,7 @@ export class DeleteCodeComponent {
       this.generateNewCode()
       this.closeModal()
 
-      this.alertService.showSuccess('Dezktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
+      this.alertService.showSuccess('Dezaktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
     })
 
   }
