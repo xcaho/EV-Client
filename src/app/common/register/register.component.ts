@@ -7,6 +7,7 @@ import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
 import {User} from "../../shared/dtos/User";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -25,6 +26,7 @@ export class RegisterComponent {
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
+    private router: Router,
   ) {
   }
 
@@ -63,21 +65,17 @@ export class RegisterComponent {
       this.authService.create(user).subscribe(result => {
 
         if (result.token) {
-
-          this.alertService.showSuccess('Zarejestrowano pomyślnie.')
-          console.log('success')
-          let token = result.token
-          console.log(token)
-          localStorage.setItem('token', token)
+          let token = result.token;
+          localStorage.setItem('token', token);
+          this.alertService.showSuccess('Pomyślnie utworzono konto.')
+          this.router.navigate(['login']);
 
         } else {
-
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
           console.log('fail')
         }
       })
     } else {
-
       this.alertService.showError('Uzupełnij wymagane pola.')
     }
   }

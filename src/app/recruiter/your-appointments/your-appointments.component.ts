@@ -4,6 +4,7 @@ import {EventDto} from "../../shared/dtos/EventDto";
 import {AvailabilityService} from "../../availability.service";
 import {TitleService} from "../../shared/services/title.service";
 import {FormatDate} from "../../shared/utils/format-date";
+import {AuthService} from "../../shared/services/auth.service";
 
 @Component({
   selector: 'app-your-appointments',
@@ -19,6 +20,7 @@ export class YourAppointmentsComponent {
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
+              private authService: AuthService
   ) {
   }
 
@@ -29,6 +31,7 @@ export class YourAppointmentsComponent {
   }
 
   ngOnInit() {
+    console.log(this.authService.isLoggedIn())
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Lista wydarzeń');
     this.isFetching = true;
