@@ -2,13 +2,14 @@ import {t, Selector} from 'testcafe'
 import {setInputValue} from '../utils';
 
 const inputName = Selector("#name");
-const inputSurveyDuration = Selector("#surveyDuration");
+const selectSurveyDuration = Selector("#surveyDuration");
 const selectSurveyBreakTime = Selector("#surveyBreakTime");
 const inputEndDate = Selector("#endDate");
 const inputMaxUsers = Selector("#maxUsers");
 const inputResearchStartDate = Selector("#researchStartDate");
 const inputResearchEndDate = Selector("#researchEndDate");
-const option = Selector("#surveyBreakTime option")
+const breakOption = Selector("#surveyBreakTime option")
+const durationOption = Selector("#surveyDuration option")
 const submitBtn = Selector('[type="submit"]')
 
 const nameError = Selector('[id*="nameError"]')
@@ -30,7 +31,6 @@ const createEvent = () => ({
                      researchEndDateValue
                    } = {}) => {
     await setInputValue(inputName, nameValue);
-    await setInputValue(inputSurveyDuration, surveyDurationValue);
     await setInputValue(inputEndDate, endDateValue);
     await setInputValue(inputMaxUsers, maxUsersValue);
     await setInputValue(inputResearchStartDate, researchStartDateValue);
@@ -38,7 +38,12 @@ const createEvent = () => ({
     if (surveyBreakTimeValue) {
       await t
         .click(selectSurveyBreakTime)
-        .click(option.withText(surveyBreakTimeValue))
+        .click(breakOption.withText(surveyBreakTimeValue))
+    }
+    if (surveyDurationValue) {
+      await t
+        .click(selectSurveyDuration)
+        .click(durationOption.withText(surveyDurationValue))
     }
   },
 
@@ -46,7 +51,7 @@ const createEvent = () => ({
     await t.click(submitBtn)
   },
 
-  validaton: async () => {
+  validation: async () => {
     await t
       .expect(nameError.exists).ok()
       .expect(durationError.exists).ok()
