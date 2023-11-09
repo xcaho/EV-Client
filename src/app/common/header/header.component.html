@@ -17,11 +17,18 @@
         </li>
       </ul>
       <a [routerLink]="['/appointments']"
+         *ngIf="authService.token"
          class="navbar-brand me-auto"
          aria-label="Przejdź do strony głównej">
         easy <span class="smaller">visit</span>
       </a>
-      <button *ngIf="displayMenu$ | async"
+      <a [routerLink]="['/login']"
+         *ngIf="!authService.token"
+         class="navbar-brand me-auto"
+         aria-label="Przejdź do strony głównej">
+        easy <span class="smaller">visit</span>
+      </a>
+      <button *ngIf="authService.token"
               class="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
@@ -35,7 +42,7 @@
       </button>
       <div class="collapse navbar-collapse mb-2 mb-lg-0"
            id="navbarList">
-        <ul *ngIf="displayMenu$ | async"
+        <ul *ngIf="authService.token"
             class="navbar-nav me-auto mt-2 mt-lg-0">
           <li class="nav-item d-flex"
               [routerLinkActive]="['active']">
@@ -46,13 +53,17 @@
           </li>
         </ul>
         <div class="spacer"></div>
-        <p *ngIf="displayMenu$ | async"
-           class="d-block ms-auto text-white text-end mb-0 me-lg-4">
-          Rola: rekruter
-        </p>
-        <p *ngIf="!(displayMenu$ | async)"
-           class="d-block ms-auto text-white text-end mb-0">
-          Rola: rekrutowany
+<!--        <p *ngIf="displayMenu$ | async"-->
+<!--           class="d-block ms-auto text-white text-end mb-0 me-lg-4">-->
+<!--          Rola: rekruter-->
+<!--        </p>-->
+<!--        <p *ngIf="!(displayMenu$ | async)"-->
+<!--           class="d-block ms-auto text-white text-end mb-0">-->
+<!--          Rola: rekrutowany-->
+<!--        </p>-->
+        <p *ngIf="authService.userLogin"
+           class="d-block ms-auto text-white text-end mb-0 me-2">
+          {{authService.userLogin}}
         </p>
         <div class="d-flex justify-content-end">
           <a [routerLink]="['/login']"

@@ -11,12 +11,14 @@ import {AuthDto} from "../dtos/AuthDto";
 })
 export class AuthService {
   public token: string | null;
+  public userLogin: string | null;
 
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
   ) {
     this.token = localStorage.getItem('token');
+    this.userLogin = localStorage.getItem('token_login');
   }
 
   create(user: User): Observable<AuthDto> {
@@ -24,7 +26,6 @@ export class AuthService {
     return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
         .pipe(
             catchError((error: any) => {
-
                 this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
                 return throwError(error);
             })
@@ -50,13 +51,17 @@ export class AuthService {
     return !!this.token;
   }
 
-  saveToken(token: string) {
+  saveToken(token: string, userLogin: string) {
     this.token = token;
+    this.userLogin = userLogin;
     localStorage.setItem('token', token);
+    localStorage.setItem('token_login', userLogin);
   }
 
   removeToken() {
     this.token = null;
+    this.userLogin = null;
     localStorage.removeItem('token');
+    localStorage.removeItem('token_login');
   }
 }

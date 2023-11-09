@@ -20,7 +20,7 @@ export class YourAppointmentsComponent {
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
-              private authService: AuthService
+              public authService: AuthService
   ) {
   }
 
