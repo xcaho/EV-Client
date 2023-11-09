@@ -65,9 +65,7 @@ export class LoginComponent {
       this.authService.login(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveToken(result.token, formGroupValue.login)
-          let token = result.token;
-          localStorage.setItem('token', token);
+          this.authService.saveToken(result.token, formGroupValue.login);
           this.router.navigate(['/appointments']);
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');

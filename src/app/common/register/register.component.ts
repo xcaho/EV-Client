@@ -66,12 +66,10 @@ export class RegisterComponent {
       let user = new User(formGroupValue.email, formGroupValue.password)
 
       this.authService.create(user).subscribe(result => {
-
         if (result.token) {
-          let token = result.token;
-          localStorage.setItem('token', token);
-          this.alertService.showSuccess('Pomyślnie utworzono konto.')
-          this.router.navigate(['login']);
+          this.alertService.showSuccess('Pomyślnie utworzono konto.');
+          this.authService.saveToken(result.token, formGroupValue.email);
+          this.router.navigate(['appointments']);
 
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
