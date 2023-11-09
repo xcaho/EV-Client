@@ -6,6 +6,7 @@
         <a class="w-100 btn btn-primary"
            (click)="goToCreate()"
            id="id1"
+           *ngIf="authService.isLoggedIn()"
            [routerLink]="['/create']">
           Dodaj wydarzenie
         </a>

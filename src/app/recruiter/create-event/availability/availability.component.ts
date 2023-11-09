@@ -10,6 +10,7 @@ import {AvailabilityService} from "../../../availability.service";
 import {firstValueFrom} from "rxjs";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {EventUtils} from "../../../shared/utils/EventUtils";
+import {AuthService} from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-availability',
@@ -30,7 +31,8 @@ export class AvailabilityComponent {
               private modalService: NgbModal,
               private router: Router,
               private route: ActivatedRoute,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private authService: AuthService,) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -39,6 +41,9 @@ export class AvailabilityComponent {
   }
 
   async ngOnInit() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/403'], {skipLocationChange: true})
+    }
     document.getElementById('focusReset')?.focus();
 
     this.event = this.eventService.getTemporaryEvent();

@@ -1,6 +1,8 @@
 import {Component, HostListener} from '@angular/core';
 import {TextChangeService} from "../../shared/services/text-change.service";
 import {TitleService} from "../../shared/services/title.service";
+import {AuthService} from "../../shared/services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-event',
@@ -13,7 +15,9 @@ export class CreateEventComponent {
   public isFormDirty: boolean = false;
 
   constructor(private textChangeService: TextChangeService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private authService: AuthService,
+              private router: Router) {
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -28,6 +32,9 @@ export class CreateEventComponent {
   }
 
   ngOnInit() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/403'], {skipLocationChange: true})
+    }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Definiowanie wydarzenia');
     this.textChangeService.h1$.subscribe(h1 => {

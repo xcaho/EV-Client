@@ -61,8 +61,12 @@ export class EventComponent {
 
       this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
         this.surveyList = surveys;
+      }, error => {
+        if (error.status === 403) {
+          this.router.navigate(['/403'])
+        }
       })
-    }, () => {
+    }, (error) => {
       this.router.navigate(['/404'])
     })
   }
