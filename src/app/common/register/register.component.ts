@@ -31,6 +31,9 @@ export class RegisterComponent {
   }
 
   ngOnInit() {
+    if (this.authService.token) {
+      this.router.navigate(['/appointments']);
+    }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja');
     this.initFormGroup();
