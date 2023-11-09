@@ -28,7 +28,7 @@
          aria-label="Przejdź do strony głównej">
         easy <span class="smaller">visit</span>
       </a>
-      <button *ngIf="displayMenu$ | async"
+      <button *ngIf="authService.token"
               class="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
