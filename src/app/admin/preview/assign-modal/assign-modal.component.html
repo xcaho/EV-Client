@@ -1,0 +1,86 @@
+<ng-template #content>
+  <form>
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">
+        Przypisz wydarzenie do innego rekrutera
+      </h3>
+      <button type="button"
+              class="btn-close"
+              aria-label="Zamknij modal"
+              (click)="closeModal()">
+        <span class="d-none">Zamknij modal</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <fieldset aria-live="polite" aria-relevant="additions" aria-atomic="true">
+        <legend class="font-rem">Lista rekruterów:</legend>
+        <div class="form-check mb-1">
+          <input class="form-check-input"
+                 type="radio"
+                 name="radioList"
+                 id="radio1"
+                 checked>
+          <label class="form-check-label"
+                 for="radio1">
+            Szymcio
+          </label>
+        </div>
+        <div class="form-check mb-1">
+          <input class="form-check-input"
+                 type="radio"
+                 name="radioList"
+                 id="radio2">
+          <label class="form-check-label"
+                 for="radio2">
+            Gaweł
+          </label>
+        </div>
+        <!--            Input ponizej jest wczytywany dynamicznie-->
+        <div class="d-none" id="XD">
+          <div class="form-check mb-1">
+            <input class="form-check-input"
+                   type="radio"
+                   name="radioList"
+                   id="radio34">
+            <label class="form-check-label"
+                   for="radio34">
+              Szymoncio Mazur
+            </label>
+          </div>
+          <div class="form-check mb-1">
+            <input class="form-check-input"
+                   type="radio"
+                   name="radioList"
+                   id="radio346">
+            <label class="form-check-label"
+                   for="radio346">
+              Zur to nie Zurek
+            </label>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary mt-1 w-100"
+                type="button"
+                onclick="document.getElementById('XD').classList.remove('d-none')">
+          Pokaż więcej rekruterów
+        </button>
+      </fieldset>
+    </div>
+    <div class="modal-footer px-0">
+      <div class="w-100 row m-0 justify-content-between">
+        <div class="col-6 col-sm-auto">
+          <button type="button"
+                  class="w-100 btn btn-outline-primary"
+                  (click)="closeModal()">
+            Anuluj
+          </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+          <button type="submit"
+                  class="w-100 btn btn-primary">
+            Generuj kod
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
