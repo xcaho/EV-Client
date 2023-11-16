@@ -1,0 +1,143 @@
+<app-assign-modal></app-assign-modal>
+<div class="h64 flex-center border-bottom border-secondary mb-5">
+  <div class="container-xxl d-flex flex-column flex-wrap flex-sm-row justify-content-between">
+    <div class="col-12 col-md-6">
+      <h1 class="h2 mb-1">
+        Szczegóły użytkownika: {{user.email}}
+      </h1>
+    </div>
+    <div class="col-12 col-md-6 mb-2 mb-md-0">
+      <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="user.email">
+        <div class="col-6 col-md-auto">
+          <button class="w-100 btn btn-outline-primary">
+            Zablokuj użytkownika
+          </button>
+        </div>
+        <div class="col-6 col-md-auto">
+          <a class="w-100 btn btn-primary">
+            Edytuj użytkownika
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content container-xxl mb-5">
+  <section class="row justify-content-center">
+    <section class="col-12">
+      <dl class="row gap">
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>E-mail:</dt>
+            <dd>{{user.email}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Rola:</dt>
+            <dd>rekruter</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Status:</dt>
+            <dd>aktywny</dd>
+          </div>
+        </div>
+      </dl>
+    </section>
+    <section class="col-12 mt-4 mb-3">
+      <h2 class="h5 mb-3" id="listTitle">Lista wydarzeń użytkownika</h2>
+      <table class="list-group d-none d-md-block">
+        <caption class="sr-only">Wydarzenia użytkownika</caption>
+        <thead class="list-group-item p-3 li-header d-block">
+        <tr class="row">
+          <th class="col-2 fw-medium" id="Status-Title">Status:</th>
+          <th class="col-5 fw-medium" id="Nazwa-Title">Nazwa wydarzenia:</th>
+          <th class="col-4 fw-medium" id="Okres-Title">Okres badań:</th>
+          <th class="col-1 fw-medium text-end sr-only" id="Akcje-Title">Akcje:</th>
+        </tr>
+        </thead>
+        <tbody class="list-group-item d-block">
+        <tr class="row">
+          <td class="col-2">
+            Aktywne
+          </td>
+          <td class="col-5">
+            <span id="Nazwa-1">Makiety trakerinio</span>
+          </td>
+          <td class="col-4">
+            31.02.2023 - 33.02.2023
+          </td>
+          <td class="col-1">
+            <div class="d-flex justify-content-end h-100 align-items-start pe-1"
+                 style="gap: 0 0.75rem; padding-top:0.325rem;">
+              <button class="btn btn-icon btn-list"
+                      type="button"
+                      aria-describedby="Nazwa-Title Nazwa-1"
+                      title="Przepisz wydarzenie do innego rekrutera"
+                      (click)="assignModalComponent.open(assignModalComponent.content)">
+                <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
+                <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
+              </button>
+              <a class="btn btn-icon btn-list"
+                 href="#"
+                 target="_blank"
+                 aria-describedby="Nazwa-Title Nazwa-1"
+                 title="Otwórz szczegóły wydarzenia">
+                <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
+                <span class="sr-only">Otwórz szczegóły wydarzenia</span>
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
+        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3">
+          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+            <dt class="col-5 col-sm-4 text-end">
+              Status:
+            </dt>
+            <dd class="col-7 col-sm-8">
+              Umówione
+            </dd>
+            <dt class="col-5 col-sm-4 text-end">
+              Nazwa wydarzenia:
+            </dt>
+            <dd class="col-7 col-sm-8">
+              Makiety dot. Trackerinio
+            </dd>
+            <dt class="col-5 col-sm-4 text-end">
+              Okres badań:
+            </dt>
+            <dd class="col-7 col-sm-8">
+              31.02.2023 - 33.02.2023
+            </dd>
+            <dt class="col-5 col-sm-4 text-end">
+              Akcje:
+            </dt>
+            <dd class="col-7 col-sm-8">
+              <button class="btn btn-icon"
+                      type="button"
+                      aria-describedby="Nazwa-Title Nazwa-1"
+                      title="Przepisz wydarzenie do innego rekrutera"
+                      (click)="assignModalComponent.open(assignModalComponent.content)">
+                <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
+                <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
+              </button>
+              <a class="btn btn-icon"
+                 href="#"
+                 target="_blank"
+                 aria-describedby="Nazwa-Title Nazwa-1"
+                 title="Otwórz szczegóły wydarzenia">
+                <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
+                <span class="sr-only">Otwórz szczegóły wydarzenia</span>
+              </a>
+            </dd>
+          </dl>
+        </li>
+      </ul>
+    </section>
+  </section>
+</div>

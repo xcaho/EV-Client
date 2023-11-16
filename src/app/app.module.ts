@@ -27,6 +27,10 @@ import {AlertService} from "./common/alerts/service/alert.service";
 import {LoginComponent} from './common/login/login.component';
 import {RegisterComponent} from './common/register/register.component';
 import {TokenInterceptorService} from "./token-interceptor.service";
+import { ListComponent } from './admin/list/list.component';
+import { PreviewComponent } from './admin/preview/preview.component';
+import { AddUserComponent } from './admin/add-user/add-user.component';
+import { AssignModalComponent } from './admin/preview/assign-modal/assign-modal.component';
 
 
 @NgModule({
@@ -48,6 +52,10 @@ import {TokenInterceptorService} from "./token-interceptor.service";
     AlertsComponent,
     LoginComponent,
     RegisterComponent,
+    ListComponent,
+    PreviewComponent,
+    AddUserComponent,
+    AssignModalComponent,
   ],
   imports: [
     BrowserModule,
