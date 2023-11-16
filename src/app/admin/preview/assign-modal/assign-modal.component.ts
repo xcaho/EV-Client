@@ -1,7 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
-import {SurveyDto} from "../../../shared/dtos/SurveyDto";
-import {SurveyService} from "../../../survey.service";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 
 @Component({
@@ -11,28 +9,49 @@ import {AlertService} from "../../../common/alerts/service/alert.service";
 })
 export class AssignModalComponent {
   @ViewChild('content') content: ElementRef | undefined;
-  modalRef: NgbModalRef = null!;
-  survey: SurveyDto;
-  surveyList: SurveyDto[] = [];
+  private modalRef: NgbModalRef = null!;
+  public users: string[] = [
+    'Paweł Gaweł',
+    'Szymon Mazi',
+    'Fabian Fabianowski',
+    'Mazi Szymon',
+    'Mateusz Mati',
+    'Gaweł Paweł'
+  ];
+  public appointmentHolder = 'Szymon Mazi';
+  public displayedUsers: string[] = [];
+  public numberOfShowedUsers: number = 4;
 
   constructor(private modalService: NgbModal,
-              private surveyService: SurveyService,
               private alertService: AlertService) {
-    this.survey = {} as SurveyDto
   }
 
-  open(content: any,): void {
+  public open(content: any,): void {
     this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
+    this.displayedUsers = [];
+    this.sortUsers();
+    this.loadMoreResults();
   }
 
-  generateNewCode() {
-    this.surveyService.saveSurvey(this.survey.eventId).subscribe((survey) => {
-      survey.date = new Date(0)
-      this.surveyList.push(survey)
-    })
-  }
-
-  closeModal(): void {
+  public closeModal(): void {
     this.modalRef.dismiss();
+  }
+
+  private sortUsers() {
+    this.users.sort((a, b) => {
+      if (a === this.appointmentHolder) {
+        return -1;
+      } else if (b === this.appointmentHolder) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  public loadMoreResults() {
+    const startIndex = this.displayedUsers.length;
+    const endIndex = startIndex + this.numberOfShowedUsers;
+    this.displayedUsers = [...this.displayedUsers, ...this.users.slice(startIndex, endIndex)];
   }
 }

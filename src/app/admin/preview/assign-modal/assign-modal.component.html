@@ -11,56 +11,26 @@
         <span class="d-none">Zamknij modal</span>
       </button>
     </div>
-    <div class="modal-body">
-      <fieldset aria-live="polite" aria-relevant="additions" aria-atomic="true">
+    <div class="modal-body" aria-live="polite" aria-relevant="additions" aria-atomic="true">
+      <fieldset>
         <legend class="font-rem">Lista rekruterów:</legend>
-        <div class="form-check mb-1">
-          <input class="form-check-input"
-                 type="radio"
-                 name="radioList"
-                 id="radio1"
-                 checked>
-          <label class="form-check-label"
-                 for="radio1">
-            Szymcio
-          </label>
-        </div>
-        <div class="form-check mb-1">
-          <input class="form-check-input"
-                 type="radio"
-                 name="radioList"
-                 id="radio2">
-          <label class="form-check-label"
-                 for="radio2">
-            Gaweł
-          </label>
-        </div>
-        <!--            Input ponizej jest wczytywany dynamicznie-->
-        <div class="d-none" id="XD">
+        <ng-container *ngFor="let user of displayedUsers; index as i">
           <div class="form-check mb-1">
             <input class="form-check-input"
                    type="radio"
-                   name="radioList"
-                   id="radio34">
+                   name="usersList"
+                   id="user{{i}}"
+                   [checked]="user === appointmentHolder">
             <label class="form-check-label"
-                   for="radio34">
-              Szymoncio Mazur
+                   for="user{{i}}">
+              {{user}}
             </label>
           </div>
-          <div class="form-check mb-1">
-            <input class="form-check-input"
-                   type="radio"
-                   name="radioList"
-                   id="radio346">
-            <label class="form-check-label"
-                   for="radio346">
-              Zur to nie Zurek
-            </label>
-          </div>
-        </div>
+        </ng-container>
         <button class="btn btn-outline-primary mt-1 w-100"
                 type="button"
-                onclick="document.getElementById('XD').classList.remove('d-none')">
+                (click)="loadMoreResults()"
+                *ngIf="this.displayedUsers.length < this.users.length">
           Pokaż więcej rekruterów
         </button>
       </fieldset>
