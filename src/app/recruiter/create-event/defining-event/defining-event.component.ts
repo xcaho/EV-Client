@@ -61,12 +61,10 @@ export class DefiningEventComponent {
     }
 
     if (this.isEdit) {
-
       //fill form by fetching from the server, case when event doesn't exist locally, and it's edit mode
       this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
         this.event = eventDto;
         this.patchForm();
-
         this.researchStartDateMin = new Date(this.event.researchStartDate);
         this.researchEndDateMin = new Date(this.event.researchStartDate);
         const today = new Date();
@@ -77,6 +75,12 @@ export class DefiningEventComponent {
           this.endDate.clearValidators();
           this.endDate.updateValueAndValidity();
           this.editableDateValidation();
+        }
+      }, (error) => {
+        if (error.status === 403) {
+          this.router.navigate(['/403']);
+        } else {
+          this.router.navigate(['/404']);
         }
       })
     }
@@ -140,7 +144,7 @@ export class DefiningEventComponent {
     this.eventService.setTemporaryEvent(this.event)
   }
 
-  goBack() {
+  public goBack() {
     if (this.reactiveForm.dirty) {
       if (window.confirm('Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?')) {
         this.eventService.clearTemporaryEvent();

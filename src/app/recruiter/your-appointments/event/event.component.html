@@ -1,102 +1,43 @@
 <app-delete-code></app-delete-code>
 <app-delete-event></app-delete-event>
 <div class="h64 flex-center border-bottom border-secondary mb-4">
-  <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
-    <h1 class="h2 mb-0">{{event.name}}</h1>
-    <div class="row mt-2 mt-md-0" *ngIf="event.active === true">
-      <div class="col-6 col-sm-auto">
-        <button class="w-100 btn btn-outline-primary"
-                (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
-          Zamknij wydarzenie </button>
-      </div>
-      <div class="col-6 col-sm-auto">
-        <a class="w-100 btn btn-primary"
-           (click)="goToEdit()"
-           [routerLink]="['/edit/', this.event.id]">
-          Edytuj wydarzenie
-        </a>
+  <div class="container-xxl d-flex flex-column flex-wrap flex-sm-row justify-content-between">
+    <div class="col-12 col-md-6">
+      <h1 class="h2 mb-0">
+        {{event.name}}
+      </h1>
+    </div>
+    <div class="col-12 col-md-6 mb-2 mb-md-0">
+      <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="event.active === true">
+        <div class="col-6 col-md-auto">
+          <button class="w-100 btn btn-outline-primary"
+                  (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
+            Zamknij wydarzenie
+          </button>
+        </div>
+        <div class="col-6 col-md-auto">
+          <a class="w-100 btn btn-primary"
+             (click)="goToEdit()"
+             [routerLink]="['/edit/', this.event.id]">
+            Edytuj wydarzenie
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
   <section class="row justify-content-center">
-    <section class="col-12">
-      <h2 class="h5 mb-3">Szczegóły dotyczące wydarzenia "{{event.name}}"</h2>
-      <dl class="row gap">
-        <div class="col-12 col-sm-6 col-lg-4"
-             *ngIf="event.description !== ''">
-          <div class="bg-white px-3 py-2">
-            <dt>Opis:</dt>
-            <dd>{{event.description}}</dd>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="bg-white px-3 py-2">
-            <dt>Długość spotkania:</dt>
-            <dd>{{this.surveyDurationHHMM}}</dd>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="bg-white px-3 py-2">
-            <dt>Zajętość slotów:</dt>
-            <dd>{{event.slotsTaken}}/{{event.maxUsers}}</dd>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="bg-white px-3 py-2">
-            <dt>Długość przerwy:</dt>
-            <dd>{{event.surveyBreakTime}} minut</dd>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="bg-white px-3 py-2">
-            <dt>Data rozpoczęcia badań:</dt>
-            <dd>{{formatDate(event.researchStartDate)}}</dd>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="bg-white px-3 py-2">
-            <dt>Data zakończenia badań:</dt>
-            <dd>{{formatDate(event.researchEndDate)}}</dd>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="bg-white px-3 py-2">
-            <dt>Data zakończenia zapisów:</dt>
-            <dd>{{formatDate(event.endDate)}}</dd>
-          </div>
-        </div>
-      </dl>
-    </section>
-    <section class="col-12 mb-3">
-      <h2 class="h5 mt-4 mb-3">Dostępność</h2>
-      <div class="row calendar">
-        <div class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList; let i=index">
-          <div class="c-card">
-            <div class="c-card-header">
-              <p class="mb-0 ps-2">{{availability.dayOfWeek}}<br><span
-                class="smaller">{{ availability.dateFormatted }}</span></p>
-            </div>
-            <div class="c-card-body">
-              <div class="slot" *ngFor="let hours of availability.hoursList">
-                <p class="mb-0 ps-2">{{hours.toString()}}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="col-12">
-      <h2 class="h5 mt-4 mb-3" id="listTitle">Lista kodów</h2>
+    <section class="col-12 mt-4 mb-3">
+      <h2 class="h5 mb-3" id="listTitle">Lista spotkań</h2>
       <table class="list-group d-none d-md-block" aria-labelledby="listTitle">
-        <caption class="sr-only">Lista kodów</caption>
+        <caption class="sr-only">Lista spotkań</caption>
         <thead class="list-group-item p-3 li-header d-block">
         <tr class="row">
-          <th class="col-3">Status:</th>
-          <th class="col-4">Kod:</th>
-          <th class="col-4">Data spotkania:</th>
-          <th class="col-1 text-end sr-only">Akcje:</th>
+          <th class="col-3 fw-medium">Status:</th>
+          <th class="col-4 fw-medium">Kod do spotkania:</th>
+          <th class="col-4 fw-medium">Data spotkania:</th>
+          <th class="col-1 fw-medium text-end sr-only">Akcje:</th>
         </tr>
         </thead>
         <tbody class="list-group-item d-block"
@@ -104,13 +45,13 @@
         <tr class="row">
           <td class="col-3">
             <ng-container *ngIf="survey.surveyState === 'USED'">
-              Użyty
+              Umówione
             </ng-container>
             <ng-container *ngIf="survey.surveyState === 'UNUSED'">
-              Nieużyty
+              Nieumówione
             </ng-container>
             <ng-container *ngIf="survey.surveyState === 'INACTIVE'">
-              Wyłączony
+              Wyłączone
             </ng-container>
           </td>
           <td class="col-4">
@@ -170,11 +111,11 @@
           <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
             <dt class="col-5 col-sm-4 text-end">Status:</dt>
             <dd class="col-7 col-sm-8">
-              <ng-container *ngIf="survey.surveyState === 'USED'">Użyty</ng-container>
-              <ng-container *ngIf="survey.surveyState === 'UNUSED'">Nieużyty</ng-container>
-              <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączony</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'USED'">Umówione</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'UNUSED'">Nie umówione</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączone</ng-container>
             </dd>
-            <dt class="col-5 col-sm-4 text-end">Kod:</dt>
+            <dt class="col-5 col-sm-4 text-end">Kod do spotkania:</dt>
             <dd class="col-7 col-sm-8">{{survey.code}}</dd>
             <dt class="col-5 col-sm-4 text-end">Data spotkania:</dt>
             <dd class="col-7 col-sm-8"
@@ -217,6 +158,73 @@
           </dl>
         </li>
       </ul>
+    </section>
+    <section class="col-12 mt-4">
+      <h2 class="h5 mb-3">Szczegóły dotyczące wydarzenia "{{event.name}}"</h2>
+      <dl class="row gap">
+        <div class="col-12 col-sm-6 col-lg-4"
+             *ngIf="event.description !== ''">
+          <div class="bg-white px-3 py-2">
+            <dt>Opis:</dt>
+            <dd>{{event.description}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Długość spotkania:</dt>
+            <dd>{{this.surveyDurationHHMM}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Zajętość slotów:</dt>
+            <dd>{{event.slotsTaken}}/{{event.maxUsers}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Długość przerwy:</dt>
+            <dd>{{event.surveyBreakTime}} minut</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Data rozpoczęcia badań:</dt>
+            <dd>{{formatDate(event.researchStartDate)}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Data zakończenia badań:</dt>
+            <dd>{{formatDate(event.researchEndDate)}}</dd>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="bg-white px-3 py-2">
+            <dt>Data zakończenia zapisów:</dt>
+            <dd>{{formatDate(event.endDate)}}</dd>
+          </div>
+        </div>
+      </dl>
+    </section>
+    <section class="col-12 mt-4">
+      <h2 class="h5 mb-3">Dostępność</h2>
+      <p *ngIf="availabilityList.length === 0">Twoja dostępność jest pusta. Aby zobaczyć listę dni swojej dostępności, uzupełnij ją poprzez edytowanie wydarzenia.</p>
+      <div *ngIf="availabilityList.length !== 0" class="row calendar">
+        <div class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList; let i=index">
+          <div class="c-card">
+            <div class="c-card-header">
+              <p class="mb-0 ps-2">{{availability.dayOfWeek}}<br><span
+                class="smaller">{{ availability.dateFormatted }}</span></p>
+            </div>
+            <div class="c-card-body">
+              <div class="slot" *ngFor="let hours of availability.hoursList">
+                <p class="mb-0 ps-2">{{hours.toString()}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </section>
 </div>

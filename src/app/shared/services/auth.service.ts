@@ -5,6 +5,7 @@ import {catchError} from "rxjs/operators";
 import {AlertService} from "../../common/alerts/service/alert.service";
 import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import {AuthDto} from "../dtos/AuthDto";
 export class AuthService {
   public token: string | null;
   public userLogin: string | null;
+  public url: string | null;
 
   constructor(
     private http: HttpClient,
@@ -19,10 +21,10 @@ export class AuthService {
   ) {
     this.token = localStorage.getItem('token');
     this.userLogin = localStorage.getItem('token_login');
+    this.url = localStorage.getItem('token_url');
   }
 
   create(user: User): Observable<AuthDto> {
-    console.log(user)
     return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
         .pipe(
             catchError((error: any) => {
@@ -33,7 +35,6 @@ export class AuthService {
   }
 
   login(user: User): Observable<AuthDto> {
-    console.log(user)
     return this.http.post<AuthDto>('http://localhost:8080/auth/login', user)
       .pipe(
           catchError((error: any) => {
@@ -51,11 +52,24 @@ export class AuthService {
     return !!this.token;
   }
 
-  saveToken(token: string, userLogin: string) {
+  saveToken(token: string, userLogin: string, router: Router) {
     this.token = token;
     this.userLogin = userLogin;
     localStorage.setItem('token', token);
     localStorage.setItem('token_login', userLogin);
+  }
+
+  saveURL(router: Router) {
+    if (!this.isLoggedIn()) {
+      this.url = router.url;
+      localStorage.setItem('token_url', router.url);
+      router.navigate(['/login']);
+    }
+  }
+
+  removeURL() {
+    this.url = null;
+    localStorage.removeItem('token_url');
   }
 
   removeToken() {

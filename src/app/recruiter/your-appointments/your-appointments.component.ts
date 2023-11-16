@@ -5,6 +5,7 @@ import {AvailabilityService} from "../../availability.service";
 import {TitleService} from "../../shared/services/title.service";
 import {FormatDate} from "../../shared/utils/format-date";
 import {AuthService} from "../../shared/services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-your-appointments',
@@ -20,28 +21,28 @@ export class YourAppointmentsComponent {
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
-              public authService: AuthService
+              public authService: AuthService,
+              private router: Router,
   ) {
   }
 
-  goToCreate() {
-    this.eventService.clearTemporaryEvent()
-    this.eventService.setIsEdit(false)
-    this.availabilityService.clearTemporaryAvailabilities()
-  }
-
   ngOnInit() {
-    console.log(this.authService.isLoggedIn())
+    this.authService.saveURL(this.router);
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Lista wydarzeń');
     this.isFetching = true;
     this.eventService.getEvents().subscribe((events) => {
         this.events = this.eventSort(events);
         this.isFetching = false;
-      },
-      () => {
+      }, (err) => {
         this.hasErrors = true;
       });
+  }
+
+  goToCreate() {
+    this.eventService.clearTemporaryEvent()
+    this.eventService.setIsEdit(false)
+    this.availabilityService.clearTemporaryAvailabilities()
   }
 
   eventSort(events: EventDto[]): EventDto[] {

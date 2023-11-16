@@ -27,18 +27,16 @@ export class CreateEventComponent {
     }
   }
 
-  onFormDirtyChange(isFormDirty: boolean) {
-    this.isFormDirty = isFormDirty;
-  }
-
   ngOnInit() {
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/403'], {skipLocationChange: true})
-    }
+    this.authService.saveURL(this.router);
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Definiowanie wydarzenia');
     this.textChangeService.h1$.subscribe(h1 => {
       this.h1 = h1;
     })
+  }
+
+  onFormDirtyChange(isFormDirty: boolean) {
+    this.isFormDirty = isFormDirty;
   }
 }

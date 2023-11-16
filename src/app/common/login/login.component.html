@@ -78,7 +78,15 @@
           </a>
           <button type="submit"
                   class="btn btn-primary"
+                  *ngIf="!authService.url"
                   (click)="save()"
+          >
+            Zaloguj
+          </button>
+          <button type="submit"
+                  class="btn btn-primary"
+                  *ngIf="authService.url"
+                  (click)="saveAndPreviousPage()"
           >
             Zaloguj
           </button>

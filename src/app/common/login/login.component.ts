@@ -20,7 +20,7 @@ export class LoginComponent {
   public buttonTitle: string = "Pokaż hasło";
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
     private router: Router,
@@ -58,15 +58,35 @@ export class LoginComponent {
 
   public save() {
     if (this.validateForm()) {
-
       let formGroupValue = this.formGroup.value
       let user = new User(formGroupValue.login, formGroupValue.password)
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveToken(result.token, formGroupValue.login);
+          this.authService.saveToken(result.token, formGroupValue.login, this.router);
           this.router.navigate(['/appointments']);
+          this.authService.removeURL();
+        } else {
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
+        }
+      })
+    } else {
+      this.alertService.showError('Uzupełnij wymagane pola.');
+    }
+  }
+
+  public saveAndPreviousPage() {
+    if (this.validateForm()) {
+      let formGroupValue = this.formGroup.value
+      let user = new User(formGroupValue.login, formGroupValue.password)
+
+      this.authService.login(user).subscribe(result => {
+        if (result.token) {
+          this.alertService.showSuccess('Zalogowano pomyślnie.');
+          this.authService.saveToken(result.token, formGroupValue.login, this.router);
+          this.router.navigate([this.authService.url]);
+          this.authService.removeURL();
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
         }
