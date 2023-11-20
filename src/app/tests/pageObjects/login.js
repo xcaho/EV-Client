@@ -1,5 +1,4 @@
 import {t, Selector} from 'testcafe'
-import createEvent from "./createEvent";
 
 const inputLogin = Selector("#login")
 const inputPassword = Selector("#password")
