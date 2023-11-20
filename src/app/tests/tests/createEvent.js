@@ -2,21 +2,29 @@ import {t, Selector} from 'testcafe';
 import createEvent from "../pageObjects/createEvent";
 import availabilityAdd from "../pageObjects/availability";
 import {format, addDays} from 'date-fns'
+import login from "../pageObjects/login";
 
 const createEventPage = createEvent();
 const availabilityPage = availabilityAdd();
+const loginPage = login();
 
 fixture('Getting Started')
   .page('http://localhost:4200/')
-  .beforeEach(async () => {
-    await t.click(Selector("#id1"));
-  });
 
 test
 ('Correctly create event', async () => {
   const eventDurationDays = 5;
   const startDate = format(new Date(), 'yyyy-MM-dd');
   const endDate = format(addDays(new Date(startDate), eventDurationDays - 1), 'yyyy-MM-dd');
+  const login = "mail@domena.com"
+  const password = "password1"
+
+  await loginPage.typeLogin(login);
+  await loginPage.typePassword(password);
+  await loginPage.submit()
+
+  await t.wait(1000)
+  await t.click(Selector("#id1"))
 
   await createEventPage.fillForm(
     {
@@ -63,6 +71,15 @@ test
 
 test
 ('Checking inputs validation', async () => {
+  const login = "mail@domena.com"
+  const password = "password1"
+
+  await loginPage.typeLogin(login);
+  await loginPage.typePassword(password);
+  await loginPage.submit()
+
+  await t.wait(1000)
+  await t.click(Selector("#id1"))
 
   await createEventPage.fillForm();
 

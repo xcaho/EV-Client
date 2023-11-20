@@ -22,7 +22,7 @@ const availabilityAdd = () => ({
 
   submit: async () => {
     await t
-      .wait(2000)
+      .wait(1000)
       .click(submitBtn)
   },
 
