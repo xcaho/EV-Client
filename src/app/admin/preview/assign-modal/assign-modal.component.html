@@ -27,7 +27,7 @@
             </label>
           </div>
         </ng-container>
-        <button class="btn btn-outline-primary mt-1 w-100"
+        <button class="btn btn-outline-primary mt-2 w-100"
                 type="button"
                 (click)="loadMoreResults()"
                 *ngIf="this.displayedUsers.length < this.users.length">
@@ -46,8 +46,9 @@
         </div>
         <div class="col-6 col-sm-auto">
           <button type="submit"
-                  class="w-100 btn btn-primary">
-            Przepisz wydarzenie
+                  class="w-100 btn btn-primary"
+                  (click)="save()">
+            Przypisz wydarzenie
           </button>
         </div>
       </div>

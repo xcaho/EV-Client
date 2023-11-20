@@ -26,25 +26,39 @@ export class AuthService {
 
   create(user: User): Observable<AuthDto> {
     return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
-        .pipe(
-            catchError((error: any) => {
-                this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
-                return throwError(error);
-            })
-        )
+      .pipe(
+        catchError((error: any) => {
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
+          return throwError(error);
+        })
+      )
   }
 
   login(user: User): Observable<AuthDto> {
     return this.http.post<AuthDto>('http://localhost:8080/auth/login', user)
       .pipe(
-          catchError((error: any) => {
-            if (error.status === 403) {
-              this.alertService.showError('Błędne dane logowania.');
-              return throwError(error);
-            }
-              this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
-              return throwError(error);
-          })
+        catchError((error: any) => {
+          if (error.status === 403) {
+            this.alertService.showError('Błędne dane logowania.');
+            return throwError(error);
+          }
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
+          return throwError(error);
+        })
+      )
+  }
+
+  resetPassword(user: User): Observable<AuthDto> {
+    return this.http.post<AuthDto>('http://localhost:8080/auth/reset', user)
+      .pipe(
+        catchError((error: any) => {
+          if (error.status === 403) {
+            this.alertService.showError('Podany login nie istnieje.');
+            return throwError(error);
+          }
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
+          return throwError(error);
+        })
       )
   }
 

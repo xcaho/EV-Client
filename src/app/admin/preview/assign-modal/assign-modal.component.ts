@@ -18,7 +18,7 @@ export class AssignModalComponent {
     'Mateusz Mati',
     'Gaweł Paweł'
   ];
-  public appointmentHolder = 'Szymon Mazi';
+  public appointmentHolder: string = 'Szymon Mazi';
   public displayedUsers: string[] = [];
   public numberOfShowedUsers: number = 4;
 
@@ -26,7 +26,7 @@ export class AssignModalComponent {
               private alertService: AlertService) {
   }
 
-  public open(content: any,): void {
+  public open(content: any): void {
     this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
     this.displayedUsers = [];
     this.sortUsers();
@@ -34,10 +34,10 @@ export class AssignModalComponent {
   }
 
   public closeModal(): void {
-    this.modalRef.dismiss();
+    this.modalRef?.dismiss();
   }
 
-  private sortUsers() {
+  private sortUsers(): void {
     this.users.sort((a, b) => {
       if (a === this.appointmentHolder) {
         return -1;
@@ -49,9 +49,12 @@ export class AssignModalComponent {
     });
   }
 
-  public loadMoreResults() {
+  public loadMoreResults(): void {
     const startIndex = this.displayedUsers.length;
     const endIndex = startIndex + this.numberOfShowedUsers;
     this.displayedUsers = [...this.displayedUsers, ...this.users.slice(startIndex, endIndex)];
+  }
+
+  public save(): void {
   }
 }

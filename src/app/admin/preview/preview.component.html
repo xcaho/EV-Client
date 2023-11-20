@@ -1,20 +1,57 @@
 <app-assign-modal></app-assign-modal>
+<app-reset-password-modal></app-reset-password-modal>
+<app-block-user-modal></app-block-user-modal>
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl d-flex flex-column flex-wrap flex-sm-row justify-content-between">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-lg-6">
       <h1 class="h2 mb-1">
         Szczegóły użytkownika: {{user.email}}
       </h1>
     </div>
-    <div class="col-12 col-md-6 mb-2 mb-md-0">
+    <div class="col-12 col-lg-6 mb-2 mb-md-0">
       <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="user.email">
-        <div class="col-6 col-md-auto">
-          <button class="w-100 btn btn-outline-primary">
+        <div class="col-4 col-md-auto d-none d-md-block">
+          <button class="w-100 btn btn-outline-primary"
+                  (click)="blockUserModalComponent.open(blockUserModalComponent.content)">
             Zablokuj użytkownika
           </button>
         </div>
+        <div class="col-4 col-md-auto d-none d-md-block">
+          <button class="w-100 h-100 btn btn-outline-primary"
+                  (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content)">
+            Zarządzaj hasłem
+          </button>
+        </div>
+        <div class="col-6 col-md-auto d-block d-md-none position-relative">
+          <button class="w-100 h-100 btn btn-outline-primary"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#showMore"
+                  aria-controls="showMore"
+                  aria-expanded="false"
+                  aria-label="Pokaż więcej"
+                  (click)="toggleShowMore($event)">
+            Więcej
+          </button>
+          <div class="collapse navbar-collapse" id="showMore" *ngIf="this.showMore">
+            <ul class="d-flex flex-column">
+              <li class="nav-item d-flex">
+                <button class="w-100 btn btn-outline-primary"
+                        (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content)">
+                  Zarządzaj hasłem
+                </button>
+              </li>
+              <li class="nav-item d-flex">
+                <button class="w-100 btn btn-outline-primary"
+                        (click)="blockUserModalComponent.open(blockUserModalComponent.content)">
+                  Zablokuj użytkownika
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div class="col-6 col-md-auto">
-          <a class="w-100 btn btn-primary">
+          <a class="w-100 h-100 btn btn-primary"
+             href="#">
             Edytuj użytkownika
           </a>
         </div>

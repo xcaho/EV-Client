@@ -47,20 +47,19 @@
           <li class="nav-item d-flex"
               [routerLinkActive]="['active']">
             <a class="nav-link px-2"
+               routerLink="admin">
+              Panel administratora
+            </a>
+          </li>
+          <li class="nav-item d-flex"
+              [routerLinkActive]="['active']">
+            <a class="nav-link px-2"
                routerLink="appointments">
               Lista wydarzeń
             </a>
           </li>
         </ul>
         <div class="spacer"></div>
-<!--        <p *ngIf="displayMenu$ | async"-->
-<!--           class="d-block ms-auto text-white text-end mb-0 me-lg-4">-->
-<!--          Rola: rekruter-->
-<!--        </p>-->
-<!--        <p *ngIf="!(displayMenu$ | async)"-->
-<!--           class="d-block ms-auto text-white text-end mb-0">-->
-<!--          Rola: rekrutowany-->
-<!--        </p>-->
         <p *ngIf="authService.userLogin"
            class="d-block ms-auto text-white text-end mb-0 me-2">
           {{authService.userLogin}}

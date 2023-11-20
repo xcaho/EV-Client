@@ -27,10 +27,13 @@ import {AlertService} from "./common/alerts/service/alert.service";
 import {LoginComponent} from './common/login/login.component';
 import {RegisterComponent} from './common/register/register.component';
 import {TokenInterceptorService} from "./token-interceptor.service";
-import { ListComponent } from './admin/list/list.component';
-import { PreviewComponent } from './admin/preview/preview.component';
-import { AddUserComponent } from './admin/add-user/add-user.component';
-import { AssignModalComponent } from './admin/preview/assign-modal/assign-modal.component';
+import {ListComponent} from './admin/list/list.component';
+import {PreviewComponent} from './admin/preview/preview.component';
+import {AddUserComponent} from './admin/add-user/add-user.component';
+import {AssignModalComponent} from './admin/preview/assign-modal/assign-modal.component';
+import {PasswordRemindComponent} from "./common/login/password-remind/password-remind.component";
+import { ResetPasswordModalComponent } from './admin/preview/reset-password-modal/reset-password-modal.component';
+import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-user-modal.component';
 
 
 @NgModule({
@@ -56,6 +59,9 @@ import { AssignModalComponent } from './admin/preview/assign-modal/assign-modal.
     PreviewComponent,
     AddUserComponent,
     AssignModalComponent,
+    PasswordRemindComponent,
+    ResetPasswordModalComponent,
+    BlockUserModalComponent,
   ],
   imports: [
     BrowserModule,
