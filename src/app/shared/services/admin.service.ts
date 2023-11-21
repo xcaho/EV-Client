@@ -48,4 +48,24 @@ export class AdminService {
         })
       )
   }
+
+  public blockUser(id: number): Observable<User> {
+
+    return this.http.post<User>(this.apiUrl + '/admin/users/' + id + '/block', null)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  public unblockUser(id: number): Observable<User> {
+
+    return this.http.post<User>(this.apiUrl + '/admin/users/' + id + '/unblock', null)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
 }
