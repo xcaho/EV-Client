@@ -8,10 +8,10 @@ import {User} from "../../../shared/dtos/User";
 
 @Component({
   selector: 'app-password-remind',
-  templateUrl: './password-remind.component.html',
-  styleUrls: ['./password-remind.component.scss']
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss']
 })
-export class PasswordRemindComponent {
+export class ResetPasswordComponent {
   public formGroup!: FormGroup;
 
   constructor(

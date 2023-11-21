@@ -31,7 +31,7 @@ import {ListComponent} from './admin/list/list.component';
 import {PreviewComponent} from './admin/preview/preview.component';
 import {AddUserComponent} from './admin/add-user/add-user.component';
 import {AssignModalComponent} from './admin/preview/assign-modal/assign-modal.component';
-import {PasswordRemindComponent} from "./common/login/password-remind/password-remind.component";
+import {ResetPasswordComponent} from "./common/login/password-remind/reset-password.component";
 import { ResetPasswordModalComponent } from './admin/preview/reset-password-modal/reset-password-modal.component';
 import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-user-modal.component';
 
@@ -59,7 +59,7 @@ import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-
     PreviewComponent,
     AddUserComponent,
     AssignModalComponent,
-    PasswordRemindComponent,
+    ResetPasswordComponent,
     ResetPasswordModalComponent,
     BlockUserModalComponent,
   ],

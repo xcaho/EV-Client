@@ -13,7 +13,7 @@ import {RegisterComponent} from "./common/register/register.component";
 import {ListComponent} from "./admin/list/list.component";
 import {AddUserComponent} from "./admin/add-user/add-user.component";
 import {PreviewComponent} from "./admin/preview/preview.component";
-import {PasswordRemindComponent} from "./common/login/password-remind/password-remind.component";
+import {ResetPasswordComponent} from "./common/login/password-remind/reset-password.component";
 
 const appRoute: Routes = [
   {
@@ -38,7 +38,7 @@ const appRoute: Routes = [
   },
   {
     path: 'remind-password',
-    component: PasswordRemindComponent
+    component: ResetPasswordComponent
   },
   {
     path: 'appointments',
