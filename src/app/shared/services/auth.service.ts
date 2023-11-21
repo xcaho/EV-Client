@@ -6,6 +6,7 @@ import {AlertService} from "../../common/alerts/service/alert.service";
 import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
 import {Router} from "@angular/router";
+import {LoginDto} from "../dtos/LoginDto";
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class AuthService {
     this.url = localStorage.getItem('token_url');
   }
 
-  create(user: User): Observable<AuthDto> {
+  register(user: User): Observable<AuthDto> {
     return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
       .pipe(
         catchError((error: any) => {
@@ -34,7 +35,7 @@ export class AuthService {
       )
   }
 
-  login(user: User): Observable<AuthDto> {
+  login(user: LoginDto): Observable<AuthDto> {
     return this.http.post<AuthDto>('http://localhost:8080/auth/login', user)
       .pipe(
         catchError((error: any) => {
@@ -48,8 +49,8 @@ export class AuthService {
       )
   }
 
-  resetPassword(user: User): Observable<AuthDto> {
-    return this.http.post<AuthDto>('http://localhost:8080/auth/reset', user)
+  resetPassword(userId: number): Observable<AuthDto> {
+    return this.http.post<AuthDto>('http://localhost:8080/admin/user/'+ userId +'/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {

@@ -6,6 +6,7 @@ import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
 import {User} from "../../shared/dtos/User";
 import {Router} from "@angular/router";
+import {LoginDto} from "../../shared/dtos/LoginDto";
 
 @Component({
   selector: 'app-login',
@@ -56,10 +57,10 @@ export class LoginComponent {
     return noErrors;
   }
 
-  public save() {
+  public loginAndGoToAppointments() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.login, formGroupValue.password)
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
@@ -76,10 +77,10 @@ export class LoginComponent {
     }
   }
 
-  public saveAndPreviousPage() {
+  public loginAndGoToPreviousPage() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.login, formGroupValue.password)
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {

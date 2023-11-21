@@ -5,6 +5,7 @@ import {AssignModalComponent} from "./assign-modal/assign-modal.component";
 import {AlertService} from "../../common/alerts/service/alert.service";
 import {ResetPasswordModalComponent} from "./reset-password-modal/reset-password-modal.component";
 import {BlockUserModalComponent} from "./block-user-modal/block-user-modal.component";
+import { Role } from 'src/app/shared/enums/role';
 
 @Component({
   selector: 'app-preview',
@@ -20,6 +21,7 @@ export class PreviewComponent {
   @ViewChild(ResetPasswordModalComponent) resetPasswordModalComponent!: ResetPasswordModalComponent;
   @ViewChild(BlockUserModalComponent) blockUserModalComponent!: BlockUserModalComponent;
   @HostListener('document:click', ['$event'])
+
   private handleClickOutside(event: Event) {
     const target = event.target as HTMLElement;
     if (!target.closest('.btn-outline-primary') && !target.closest('#showMore')) {
@@ -30,10 +32,7 @@ export class PreviewComponent {
   constructor(
     private alertService: AlertService
   ) {
-    this.user = {
-      email: '123',
-      password: '123'
-    } as User;
+    this.user = new User('sample@gmail.com', 'sample', Role.RECRUITER)
   }
 
   ngOnInit() {

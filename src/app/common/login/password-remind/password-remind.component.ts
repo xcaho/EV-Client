@@ -53,9 +53,9 @@ export class PasswordRemindComponent {
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.login, '')
+      let userId = 1 //TODO: get from url/service
 
-      this.authService.resetPassword(user).subscribe(result => {
+      this.authService.resetPassword(userId).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie zresetowano hasło. Wysłano powiadomienie do administratora.');
           this.router.navigate(['/login']);

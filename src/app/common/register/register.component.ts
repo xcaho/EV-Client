@@ -8,6 +8,7 @@ import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
 import {User} from "../../shared/dtos/User";
 import {Router} from "@angular/router";
+import {Role} from "../../shared/enums/role";
 
 @Component({
   selector: 'app-register',
@@ -62,11 +63,12 @@ export class RegisterComponent {
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.email, formGroupValue.password)
+      let user = new User(formGroupValue.email, formGroupValue.name, Role.ADMIN)
 
-      this.authService.create(user).subscribe(result => {
+      this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono konto.');
+          console.log(result)
           this.authService.saveToken(result.token, formGroupValue.email, this.router);
           this.router.navigate(['appointments']);
         } else {

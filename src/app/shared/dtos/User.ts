@@ -1,11 +1,16 @@
+import { Role } from "../enums/role";
+
 export class User {
 
   public email: string;
-  public password: string;
+  public name: string;
+  public role: Role;
+  public isBlocked: boolean = false;
 
-
-  constructor(email: string, password: string) {
+  constructor(email: string, name: string, role: Role, isBlocked: boolean = false) {
     this.email = email;
-    this.password = password;
+    this.name = name;
+    this.role = role;
+    this.isBlocked = isBlocked;
   }
 }

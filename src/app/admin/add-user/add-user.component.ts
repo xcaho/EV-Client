@@ -6,6 +6,7 @@ import {AlertService} from "../../common/alerts/service/alert.service";
 import {Router} from "@angular/router";
 import {EmailValidator} from "../../shared/validators/email-validator";
 import {User} from "../../shared/dtos/User";
+import {UserUtils} from "../../shared/utils/UserUtils";
 
 @Component({
   selector: 'app-add-user',
@@ -57,11 +58,12 @@ export class AddUserComponent {
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.email, formGroupValue.password)
+      let user = new User(formGroupValue.email, formGroupValue.name, UserUtils.getRoleFromString(formGroupValue.role))
 
-      this.authService.create(user).subscribe(result => {
+      this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono użytkownika.');
+          console.log(result)
           this.authService.saveToken(result.token, formGroupValue.email, this.router);
           this.router.navigate(['admin']);
         } else {

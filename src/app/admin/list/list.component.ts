@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {User} from "../../shared/dtos/User";
 import {AuthService} from "../../shared/services/auth.service";
+import {Role} from "../../shared/enums/role";
 
 @Component({
   selector: 'app-list',
@@ -9,10 +10,7 @@ import {AuthService} from "../../shared/services/auth.service";
 })
 export class ListComponent {
   public users: User[] = [
-    {
-      email: '123',
-      password: '123'
-    }
+    new User('sample@gmail.com', 'sample', Role.RECRUITER)
   ];
 
   constructor(private authService: AuthService) {
