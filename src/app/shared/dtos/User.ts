@@ -2,15 +2,21 @@ import { Role } from "../enums/role";
 
 export class User {
 
+  public id: number = 0;
   public email: string;
   public name: string;
   public role: Role;
-  public isBlocked: boolean = false;
+  public blocked: boolean = false;
 
-  constructor(email: string, name: string, role: Role, isBlocked: boolean = false) {
+  constructor(email: string, name: string, role: Role, isBlocked: boolean = false, id: number = 0) {
     this.email = email;
     this.name = name;
     this.role = role;
-    this.isBlocked = isBlocked;
+    this.blocked = isBlocked;
+    this.id = id;
+  }
+
+  public isBlocked() {
+    return this.blocked ? "Zablokowany" : "Aktywny"
   }
 }

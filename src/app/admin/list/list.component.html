@@ -35,20 +35,20 @@
         </li>
         <li class="list-group-item d-block"
             *ngFor="let user of users">
-          <a [routerLink]="['/admin/user/', 1]"
+          <a [routerLink]="['/admin/users/', user.id]"
              class="p-3 d-block">
             <div class="row">
               <div class="col-3">
-                <span aria-labelledby="Nazwa-Title"></span> {{ user.email }}
+                <span aria-labelledby="Nazwa-Title"></span> {{ user.name }}
               </div>
               <div class="col-3">
                 <span aria-labelledby="Email-Title"></span> {{ user.email }}
               </div>
               <div class="col-3">
-                <span aria-labelledby="Rola-Title"></span> {{ user.email }}
+                <span aria-labelledby="Rola-Title"></span> {{ user.role }}
               </div>
               <div class="col text-end">
-                <span aria-labelledby="Status-Title"></span> {{ user.email }}
+                <span aria-labelledby="Status-Title"></span> {{ user.isBlocked() }}
               </div>
             </div>
           </a>
@@ -58,13 +58,13 @@
         <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let user of users">
           <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
             <dt class="col-5 col-sm-4 text-end">Nazwa:</dt>
-            <dd class="col-7 col-sm-8">{{ user.email }}</dd>
+            <dd class="col-7 col-sm-8">{{ user.name }}</dd>
             <dt class="col-5 col-sm-4 text-end">E-mail:</dt>
             <dd class="col-7 col-sm-8">{{ user.email }}</dd>
             <dt class="col-5 col-sm-4 text-end">Rola:</dt>
-            <dd class="col-7 col-sm-8">{{ user.email }}</dd>
+            <dd class="col-7 col-sm-8">{{ user.role }}</dd>
             <dt class="col-5 col-sm-4 text-end">Status:</dt>
-            <dd class="col-7 col-sm-8">{{ user.email }}</dd>
+            <dd class="col-7 col-sm-8">{{ user.blocked }}</dd>
           </dl>
           <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
             <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0"

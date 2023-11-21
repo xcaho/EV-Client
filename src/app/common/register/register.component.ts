@@ -63,14 +63,14 @@ export class RegisterComponent {
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.email, formGroupValue.name, Role.ADMIN)
+      let user = new User(formGroupValue.email, "sample", Role.ADMIN)
 
       this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono konto.');
           console.log(result)
           this.authService.saveToken(result.token, formGroupValue.email, this.router);
-          this.router.navigate(['appointments']);
+          this.router.navigate(['admin']);
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
         }

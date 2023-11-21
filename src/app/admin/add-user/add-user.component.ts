@@ -64,7 +64,6 @@ export class AddUserComponent {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono użytkownika.');
           console.log(result)
-          this.authService.saveToken(result.token, formGroupValue.email, this.router);
           this.router.navigate(['admin']);
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')

@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {User} from "../../shared/dtos/User";
-import {AuthService} from "../../shared/services/auth.service";
-import {Role} from "../../shared/enums/role";
+import {AdminService} from "../../shared/services/admin.service";
 
 @Component({
   selector: 'app-list',
@@ -9,13 +8,16 @@ import {Role} from "../../shared/enums/role";
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent {
-  public users: User[] = [
-    new User('sample@gmail.com', 'sample', Role.RECRUITER)
-  ];
+  public users: User[] = []
 
-  constructor(private authService: AuthService) {
+  constructor(private adminService: AdminService) {
   }
 
   ngOnInit() {
+
+    this.adminService.getAllUsers().subscribe(users => {
+
+      this.users = users;
+    })
   }
 }

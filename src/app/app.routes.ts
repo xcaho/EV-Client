@@ -25,7 +25,7 @@ const appRoute: Routes = [
     component: AddUserComponent
   },
   {
-    path: 'admin/user/:id',
+    path: 'admin/users/:id',
     component: PreviewComponent
   },
   {
