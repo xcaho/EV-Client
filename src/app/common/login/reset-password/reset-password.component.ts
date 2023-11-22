@@ -7,12 +7,13 @@ import {Router} from "@angular/router";
 import {User} from "../../../shared/dtos/User";
 
 @Component({
-  selector: 'app-password-remind',
+  selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent {
   public formGroup!: FormGroup;
+  public userId: string | null;
 
   constructor(
     public authService: AuthService,
@@ -20,11 +21,13 @@ export class ResetPasswordComponent {
     private alertService: AlertService,
     private router: Router,
   ) {
+    this.userId = this.authService.getUserId();
   }
 
   ngOnInit() {
+
     if (this.authService.token) {
-      this.router.navigate(['/appointments']);
+      this.router.navigate(['/users/'+ this.userId +'/appointments']);
     }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Przypomnij hasło');
@@ -53,9 +56,8 @@ export class ResetPasswordComponent {
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
-      let userId = 1 //TODO: get from url/service
 
-      this.authService.resetPassword(userId).subscribe(result => {
+      this.authService.resetPassword(Number(this.userId)).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie zresetowano hasło. Wysłano powiadomienie do administratora.');
           this.router.navigate(['/login']);

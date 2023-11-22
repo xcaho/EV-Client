@@ -45,13 +45,14 @@ export class PreviewComponent {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.userId = params['id'];
+      this.userId = params['user-id'];
     });
 
     this.adminService.getUser(this.userId).subscribe(user => {
+      console.log(user)
       this.user = user;
 
-      this.eventService.getEvents().subscribe(events => {
+      this.eventService.getEvents(this.userId).subscribe(events => {
 
         this.events = events;
       })

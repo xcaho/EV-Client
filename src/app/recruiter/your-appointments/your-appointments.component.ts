@@ -5,7 +5,7 @@ import {AvailabilityService} from "../../availability.service";
 import {TitleService} from "../../shared/services/title.service";
 import {FormatDate} from "../../shared/utils/format-date";
 import {AuthService} from "../../shared/services/auth.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-your-appointments',
@@ -17,12 +17,14 @@ export class YourAppointmentsComponent {
   public isFetching: boolean = false;
   public hasErrors: boolean = false;
   public formatDate = FormatDate;
+  public userId: number = 0;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
               public authService: AuthService,
               private router: Router,
+              private route: ActivatedRoute
   ) {
   }
 
@@ -30,10 +32,13 @@ export class YourAppointmentsComponent {
     this.authService.saveURL(this.router);
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Lista wydarzeń');
-    this.isFetching = true;
-    this.eventService.getEvents().subscribe((events) => {
+
+    this.route.params.subscribe(params => {
+      this.userId = params['user-id'];
+    });
+
+    this.eventService.getEvents(this.userId).subscribe((events) => {
         this.events = this.eventSort(events);
-        this.isFetching = false;
       }, (err) => {
         this.hasErrors = true;
       });

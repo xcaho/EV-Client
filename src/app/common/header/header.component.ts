@@ -11,6 +11,7 @@ import {AuthService} from "../../shared/services/auth.service";
 export class HeaderComponent {
   public displayMenu$ = this.menuService.displayMenu$;
   public route: string | undefined;
+  public userId: string | null = '';
 
   constructor(public menuService: MenuService,
               private router: Router,

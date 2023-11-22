@@ -16,7 +16,7 @@
           </a>
         </li>
       </ul>
-      <a [routerLink]="['/appointments']"
+      <a [routerLink]="['/users/{{this.authService.getUserId()}}/appointments']"
          *ngIf="authService.token"
          class="navbar-brand me-auto"
          aria-label="Przejdź do strony głównej">
@@ -54,7 +54,7 @@
           <li class="nav-item d-flex"
               [routerLinkActive]="['active']">
             <a class="nav-link px-2"
-               routerLink="appointments">
+               routerLink="users/{{this.authService.getUserId()}}/appointments">
               Lista wydarzeń
             </a>
           </li>

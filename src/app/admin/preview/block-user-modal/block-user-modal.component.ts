@@ -23,7 +23,7 @@ export class BlockUserModalComponent {
               private route: ActivatedRoute) {
 
     this.route.params.subscribe(params => {
-      this.userId = params['id'];
+      this.userId = params['user-id'];
     });
   }
 

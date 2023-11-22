@@ -7,6 +7,7 @@ import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
 import {Router} from "@angular/router";
 import {LoginDto} from "../dtos/LoginDto";
+import {MenuService} from "../../menu.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +16,18 @@ export class AuthService {
   public token: string | null;
   public userLogin: string | null;
   public url: string | null;
+  private userId: string | null;
 
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
+    private router: Router,
+    private menuService: MenuService
   ) {
     this.token = localStorage.getItem('token');
     this.userLogin = localStorage.getItem('token_login');
     this.url = localStorage.getItem('token_url');
+    this.userId = localStorage.getItem('userId')
   }
 
   register(user: User): Observable<AuthDto> {
@@ -67,11 +72,13 @@ export class AuthService {
     return !!this.token;
   }
 
-  saveToken(token: string, userLogin: string, router: Router) {
+  saveAuthData(token: string, userLogin: string, userId: string) {
     this.token = token;
     this.userLogin = userLogin;
+    this.userId = userId;
     localStorage.setItem('token', token);
     localStorage.setItem('token_login', userLogin);
+    localStorage.setItem('userId', userId);
   }
 
   saveURL(router: Router) {
@@ -90,7 +97,14 @@ export class AuthService {
   removeToken() {
     this.token = null;
     this.userLogin = null;
+    this.userId = null;
     localStorage.removeItem('token');
     localStorage.removeItem('token_login');
+    localStorage.removeItem('userId');
+  }
+
+  getUserId() {
+
+    return this.userId;
   }
 }

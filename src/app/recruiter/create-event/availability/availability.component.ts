@@ -25,6 +25,7 @@ export class AvailabilityComponent {
   public plus = faPlus;
   public trash = faTrash;
   private eventId: number = 0;
+  private userId: string | null | undefined;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -46,6 +47,7 @@ export class AvailabilityComponent {
     this.event = this.eventService.getTemporaryEvent();
     this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
     this.eventId = EventUtils.getIdFromRoute(this.route);
+    this.userId = this.authService.getUserId()
 
     if (this.event == undefined && this.isEdit) {
       this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
@@ -114,7 +116,7 @@ export class AvailabilityComponent {
         response => {
           this.eventService.clearTemporaryEvent();
           this.availabilityService.clearTemporaryAvailabilities();
-          this.router.navigate(['/appointments']);
+          this.router.navigate(['/users/'+ this.userId +'/appointments']);
         }, error => {
           this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         })
@@ -124,7 +126,7 @@ export class AvailabilityComponent {
           this.eventService.clearTemporaryEvent();
           this.availabilityService.clearTemporaryAvailabilities();
           this.alertService.showSuccess('Pomyślnie dodano wydarzenie.');
-          this.router.navigate(['/appointments']);
+          this.router.navigate(['/users/'+ this.userId +'/appointments']);
         }, error => {
           this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }

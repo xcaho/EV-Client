@@ -13,7 +13,7 @@ import {RegisterComponent} from "./common/register/register.component";
 import {ListComponent} from "./admin/list/list.component";
 import {AddUserComponent} from "./admin/add-user/add-user.component";
 import {PreviewComponent} from "./admin/preview/preview.component";
-import {ResetPasswordComponent} from "./common/login/password-remind/reset-password.component";
+import {ResetPasswordComponent} from "./common/login/reset-password/reset-password.component";
 
 const appRoute: Routes = [
   {
@@ -25,7 +25,7 @@ const appRoute: Routes = [
     component: AddUserComponent
   },
   {
-    path: 'admin/users/:id',
+    path: 'admin/users/:user-id',
     component: PreviewComponent
   },
   {
@@ -37,11 +37,11 @@ const appRoute: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'remind-password',
+    path: 'reset-password',
     component: ResetPasswordComponent
   },
   {
-    path: 'appointments',
+    path: 'users/:user-id/appointments',
     component: YourAppointmentsComponent
   },
   {

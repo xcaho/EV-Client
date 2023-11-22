@@ -30,7 +30,7 @@ export class LoginComponent {
 
   ngOnInit() {
     if (this.authService.token) {
-      this.router.navigate(['/appointments']);
+      this.router.navigate(['/users/'+ this.authService.getUserId() +'/appointments']);
     }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Panel logowania');
@@ -65,8 +65,8 @@ export class LoginComponent {
       this.authService.login(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveToken(result.token, formGroupValue.login, this.router);
-          this.router.navigate(['/appointments']);
+          this.authService.saveAuthData(result.token, formGroupValue.login, result.userId);
+          this.router.navigate(['/users/'+ result.userId +'/appointments']);
           this.authService.removeURL();
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
@@ -85,7 +85,7 @@ export class LoginComponent {
       this.authService.login(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveToken(result.token, formGroupValue.login, this.router);
+          this.authService.saveAuthData(result.token, formGroupValue.login, result.userId);
           this.router.navigate([this.authService.url]);
           this.authService.removeURL();
         } else {
