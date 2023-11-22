@@ -59,7 +59,7 @@ export class AdminService {
       )
   }
 
-  public unblockUser(id: number): Observable<User> {
+  public unlockUser(id: number): Observable<User> {
 
     return this.http.post<User>(this.apiUrl + '/admin/users/' + id + '/unblock', null)
       .pipe(

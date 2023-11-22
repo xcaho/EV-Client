@@ -17,7 +17,6 @@ import {EventDto} from "../../shared/dtos/EventDto";
   styleUrls: ['./preview.component.scss']
 })
 export class PreviewComponent {
-
   public userId: number = 0;
   public user: User;
   public events: EventDto[] = [];
@@ -28,7 +27,6 @@ export class PreviewComponent {
   @ViewChild(ResetPasswordModalComponent) resetPasswordModalComponent!: ResetPasswordModalComponent;
   @ViewChild(BlockUserModalComponent) blockUserModalComponent!: BlockUserModalComponent;
   @HostListener('document:click', ['$event'])
-
   private handleClickOutside(event: Event) {
     const target = event.target as HTMLElement;
     if (!target.closest('.btn-outline-primary') && !target.closest('#showMore')) {

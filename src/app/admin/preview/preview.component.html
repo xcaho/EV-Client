@@ -12,8 +12,9 @@
       <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="user.email">
         <div class="col-4 col-md-auto d-none d-md-block">
           <button class="w-100 btn btn-outline-primary"
-                  (click)="blockUserModalComponent.open(blockUserModalComponent.content)">
-            Zablokuj użytkownika
+                  (click)="blockUserModalComponent.open(blockUserModalComponent.content, user)">
+            <ng-container *ngIf="!user.blocked">Zablokuj użytkownika</ng-container>
+            <ng-container *ngIf="user.blocked">Odblokuj użytkownika</ng-container>
           </button>
         </div>
         <div class="col-4 col-md-auto d-none d-md-block">
@@ -42,7 +43,7 @@
               </li>
               <li class="nav-item d-flex">
                 <button class="w-100 btn btn-outline-primary"
-                        (click)="blockUserModalComponent.open(blockUserModalComponent.content)">
+                        (click)="blockUserModalComponent.open(blockUserModalComponent.content, user)">
                   Zablokuj użytkownika
                 </button>
               </li>

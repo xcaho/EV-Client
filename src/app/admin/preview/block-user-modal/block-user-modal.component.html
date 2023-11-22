@@ -2,7 +2,12 @@
   <form>
     <div class="modal-header">
       <h3 class="modal-title" id="modalTitle">
-        Zablokuj konto użytkownika
+        <ng-container *ngIf="!user.blocked">
+          Zablokuj konto użytkownika
+        </ng-container>
+        <ng-container *ngIf="user.blocked">
+          Odblokuj konto użytkownika
+        </ng-container>
       </h3>
       <button type="button"
               class="btn-close"
@@ -13,7 +18,12 @@
     </div>
     <div class="modal-body">
       <p class="mb-0">
-        Zablokowanie konta użytkownika spowoduje uniemożliwienie zalogowania się na to konto.
+        <ng-container *ngIf="!user.blocked">
+          Zablokowanie konta użytkownika spowoduje uniemożliwienie logowania się na to konto.
+        </ng-container>
+        <ng-container *ngIf="user.blocked">
+          Odblokowanie konta użytkownika spowoduje umożliwienie logowania się na to konto.
+        </ng-container>
       </p>
     </div>
     <div class="modal-footer px-0">
@@ -29,8 +39,15 @@
         <div class="col-6 col-sm-auto">
           <button type="submit"
                   class="w-100 h-100 btn btn-primary"
-                  (click)="blockUser()">
+                  (click)="blockUser()"
+                  *ngIf="!user.blocked">
             Zablokuj
+          </button>
+          <button type="submit"
+                  class="w-100 h-100 btn btn-primary"
+                  (click)="unlockUser()"
+                  *ngIf="user.blocked">
+            Odblokuj
           </button>
         </div>
       </div>
