@@ -10,6 +10,9 @@ fixture('Sign up page')
 
 test
 ('Correctly register to event', async () => {
+  await t
+    .maximizeWindow()
+
   const login = "mail@domena.com"
   const password = "password1"
 

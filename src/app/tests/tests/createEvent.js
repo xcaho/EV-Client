@@ -13,6 +13,9 @@ fixture('Getting Started')
 
 test
 ('Correctly create event', async () => {
+  await t
+    .maximizeWindow()
+
   const eventDurationDays = 5;
   const startDate = format(new Date(), 'yyyy-MM-dd');
   const endDate = format(addDays(new Date(startDate), eventDurationDays - 1), 'yyyy-MM-dd');
@@ -71,6 +74,9 @@ test
 
 test
 ('Checking inputs validation', async () => {
+  await t
+    .maximizeWindow()
+
   const login = "mail@domena.com"
   const password = "password1"
 
