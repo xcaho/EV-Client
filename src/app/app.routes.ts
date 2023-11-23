@@ -14,6 +14,7 @@ import {ListComponent} from "./admin/list/list.component";
 import {AddUserComponent} from "./admin/add-user/add-user.component";
 import {PreviewComponent} from "./admin/preview/preview.component";
 import {ResetPasswordComponent} from "./common/login/reset-password/reset-password.component";
+import {ChangePasswordComponent} from "./common/change-password/change-password.component";
 
 const appRoute: Routes = [
   {
@@ -39,6 +40,10 @@ const appRoute: Routes = [
   {
     path: 'reset-password',
     component: ResetPasswordComponent
+  },
+  {
+    path: 'change-password',
+    component: ChangePasswordComponent
   },
   {
     path: 'users/:user-id/appointments',

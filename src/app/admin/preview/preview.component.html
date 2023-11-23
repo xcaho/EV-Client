@@ -19,7 +19,7 @@
         </div>
         <div class="col-4 col-md-auto d-none d-md-block">
           <button class="w-100 h-100 btn btn-outline-primary"
-                  (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content)">
+                  (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content, userId)">
             Zarządzaj hasłem
           </button>
         </div>
@@ -37,7 +37,7 @@
             <ul class="d-flex flex-column">
               <li class="nav-item d-flex">
                 <button class="w-100 btn btn-outline-primary"
-                        (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content)">
+                        (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content, userId)">
                   Zarządzaj hasłem
                 </button>
               </li>

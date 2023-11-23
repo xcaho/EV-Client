@@ -20,10 +20,10 @@
                    type="radio"
                    name="usersList"
                    id="user{{i}}"
-                   [checked]="user === appointmentHolder">
+                   [checked]="user.name === appointmentHolder">
             <label class="form-check-label"
                    for="user{{i}}">
-              {{user}}
+              {{user.name}}
             </label>
           </div>
         </ng-container>

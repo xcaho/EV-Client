@@ -12,9 +12,9 @@ import {AdminService} from "../../../shared/services/admin.service";
 export class AssignModalComponent {
   @ViewChild('content') content: ElementRef | undefined;
   private modalRef: NgbModalRef = null!;
-  public users: User[] = []
+  public users: User[] = [];
   public appointmentHolder: string = 'Szymon Mazi';
-  public displayedUsers: string[] = [];
+  public displayedUsers: User[] = [];
   public numberOfShowedUsers: number = 4;
 
   constructor(private modalService: NgbModal,
@@ -23,7 +23,6 @@ export class AssignModalComponent {
   }
 
   ngOnInit() {
-
     this.adminService.getAllUsers().subscribe(users => {
       this.users = users;
     })
@@ -31,7 +30,6 @@ export class AssignModalComponent {
 
   public open(content: any): void {
     this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
-    this.displayedUsers = [];
     this.sortUsers();
     this.loadMoreResults();
   }
@@ -42,12 +40,14 @@ export class AssignModalComponent {
 
   private sortUsers(): void {
     this.users.sort((a, b) => {
-      if (a === this.appointmentHolder) {
+      if (a.name === this.appointmentHolder) {
         return -1;
-      } else if (b === this.appointmentHolder) {
-        return 1;
       } else {
-        return 0;
+        if (b.name === this.appointmentHolder) {
+                return 1;
+              } else {
+                return 0;
+              }
       }
     });
   }

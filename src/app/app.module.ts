@@ -34,6 +34,7 @@ import {AssignModalComponent} from './admin/preview/assign-modal/assign-modal.co
 import {ResetPasswordComponent} from "./common/login/reset-password/reset-password.component";
 import { ResetPasswordModalComponent } from './admin/preview/reset-password-modal/reset-password-modal.component';
 import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-user-modal.component';
+import { ChangePasswordComponent } from './common/change-password/change-password.component';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-
     ResetPasswordComponent,
     ResetPasswordModalComponent,
     BlockUserModalComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,

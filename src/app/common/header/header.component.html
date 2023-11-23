@@ -65,10 +65,15 @@
           {{authService.userLogin}}
         </p>
         <div class="d-flex justify-content-end">
+          <a [routerLink]="['/change-password']"
+             class="log-out text-end"
+             *ngIf="authService.isLoggedIn()">
+            Zmień hasło
+          </a>
           <a [routerLink]="['/login']"
              (click)="deleteToken()"
-             *ngIf="authService.isLoggedIn()"
-             class="log-out text-end">
+             class="log-out text-end"
+             *ngIf="authService.isLoggedIn()">
             Wyloguj się
           </a>
         </div>

@@ -3,6 +3,7 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {faCopy, faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {ClipboardService} from "ngx-clipboard";
+import {AuthService} from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-reset-password-modal',
@@ -18,14 +19,17 @@ export class ResetPasswordModalComponent {
   public eye = faEye;
   public eyeSlash = faEyeSlash;
   public copy = faCopy;
+  public userId: number = 0;
 
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
-              private clipboardService: ClipboardService,) {
+              private clipboardService: ClipboardService,
+              private authServce: AuthService,) {
   }
 
-  public open(content: any): void {
+  public open(content: any, id: number): void {
     this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
+    this.userId = id;
   }
 
   public closeModal(): void {
@@ -47,7 +51,7 @@ export class ResetPasswordModalComponent {
   }
 
   public generateNewPassword() {
-    this.alertService.showSuccess('Wygenerowano nowe tymczasowe hasło dla użytkownika.')
-
+    this.authServce.resetPassword(this.userId);
+    // this.alertService.showSuccess('Wygenerowano nowe tymczasowe hasło dla użytkownika.');
   }
 }
