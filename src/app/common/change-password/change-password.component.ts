@@ -4,10 +4,7 @@ import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {AlertService} from "../alerts/service/alert.service";
-import {Router} from "@angular/router";
 import {PasswordValidator} from "../../shared/validators/password-validator";
-import {User} from "../../shared/dtos/User";
-import {Role} from "../../shared/enums/role";
 import { passwordMatchValidator } from 'src/app/shared/validators/password-match-validator';
 
 @Component({
@@ -30,14 +27,10 @@ export class ChangePasswordComponent {
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
-    private router: Router,
   ) {
   }
 
   ngOnInit() {
-    if (this.authService.token && this.authService.getUserId()) {
-      this.router.navigate(['/users/'+ this.authService.getUserId() +'/appointments']);
-    }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Formularz zmiany hasła');
     this.initFormGroup();
