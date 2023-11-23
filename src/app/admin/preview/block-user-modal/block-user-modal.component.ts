@@ -47,7 +47,7 @@ export class BlockUserModalComponent {
 
   public unlockUser() {
     this.adminService.unlockUser(this.userId).subscribe(user => {
-      console.log('Unloocked user:')
+      console.log('Unlocked user:')
       console.log(user)
     })
     this.closeModal()

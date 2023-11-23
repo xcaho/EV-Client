@@ -55,7 +55,7 @@ export class AuthService {
   }
 
   resetPassword(userId: number): Observable<AuthDto> {
-    return this.http.post<AuthDto>('http://localhost:8080/admin/users/'+ userId +'/resetPassword', null)
+    return this.http.patch<AuthDto>('http://localhost:8080/admin/users/'+ userId +'/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {

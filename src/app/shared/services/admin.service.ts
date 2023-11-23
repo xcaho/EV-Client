@@ -4,6 +4,7 @@ import {map, Observable, throwError} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {catchError} from "rxjs/operators";
+import {PasswordDto} from "../dtos/PasswordDto";
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +63,16 @@ export class AdminService {
   public unlockUser(id: number): Observable<User> {
 
     return this.http.post<User>(this.apiUrl + '/admin/users/' + id + '/unblock', null)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  public resetPassword(id: number) {
+
+    return this.http.patch<PasswordDto>(this.apiUrl + '/admin/users/'+ id +'/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

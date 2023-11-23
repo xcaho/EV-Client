@@ -51,7 +51,9 @@ export class ResetPasswordModalComponent {
   }
 
   public generateNewPassword() {
-    this.authServce.resetPassword(this.userId);
-    // this.alertService.showSuccess('Wygenerowano nowe tymczasowe hasło dla użytkownika.');
+    this.authServce.resetPassword(this.userId).subscribe(passwordDto => {
+      console.log(passwordDto.password)
+      this.alertService.showSuccess('Wygenerowano nowe tymczasowe hasło dla użytkownika.');
+    });
   }
 }
