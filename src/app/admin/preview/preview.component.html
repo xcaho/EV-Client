@@ -169,7 +169,7 @@
                 <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
               </button>
               <a class="btn btn-icon"
-                 href="#"
+                 [routerLink]="['/event/'+event.id]"
                  target="_blank"
                  [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
                  title="Otwórz szczegóły wydarzenia">
