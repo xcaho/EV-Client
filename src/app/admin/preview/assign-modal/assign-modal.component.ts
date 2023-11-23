@@ -3,6 +3,7 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import { User } from 'src/app/shared/dtos/User';
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {AdminService} from "../../../shared/services/admin.service";
+import {EventDto} from "../../../shared/dtos/EventDto";
 
 @Component({
   selector: 'app-assign-modal',
@@ -16,6 +17,7 @@ export class AssignModalComponent {
   public appointmentHolder: string = 'Szymon Mazi';
   public displayedUsers: User[] = [];
   public numberOfShowedUsers: number = 4;
+  private event!: EventDto;
 
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
@@ -28,8 +30,9 @@ export class AssignModalComponent {
     })
   }
 
-  public open(content: any): void {
+  public open(content: any, event: EventDto): void {
     this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
+    this.event = event;
     this.sortUsers();
     this.loadMoreResults();
   }

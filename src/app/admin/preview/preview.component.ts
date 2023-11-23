@@ -10,6 +10,7 @@ import {ActivatedRoute} from "@angular/router";
 import {AdminService} from "../../shared/services/admin.service";
 import {EventService} from "../../event.service";
 import {EventDto} from "../../shared/dtos/EventDto";
+import {FormatDate} from "../../shared/utils/format-date";
 
 @Component({
   selector: 'app-preview',
@@ -21,6 +22,7 @@ export class PreviewComponent {
   public user: User;
   public events: EventDto[] = [];
   public edit = faEdit;
+  public formatDate = FormatDate;
   public open = faArrowUpRightFromSquare;
   public showMore: boolean = false;
   @ViewChild(AssignModalComponent) assignModalComponent!: AssignModalComponent;

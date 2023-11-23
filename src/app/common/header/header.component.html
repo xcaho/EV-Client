@@ -16,18 +16,16 @@
           </a>
         </li>
       </ul>
-      <a [routerLink]="['/users/{{this.authService.getUserId()}}/appointments']"
-         *ngIf="authService.token"
-         class="navbar-brand me-auto"
-         aria-label="Przejdź do strony głównej">
+      <span
+         class="navbar-brand me-auto">
         easy <span class="smaller">visit</span>
-      </a>
-      <a [routerLink]="['/login']"
-         *ngIf="!authService.token"
-         class="navbar-brand me-auto"
-         aria-label="Przejdź do strony głównej">
-        easy <span class="smaller">visit</span>
-      </a>
+      </span>
+<!--      <a [routerLink]="['/login']"-->
+<!--         *ngIf="!authService.token"-->
+<!--         class="navbar-brand me-auto"-->
+<!--         aria-label="Przejdź do strony głównej">-->
+<!--        easy <span class="smaller">visit</span>-->
+<!--      </a>-->
       <button *ngIf="authService.token"
               class="navbar-toggler"
               type="button"
