@@ -63,6 +63,8 @@ export class AssignModalComponent {
   }
 
   public save(): void {
-    console.log(this.checkedUser)
+    this.adminService.reassignUser(this.checkedUser, this.event.id).subscribe(eventDto => {
+      console.log("success")
+    })
   }
 }

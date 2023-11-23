@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {catchError} from "rxjs/operators";
 import {PasswordDto} from "../dtos/PasswordDto";
+import {EventDto} from "../dtos/EventDto";
 
 @Injectable({
   providedIn: 'root',
@@ -73,6 +74,26 @@ export class AdminService {
   public resetPassword(id: number) {
 
     return this.http.patch<PasswordDto>(this.apiUrl + '/admin/users/'+ id +'/resetPassword', null)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  public changePassword(id: number, newPassword: string) {
+
+    return this.http.patch<PasswordDto>(this.apiUrl + '/admin/users/'+ id +'/changePassword', new PasswordDto(newPassword))
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  public reassignUser(id: number, eventId: number) {
+
+    return this.http.patch<EventDto>(this.apiUrl + '/admin/users/'+ id +'/reassignUser/' + eventId, null)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

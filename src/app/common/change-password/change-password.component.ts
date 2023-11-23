@@ -6,6 +6,7 @@ import {TitleService} from "../../shared/services/title.service";
 import {AlertService} from "../alerts/service/alert.service";
 import {PasswordValidator} from "../../shared/validators/password-validator";
 import { passwordMatchValidator } from 'src/app/shared/validators/password-match-validator';
+import {AdminService} from "../../shared/services/admin.service";
 
 @Component({
   selector: 'app-change-password',
@@ -27,6 +28,7 @@ export class ChangePasswordComponent {
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
+    private adminService: AdminService
   ) {
   }
 
@@ -38,7 +40,7 @@ export class ChangePasswordComponent {
 
   private initFormGroup() {
     this.formGroup = new FormGroup({
-      oldPassword: new FormControl('', [Validators.required]),
+      //oldPassword: new FormControl('', [Validators.required]),
       newPassword: new FormControl('', [Validators.required, PasswordValidator]),
       repeatNewPassword: new FormControl('', [Validators.required, PasswordValidator]),
     }, { validators: passwordMatchValidator })
@@ -58,10 +60,12 @@ export class ChangePasswordComponent {
   }
 
   public save() {
-    // TODO: ZROBIC
     if (this.validateForm()) {
-      let formGroupValue = this.formGroup.value;
-
+      this.adminService.changePassword(Number(this.authService.getUserId()), this.newPassword.value)
+        .subscribe(passwordDto => {
+          console.log(passwordDto.password)
+          this.alertService.showSuccess('Zmieniono hasło dla użytkownika.');
+        })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.')
     }
