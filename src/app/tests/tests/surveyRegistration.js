@@ -8,6 +8,7 @@ const loginPage = login();
 fixture('Sign up page')
   .page("http://localhost:4200/")
 
+
 test
 ('Correctly register to event', async () => {
   await t

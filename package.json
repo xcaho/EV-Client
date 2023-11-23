@@ -4,6 +4,7 @@
   "scripts": {
     "createEventTest": "testcafe chrome src/app/tests/tests/createEvent.js",
     "surveyRegistrationTest": "testcafe chrome src/app/tests/tests/surveyRegistration.js",
+    "checkCodesTest": "testcafe chrome src/app/tests/tests/checkCodes.js",
     "debug": "testcafe chrome src/app/tests/tests/createEvent.js --debug-mode",
     "ng": "ng",
     "start": "ng serve",
