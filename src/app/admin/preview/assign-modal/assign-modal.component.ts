@@ -18,6 +18,7 @@ export class AssignModalComponent {
   public displayedUsers: User[] = [];
   public numberOfShowedUsers: number = 4;
   private event!: EventDto;
+  public checkedUser! :any;
 
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
@@ -62,5 +63,6 @@ export class AssignModalComponent {
   }
 
   public save(): void {
+    console.log(this.checkedUser)
   }
 }

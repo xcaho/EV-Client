@@ -20,7 +20,8 @@
                    type="radio"
                    name="usersList"
                    id="user{{i}}"
-                   [checked]="user.name === appointmentHolder">
+                   [checked]="user.name === appointmentHolder"
+                   (change)="checkedUser = user.id">
             <label class="form-check-label"
                    for="user{{i}}">
               {{user.name}}
