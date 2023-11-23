@@ -51,7 +51,6 @@ export class PreviewComponent {
     });
 
     this.adminService.getUser(this.userId).subscribe(user => {
-      console.log(user)
       this.user = user;
 
       this.eventService.getEvents(this.userId).subscribe(events => {

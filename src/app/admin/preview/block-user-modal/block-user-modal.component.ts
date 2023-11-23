@@ -40,17 +40,17 @@ export class BlockUserModalComponent {
     this.adminService.blockUser(this.userId).subscribe(user => {
       console.log('Blocked user:')
       console.log(user)
+      this.closeModal()
+      window.location.reload();
     })
-    this.closeModal()
-    window.location.reload();
   }
 
   public unlockUser() {
     this.adminService.unlockUser(this.userId).subscribe(user => {
       console.log('Unlocked user:')
       console.log(user)
+      this.closeModal()
+      window.location.reload();
     })
-    this.closeModal()
-    window.location.reload();
   }
 }
