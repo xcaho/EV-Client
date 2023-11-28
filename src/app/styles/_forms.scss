@@ -119,3 +119,8 @@ textarea {
   border-color: $primary-color;
   background-color: #6750A4;
 }
+
+.form-check-input:checked[type=radio] {
+  border-color: $primary-color;
+  background-color: #6750A4;
+}

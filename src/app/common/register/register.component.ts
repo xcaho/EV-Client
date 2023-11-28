@@ -8,6 +8,7 @@ import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
 import {User} from "../../shared/dtos/User";
 import {Router} from "@angular/router";
+import {Role} from "../../shared/enums/role";
 
 @Component({
   selector: 'app-register',
@@ -31,8 +32,8 @@ export class RegisterComponent {
   }
 
   ngOnInit() {
-    if (this.authService.token) {
-      this.router.navigate(['/appointments']);
+    if (this.authService.token && this.authService.getUserId()) {
+      this.router.navigate(['/users/'+ this.authService.getUserId() +'/appointments']);
     }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja');
@@ -61,19 +62,17 @@ export class RegisterComponent {
 
   public save() {
     if (this.validateForm()) {
-
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.email, formGroupValue.password)
+      let user = new User(formGroupValue.email, "sample", Role.ADMIN)
 
-      this.authService.create(user).subscribe(result => {
+      this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono konto.');
-          this.authService.saveToken(result.token, formGroupValue.email);
-          this.router.navigate(['appointments']);
-
+          console.log(result)
+          this.authService.saveAuthData(result.token, formGroupValue.email, result.userId);
+          this.router.navigate(['admin']);
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
-          console.log('fail')
         }
       })
     } else {

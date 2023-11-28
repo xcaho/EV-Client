@@ -27,6 +27,14 @@ import {AlertService} from "./common/alerts/service/alert.service";
 import {LoginComponent} from './common/login/login.component';
 import {RegisterComponent} from './common/register/register.component';
 import {TokenInterceptorService} from "./token-interceptor.service";
+import {ListComponent} from './admin/list/list.component';
+import {PreviewComponent} from './admin/preview/preview.component';
+import {AddUserComponent} from './admin/add-user/add-user.component';
+import {AssignModalComponent} from './admin/preview/assign-modal/assign-modal.component';
+import {ResetPasswordComponent} from "./common/login/reset-password/reset-password.component";
+import { ResetPasswordModalComponent } from './admin/preview/reset-password-modal/reset-password-modal.component';
+import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-user-modal.component';
+import { ChangePasswordComponent } from './common/change-password/change-password.component';
 
 
 @NgModule({
@@ -48,6 +56,14 @@ import {TokenInterceptorService} from "./token-interceptor.service";
     AlertsComponent,
     LoginComponent,
     RegisterComponent,
+    ListComponent,
+    PreviewComponent,
+    AddUserComponent,
+    AssignModalComponent,
+    ResetPasswordComponent,
+    ResetPasswordModalComponent,
+    BlockUserModalComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,

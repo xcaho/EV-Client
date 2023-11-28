@@ -1,0 +1,58 @@
+<ng-template #content>
+  <form>
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">
+        Przypisz wydarzenie do innego rekrutera
+      </h3>
+      <button type="button"
+              class="btn-close"
+              aria-label="Zamknij modal"
+              (click)="closeModal()">
+        <span class="d-none">Zamknij modal</span>
+      </button>
+    </div>
+    <div class="modal-body" aria-live="polite" aria-relevant="additions" aria-atomic="true">
+      <fieldset>
+        <legend class="font-rem">Lista rekruterów:</legend>
+        <ng-container *ngFor="let user of displayedUsers; index as i">
+          <div class="form-check mb-1">
+            <input class="form-check-input"
+                   type="radio"
+                   name="usersList"
+                   id="user{{i}}"
+                   [checked]="user.name === appointmentHolder"
+                   (change)="checkedUser = user.id">
+            <label class="form-check-label"
+                   for="user{{i}}">
+              {{user.name}}
+            </label>
+          </div>
+        </ng-container>
+        <button class="btn btn-outline-primary mt-2 w-100"
+                type="button"
+                (click)="loadMoreResults()"
+                *ngIf="this.displayedUsers.length < this.users.length">
+          Pokaż więcej rekruterów
+        </button>
+      </fieldset>
+    </div>
+    <div class="modal-footer px-0">
+      <div class="w-100 row m-0 justify-content-between">
+        <div class="col-6 col-sm-auto">
+          <button type="button"
+                  class="w-100 btn btn-outline-primary"
+                  (click)="closeModal()">
+            Anuluj
+          </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+          <button type="submit"
+                  class="w-100 btn btn-primary"
+                  (click)="save()">
+            Przypisz wydarzenie
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

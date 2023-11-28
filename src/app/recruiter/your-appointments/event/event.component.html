@@ -1,27 +1,165 @@
 <app-delete-code></app-delete-code>
 <app-delete-event></app-delete-event>
 <div class="h64 flex-center border-bottom border-secondary mb-4">
-  <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
-    <h1 class="h2 mb-0">{{event.name}}</h1>
-    <div class="row mt-2 mt-md-0" *ngIf="event.active === true">
-      <div class="col-6 col-sm-auto">
-        <button class="w-100 btn btn-outline-primary"
-                (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
-          Zamknij wydarzenie </button>
-      </div>
-      <div class="col-6 col-sm-auto">
-        <a class="w-100 btn btn-primary"
-           (click)="goToEdit()"
-           [routerLink]="['/edit/', this.event.id]">
-          Edytuj wydarzenie
-        </a>
+  <div class="container-xxl d-flex flex-column flex-wrap flex-sm-row justify-content-between">
+    <div class="col-12 col-md-6">
+      <h1 class="h2 mb-0">
+        {{event.name}}
+      </h1>
+    </div>
+    <div class="col-12 col-md-6 mb-2 mb-md-0">
+      <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="event.active === true">
+        <div class="col-6 col-md-auto">
+          <button class="w-100 btn btn-outline-primary"
+                  (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
+            Zamknij wydarzenie
+          </button>
+        </div>
+        <div class="col-6 col-md-auto">
+          <a class="w-100 btn btn-primary"
+             (click)="goToEdit()"
+             [routerLink]="['/edit/', this.event.id]">
+            Edytuj wydarzenie
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div class="main-content container-xxl mb-5">
   <section class="row justify-content-center">
-    <section class="col-12">
+    <section class="col-12 mt-4 mb-3">
+      <h2 class="h5 mb-3" id="listTitle">Lista spotkań</h2>
+      <table class="list-group d-none d-md-block" aria-labelledby="listTitle">
+        <caption class="sr-only">Lista spotkań</caption>
+        <thead class="list-group-item p-3 li-header d-block">
+        <tr class="row">
+          <th class="col-3 fw-medium">Status:</th>
+          <th class="col-4 fw-medium">Kod do spotkania:</th>
+          <th class="col-4 fw-medium">Data spotkania:</th>
+          <th class="col-1 fw-medium text-end sr-only">Akcje:</th>
+        </tr>
+        </thead>
+        <tbody class="list-group-item d-block"
+               *ngFor="let survey of surveyList; let i=index">
+        <tr class="row">
+          <td class="col-3">
+            <ng-container *ngIf="survey.surveyState === 'USED'">
+              Umówione
+            </ng-container>
+            <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+              Nieumówione
+            </ng-container>
+            <ng-container *ngIf="survey.surveyState === 'INACTIVE'">
+              Wyłączone
+            </ng-container>
+          </td>
+          <td class="col-4">
+            <span id="kod{{survey.id}}"
+                  style="display:inline-block;
+                  min-width: 125px;">
+              {{survey.code}}
+            </span>
+            <button type="button"
+                    class="btn btn-icon btn-list fa-solid fa-copy"
+                    title="Skopiuj link do spotkania - {{survey.code}}"
+                    (click)="copyToClipboard(survey.code)">
+              <span class="sr-only">
+                Skopiuj link do spotkania - {{survey.code}}
+              </span>
+            </button>
+          </td>
+          <td class="col-4"
+              *ngIf="survey.date.toISOString() !== '1970-01-01T00:00:00.000Z' && survey.date">
+            {{getDateFormatted(survey)}}
+          </td>
+          <td class="col-4"
+              *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date"
+              title="Spotkanie nie zostało jeszcze umówione">
+            <span class="sr-only">
+              Spotkanie nie zostało jeszcze umówione
+            </span>
+            –
+          </td>
+          <td class="col-1 text-end">
+            <button type="button"
+                    class="btn btn-icon btn-list"
+                    title="Odwołaj spotkanie"
+                    (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
+                    *ngIf="survey.surveyState === 'USED'">
+              <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+              <span class="d-none">
+                Odwołaj spotkanie
+              </span>
+            </button>
+            <button type="button"
+                    class="btn btn-icon btn-list"
+                    title="Dezaktywuj kod"
+                    (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
+                    *ngIf="survey.surveyState === 'UNUSED'">
+              <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+              <span class="d-none">
+                Dezaktywuj kod
+              </span>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
+        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let survey of surveyList; let i=index">
+          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+            <dt class="col-5 col-sm-4 text-end">Status:</dt>
+            <dd class="col-7 col-sm-8">
+              <ng-container *ngIf="survey.surveyState === 'USED'">Umówione</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'UNUSED'">Nie umówione</ng-container>
+              <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączone</ng-container>
+            </dd>
+            <dt class="col-5 col-sm-4 text-end">Kod do spotkania:</dt>
+            <dd class="col-7 col-sm-8">{{survey.code}}</dd>
+            <dt class="col-5 col-sm-4 text-end">Data spotkania:</dt>
+            <dd class="col-7 col-sm-8"
+                *ngIf="survey.date.toISOString() !== '1970-01-01T00:00:00.000Z' && survey.date">
+              {{getDateFormatted(survey)}}
+            </dd>
+            <dd class="col-7 col-sm-8"
+                *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date"
+                title="Spotkanie nie zostało jeszcze umówione">
+              <span class="sr-only">
+                Spotkanie nie zostało jeszcze umówione
+              </span>
+              –
+            </dd>
+            <dt class="col-5 col-sm-4 text-end">Akcje:</dt>
+            <dd class="col-7 col-sm-8">
+              <button type="button"
+                      class="btn btn-icon fa-solid fa-copy"
+                      title="Skopiuj link do spotkania - {{survey.code}}"
+                      (click)="copyToClipboard(survey.code)">
+                <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
+              </button>
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Odwołaj spotkanie"
+                      *ngIf="survey.surveyState === 'USED'"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
+                <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+                <span class="d-none">Odwołaj spotkanie</span>
+              </button>
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Dezaktywuj kod"
+                      *ngIf="survey.surveyState === 'UNUSED'"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
+                <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+                <span class="d-none">Dezaktywuj kod</span>
+              </button>
+            </dd>
+          </dl>
+        </li>
+      </ul>
+    </section>
+    <section class="col-12 mt-4">
       <h2 class="h5 mb-3">Szczegóły dotyczące wydarzenia "{{event.name}}"</h2>
       <dl class="row gap">
         <div class="col-12 col-sm-6 col-lg-4"
@@ -69,9 +207,10 @@
         </div>
       </dl>
     </section>
-    <section class="col-12 mb-3">
-      <h2 class="h5 mt-4 mb-3">Dostępność</h2>
-      <div class="row calendar">
+    <section class="col-12 mt-4">
+      <h2 class="h5 mb-3">Dostępność</h2>
+      <p *ngIf="availabilityList.length === 0">Twoja dostępność jest pusta. Aby zobaczyć listę dni swojej dostępności, uzupełnij ją poprzez edytowanie wydarzenia.</p>
+      <div *ngIf="availabilityList.length !== 0" class="row calendar">
         <div class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList; let i=index">
           <div class="c-card">
             <div class="c-card-header">
@@ -86,137 +225,6 @@
           </div>
         </div>
       </div>
-    </section>
-    <section class="col-12">
-      <h2 class="h5 mt-4 mb-3" id="listTitle">Lista kodów</h2>
-      <table class="list-group d-none d-md-block" aria-labelledby="listTitle">
-        <caption class="sr-only">Lista kodów</caption>
-        <thead class="list-group-item p-3 li-header d-block">
-        <tr class="row">
-          <th class="col-3">Status:</th>
-          <th class="col-4">Kod:</th>
-          <th class="col-4">Data spotkania:</th>
-          <th class="col-1 text-end sr-only">Akcje:</th>
-        </tr>
-        </thead>
-        <tbody class="list-group-item d-block"
-               *ngFor="let survey of surveyList; let i=index">
-        <tr class="row">
-          <td class="col-3">
-            <ng-container *ngIf="survey.surveyState === 'USED'">
-              Użyty
-            </ng-container>
-            <ng-container *ngIf="survey.surveyState === 'UNUSED'">
-              Nieużyty
-            </ng-container>
-            <ng-container *ngIf="survey.surveyState === 'INACTIVE'">
-              Wyłączony
-            </ng-container>
-          </td>
-          <td class="col-4">
-            <span id="kod{{survey.id}}"
-                  style="display:inline-block;
-                  min-width: 125px;">
-              {{survey.code}}
-            </span>
-            <button type="button"
-                    class="btn btn-icon btn-list fa-solid fa-copy"
-                    title="Skopiuj link do spotkania - {{survey.code}}"
-                    (click)="copyToClipboard(survey.code)">
-              <span class="sr-only">
-                Skopiuj link do spotkania - {{survey.code}}
-              </span>
-            </button>
-          </td>
-          <td class="col-4"
-              *ngIf="survey.date.toISOString() !== '1970-01-01T00:00:00.000Z' && survey.date">
-            {{getDateFormatted(survey)}}
-          </td>
-          <td class="col-4"
-              *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date"
-              title="Spotkanie nie zostało jeszcze umówione">
-            <span class="sr-only">
-              Spotkanie nie zostało jeszcze umówione
-            </span>
-            –
-          </td>
-          <td class="col-1 text-end">
-            <button type="button"
-                    class="btn btn-icon btn-list"
-                    title="Odwołaj spotkanie"
-                    (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
-                    *ngIf="survey.surveyState === 'USED'">
-              <fa-icon [icon]="trash"></fa-icon>
-              <span class="d-none">
-                Odwołaj spotkanie
-              </span>
-            </button>
-            <button type="button"
-                    class="btn btn-icon btn-list"
-                    title="Dezaktywuj kod"
-                    (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
-                    *ngIf="survey.surveyState === 'UNUSED'">
-              <fa-icon [icon]="trash"></fa-icon>
-              <span class="d-none">
-                Dezaktywuj kod
-              </span>
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
-        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let survey of surveyList; let i=index">
-          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
-            <dt class="col-5 col-sm-4 text-end">Status:</dt>
-            <dd class="col-7 col-sm-8">
-              <ng-container *ngIf="survey.surveyState === 'USED'">Użyty</ng-container>
-              <ng-container *ngIf="survey.surveyState === 'UNUSED'">Nieużyty</ng-container>
-              <ng-container *ngIf="survey.surveyState === 'INACTIVE'">Wyłączony</ng-container>
-            </dd>
-            <dt class="col-5 col-sm-4 text-end">Kod:</dt>
-            <dd class="col-7 col-sm-8">{{survey.code}}</dd>
-            <dt class="col-5 col-sm-4 text-end">Data spotkania:</dt>
-            <dd class="col-7 col-sm-8"
-                *ngIf="survey.date.toISOString() !== '1970-01-01T00:00:00.000Z' && survey.date">
-              {{getDateFormatted(survey)}}
-            </dd>
-            <dd class="col-7 col-sm-8"
-                *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date"
-                title="Spotkanie nie zostało jeszcze umówione">
-              <span class="sr-only">
-                Spotkanie nie zostało jeszcze umówione
-              </span>
-              –
-            </dd>
-            <dt class="col-5 col-sm-4 text-end">Akcje:</dt>
-            <dd class="col-7 col-sm-8">
-              <button type="button"
-                      class="btn btn-icon fa-solid fa-copy"
-                      title="Skopiuj link do spotkania - {{survey.code}}"
-                      (click)="copyToClipboard(survey.code)">
-                <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
-              </button>
-              <button type="button"
-                      class="btn btn-icon btn-list"
-                      title="Odwołaj spotkanie"
-                      *ngIf="survey.surveyState === 'USED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
-                <fa-icon [icon]="trash"></fa-icon>
-                <span class="d-none">Odwołaj spotkanie</span>
-              </button>
-              <button type="button"
-                      class="btn btn-icon btn-list"
-                      title="Dezaktywuj kod"
-                      *ngIf="survey.surveyState === 'UNUSED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
-                <fa-icon [icon]="trash"></fa-icon>
-                <span class="d-none">Dezaktywuj kod</span>
-              </button>
-            </dd>
-          </dl>
-        </li>
-      </ul>
     </section>
   </section>
 </div>

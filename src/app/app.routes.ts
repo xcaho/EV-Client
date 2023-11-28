@@ -10,8 +10,25 @@ import {InvalidCodeComponent} from "./participant/invalid-code/invalid-code.comp
 import {ErrorComponent} from "./common/error/error.component";
 import {LoginComponent} from "./common/login/login.component";
 import {RegisterComponent} from "./common/register/register.component";
+import {ListComponent} from "./admin/list/list.component";
+import {AddUserComponent} from "./admin/add-user/add-user.component";
+import {PreviewComponent} from "./admin/preview/preview.component";
+import {ResetPasswordComponent} from "./common/login/reset-password/reset-password.component";
+import {ChangePasswordComponent} from "./common/change-password/change-password.component";
 
 const appRoute: Routes = [
+  {
+    path: 'admin',
+    component: ListComponent
+  },
+  {
+    path: 'admin/add-user',
+    component: AddUserComponent
+  },
+  {
+    path: 'admin/users/:user-id',
+    component: PreviewComponent
+  },
   {
     path: 'login',
     component: LoginComponent
@@ -21,7 +38,15 @@ const appRoute: Routes = [
     component: RegisterComponent
   },
   {
-    path: 'appointments',
+    path: 'reset-password',
+    component: ResetPasswordComponent
+  },
+  {
+    path: 'change-password',
+    component: ChangePasswordComponent
+  },
+  {
+    path: 'users/:user-id/appointments',
     component: YourAppointmentsComponent
   },
   {

@@ -5,6 +5,7 @@ import {AvailabilityService} from "../../availability.service";
 import {TitleService} from "../../shared/services/title.service";
 import {FormatDate} from "../../shared/utils/format-date";
 import {AuthService} from "../../shared/services/auth.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-your-appointments',
@@ -16,32 +17,37 @@ export class YourAppointmentsComponent {
   public isFetching: boolean = false;
   public hasErrors: boolean = false;
   public formatDate = FormatDate;
+  public userId: number = 0;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
-              public authService: AuthService
+              public authService: AuthService,
+              private router: Router,
+              private route: ActivatedRoute
   ) {
+  }
+
+  ngOnInit() {
+    this.authService.saveURL(this.router);
+    document.getElementById('focusReset')?.focus();
+    this.titleService.setTitle('Lista wydarzeń');
+
+    this.route.params.subscribe(params => {
+      this.userId = params['user-id'];
+    });
+
+    this.eventService.getEvents(this.userId).subscribe((events) => {
+        this.events = this.eventSort(events);
+      }, (err) => {
+        this.hasErrors = true;
+      });
   }
 
   goToCreate() {
     this.eventService.clearTemporaryEvent()
     this.eventService.setIsEdit(false)
     this.availabilityService.clearTemporaryAvailabilities()
-  }
-
-  ngOnInit() {
-    console.log(this.authService.isLoggedIn())
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Lista wydarzeń');
-    this.isFetching = true;
-    this.eventService.getEvents().subscribe((events) => {
-        this.events = this.eventSort(events);
-        this.isFetching = false;
-      },
-      () => {
-        this.hasErrors = true;
-      });
   }
 
   eventSort(events: EventDto[]): EventDto[] {

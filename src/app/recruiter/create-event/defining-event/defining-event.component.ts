@@ -9,6 +9,7 @@ import {AvailabilityService} from "../../../availability.service";
 import {TextChangeService} from "../../../shared/services/text-change.service";
 import {TimeValidator} from "../../../shared/validators/time-validator";
 import {AlertService} from "../../../common/alerts/service/alert.service";
+import {AuthService} from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-defining-event',
@@ -26,6 +27,7 @@ export class DefiningEventComponent {
   private hours: string[] = [];
   private minutes: string[] = [];
   public eventId: number = 0;
+  private userId: string | null | undefined;
   public h2: string = 'Zdefiniuj nowe wydarzenie';
   @Output() formDirtyChange = new EventEmitter<boolean>();
 
@@ -34,7 +36,8 @@ export class DefiningEventComponent {
               private router: Router,
               private route: ActivatedRoute,
               private textChangeService: TextChangeService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private authService: AuthService) {
     this.event = {} as EventDto
     this.generateHours();
   }
@@ -53,6 +56,7 @@ export class DefiningEventComponent {
     this.event = this.eventService.getTemporaryEvent()
     this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
     this.eventId = EventUtils.getIdFromRoute(this.route)
+    this.userId = this.authService.getUserId();
 
     //fill form initally, case when event exists locally
     if (this.event) {
@@ -61,12 +65,10 @@ export class DefiningEventComponent {
     }
 
     if (this.isEdit) {
-
       //fill form by fetching from the server, case when event doesn't exist locally, and it's edit mode
       this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
         this.event = eventDto;
         this.patchForm();
-
         this.researchStartDateMin = new Date(this.event.researchStartDate);
         this.researchEndDateMin = new Date(this.event.researchStartDate);
         const today = new Date();
@@ -77,6 +79,12 @@ export class DefiningEventComponent {
           this.endDate.clearValidators();
           this.endDate.updateValueAndValidity();
           this.editableDateValidation();
+        }
+      }, (error) => {
+        if (error.status === 403) {
+          this.router.navigate(['/403']);
+        } else {
+          this.router.navigate(['/404']);
         }
       })
     }
@@ -140,7 +148,7 @@ export class DefiningEventComponent {
     this.eventService.setTemporaryEvent(this.event)
   }
 
-  goBack() {
+  public goBack() {
     if (this.reactiveForm.dirty) {
       if (window.confirm('Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?')) {
         this.eventService.clearTemporaryEvent();
@@ -148,7 +156,7 @@ export class DefiningEventComponent {
         if (this.isEdit) {
           this.router.navigate(['/event/', this.eventId]).then();
         } else {
-          this.router.navigate(['/appointments']).then();
+          this.router.navigate(['/users/'+ this.userId +'/appointments']).then();
         }
       }
     } else {
@@ -157,7 +165,7 @@ export class DefiningEventComponent {
       if (this.isEdit) {
         this.router.navigate(['/event/', this.eventId]).then();
       } else {
-        this.router.navigate(['/appointments']).then();
+        this.router.navigate(['/users/'+ this.userId +'/appointments']).then();
       }
     }
   }

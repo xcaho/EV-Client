@@ -6,6 +6,7 @@ import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
 import {User} from "../../shared/dtos/User";
 import {Router} from "@angular/router";
+import {LoginDto} from "../../shared/dtos/LoginDto";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent {
   public buttonTitle: string = "Pokaż hasło";
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
     private router: Router,
@@ -29,7 +30,7 @@ export class LoginComponent {
 
   ngOnInit() {
     if (this.authService.token) {
-      this.router.navigate(['/appointments']);
+      this.router.navigate(['/users/'+ this.authService.getUserId() +'/appointments']);
     }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Panel logowania');
@@ -56,17 +57,37 @@ export class LoginComponent {
     return noErrors;
   }
 
-  public save() {
+  public loginAndGoToAppointments() {
     if (this.validateForm()) {
-
       let formGroupValue = this.formGroup.value
-      let user = new User(formGroupValue.login, formGroupValue.password)
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveToken(result.token, formGroupValue.login);
-          this.router.navigate(['/appointments']);
+          this.authService.saveAuthData(result.token, formGroupValue.login, result.userId);
+          this.router.navigate(['/users/'+ result.userId +'/appointments']);
+          this.authService.removeURL();
+        } else {
+          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
+        }
+      })
+    } else {
+      this.alertService.showError('Uzupełnij wymagane pola.');
+    }
+  }
+
+  public loginAndGoToPreviousPage() {
+    if (this.validateForm()) {
+      let formGroupValue = this.formGroup.value
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
+
+      this.authService.login(user).subscribe(result => {
+        if (result.token) {
+          this.alertService.showSuccess('Zalogowano pomyślnie.');
+          this.authService.saveAuthData(result.token, formGroupValue.login, result.userId);
+          this.router.navigate([this.authService.url]);
+          this.authService.removeURL();
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
         }

@@ -15,6 +15,7 @@ import {environment} from "../../../../environments/environment";
 import {TitleService} from "../../../shared/services/title.service";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {FormatDate} from "../../../shared/utils/format-date";
+import {AuthService} from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-event',
@@ -39,12 +40,14 @@ export class EventComponent {
               private route: ActivatedRoute,
               private clipboardService: ClipboardService,
               private alertService: AlertService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private authService: AuthService) {
 
     this.event = {} as EventDto
   }
 
   ngOnInit() {
+    this.authService.saveURL(this.router);
     document.getElementById('focusReset')?.focus();
     this.route.params.subscribe(params => {
       this.eventId = params['id'];
@@ -61,22 +64,22 @@ export class EventComponent {
 
       this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
         this.surveyList = surveys;
-      }, error => {
-        if (error.status === 403) {
-          this.router.navigate(['/403'])
-        }
       })
     }, (error) => {
-      this.router.navigate(['/404'])
+      if (error.status === 403) {
+        this.router.navigate(['/403'])
+      } else {
+        this.router.navigate(['/404'])
+      }
     })
   }
 
-  copyToClipboard(code: string) {
+  public copyToClipboard(code: string) {
     this.clipboardService.copyFromContent(environment.selfUrl + '/register/' + code);
     this.alertService.showInfo('Skopiowano kod spotkania: ' + code)
   }
 
-  goToEdit() {
+  public goToEdit() {
     this.eventService.setIsEdit(true)
   }
 

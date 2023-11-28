@@ -49,11 +49,11 @@
                     [attr.title]="buttonTitle"
                     (click)="passwordShowToggler()">
               <ng-container *ngIf="!passwdShown">
-                <fa-icon [icon]="eye"></fa-icon>
+                <fa-icon [icon]="eye" aria-hidden="true"></fa-icon>
                 <span class="sr-only">Pokaż hasło</span>
               </ng-container>
               <ng-container *ngIf="passwdShown">
-                <fa-icon [icon]="eyeSlash"></fa-icon>
+                <fa-icon [icon]="eyeSlash" aria-hidden="true"></fa-icon>
                 <span class="sr-only">Ukryj hasło</span>
               </ng-container>
             </button>
@@ -78,7 +78,15 @@
           </a>
           <button type="submit"
                   class="btn btn-primary"
-                  (click)="save()"
+                  *ngIf="!authService.url"
+                  (click)="loginAndGoToAppointments()"
+          >
+            Zaloguj
+          </button>
+          <button type="submit"
+                  class="btn btn-primary"
+                  *ngIf="authService.url"
+                  (click)="loginAndGoToPreviousPage()"
           >
             Zaloguj
           </button>
