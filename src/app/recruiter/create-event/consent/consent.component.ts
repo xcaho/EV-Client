@@ -162,16 +162,20 @@ export class ConsentComponent {
   private defaultValuesForTextareas(value: any) {
     switch (value) {
       case '1': {
-        return 'asdd'
+        return 'Wyrażam zgodę na nagrywanie badania'
       }
       case '2': {
-        return 'bca'
+        return 'Wyrażam zgodę na '
       }
       case '3': {
-        return 'bcd'
+        return 'Wyrażam zgodę na '
       }
       default: {
-        return 'asd';
+        return 'Wyrażam zgodę na przetwarzanie moich danych osobowych przez ' +
+          'Sieć Badawczą Łukasiewicz - Poznański Instytut Technologiczny w celu ' +
+          'udzielenia odpowiedzi na pytanie zadane przez formularz kontaktowy zgodnie z ' +
+          'wymogami RODO. Oświadczam, że zapoznałem się i akceptuję informacje o ochronie danych ' +
+          'osobowych oraz politykę prywatności.';
       }
     }
   }
