@@ -26,6 +26,7 @@ export class AddUserComponent {
     private alertService: AlertService,
     private router: Router,
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
