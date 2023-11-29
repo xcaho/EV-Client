@@ -12,6 +12,8 @@ import {EventService} from "../../event.service";
 import {EventDto} from "../../shared/dtos/EventDto";
 import {FormatDate} from "../../shared/utils/format-date";
 import {AuthService} from "../../shared/services/auth.service";
+import {TitleService} from "../../shared/services/title.service";
+import {RoleToView} from "../../shared/enums/role-to-view";
 
 @Component({
   selector: 'app-preview',
@@ -24,6 +26,7 @@ export class PreviewComponent {
   public events: EventDto[] = [];
   public edit = faEdit;
   public formatDate = FormatDate;
+  public roleToView = RoleToView;
   public open = faArrowUpRightFromSquare;
   public showMore: boolean = false;
   private token: string | null = null;
@@ -45,6 +48,7 @@ export class PreviewComponent {
     private eventService: EventService,
     private authService: AuthService,
     private router: Router,
+    private titleService: TitleService,
   ) {
     this.token = this.authService.token;
     this.user = new User('sample@gmail.com', 'sample', Role.RECRUITER)
@@ -55,38 +59,32 @@ export class PreviewComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
+    } else {
+
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Definiowanie nowego użytkownika');
+
+      this.route.params.subscribe(params => {
+        this.userId = params['user-id'];
+      });
+
+      this.adminService.getUser(this.userId).subscribe({
+        next: (user: User) => {
+          this.user = user
+
+          this.eventService.getEvents(this.userId).subscribe(events => {
+            this.events = events;
+          })
+        },
+        error: (error) => {
+          if (error?.status === 403) {
+            this.router.navigate(['/403'], {skipLocationChange: true});
+          } else {
+            this.router.navigate(['/404'], {skipLocationChange: true});
+          }
+        }
+      })
     }
-
-    this.route.params.subscribe(params => {
-      this.userId = params['user-id'];
-    });
-
-
-    this.adminService.getAllUsers().subscribe({
-      next: (users: User[]) => { },
-      error: (error) => {
-        if (error?.status === 403) {
-          this.router.navigate(['/403'], {skipLocationChange: true})
-        }
-      }
-    })
-
-    this.adminService.getUser(this.userId).subscribe({
-      next: (user: User) => {
-        this.user = user
-
-        this.eventService.getEvents(this.userId).subscribe(events => {
-          this.events = events;
-        })
-      },
-      error: (error) => {
-        if (error?.status === 403) {
-          this.router.navigate(['/403'], {skipLocationChange: true});
-        } else {
-          this.router.navigate(['/404'], {skipLocationChange: true});
-        }
-      }
-    })
   }
 
   public toggleShowMore(event: any) {

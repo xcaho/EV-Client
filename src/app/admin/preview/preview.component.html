@@ -10,51 +10,18 @@
     </div>
     <div class="col-12 col-lg-6 mb-2 mb-md-0">
       <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="user.email">
-        <div class="col-4 col-md-auto d-none d-md-block">
-          <button class="w-100 btn btn-outline-primary"
+        <div class="col-6 col-md-auto">
+          <button class="w-100 h-100 btn btn-outline-primary"
                   (click)="blockUserModalComponent.open(blockUserModalComponent.content, user)">
             <ng-container *ngIf="!user.blocked">Zablokuj użytkownika</ng-container>
             <ng-container *ngIf="user.blocked">Odblokuj użytkownika</ng-container>
           </button>
         </div>
-        <div class="col-4 col-md-auto d-none d-md-block">
+        <div class="col-6 col-md-auto">
           <button class="w-100 h-100 btn btn-outline-primary"
                   (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content, userId)">
-            Zarządzaj hasłem
+            Resetuj hasło
           </button>
-        </div>
-        <div class="col-6 col-md-auto d-block d-md-none position-relative">
-          <button class="w-100 h-100 btn btn-outline-primary"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#showMore"
-                  aria-controls="showMore"
-                  aria-expanded="false"
-                  aria-label="Pokaż więcej"
-                  (click)="toggleShowMore($event)">
-            Więcej
-          </button>
-          <div class="collapse navbar-collapse" id="showMore" *ngIf="this.showMore">
-            <ul class="d-flex flex-column">
-              <li class="nav-item d-flex">
-                <button class="w-100 btn btn-outline-primary"
-                        (click)="resetPasswordModalComponent.open(resetPasswordModalComponent.content, userId)">
-                  Zarządzaj hasłem
-                </button>
-              </li>
-              <li class="nav-item d-flex">
-                <button class="w-100 btn btn-outline-primary"
-                        (click)="blockUserModalComponent.open(blockUserModalComponent.content, user)">
-                  Zablokuj użytkownika
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-6 col-md-auto">
-          <a class="w-100 h-100 btn btn-primary"
-             href="#">
-            Edytuj użytkownika
-          </a>
         </div>
       </div>
     </div>
@@ -73,7 +40,7 @@
         <div class="col-12 col-sm-6 col-lg-4">
           <div class="bg-white px-3 py-2">
             <dt>Rola:</dt>
-            <dd>{{user.role}}</dd>
+            <dd>{{roleToView[user.role]}}</dd>
           </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-4">
@@ -136,50 +103,50 @@
           </tbody>
         </table>
         <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
-        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
-          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
-            <dt class="col-5 col-sm-4 text-end">
-              Status:
-            </dt>
-            <dd class="col-7 col-sm-8">
-              {{event.isActive()}}
-            </dd>
-            <dt class="col-5 col-sm-4 text-end">
-              Nazwa wydarzenia:
-            </dt>
-            <dd class="col-7 col-sm-8">
-              <span id="Nazwa-{{event.id}}">{{event.name}}</span>
-            </dd>
-            <dt class="col-5 col-sm-4 text-end">
-              Okres badań:
-            </dt>
-            <dd class="col-7 col-sm-8">
-              {{formatDate(event.researchStartDate)}} - {{formatDate(event.researchEndDate)}}
-            </dd>
-            <dt class="col-5 col-sm-4 text-end">
-              Akcje:
-            </dt>
-            <dd class="col-7 col-sm-8">
-              <button class="btn btn-icon"
-                      type="button"
-                      [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
-                      title="Przepisz wydarzenie do innego rekrutera"
-                      (click)="assignModalComponent.open(assignModalComponent.content, event, userId)">
-                <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
-                <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
-              </button>
-              <a class="btn btn-icon"
-                 [routerLink]="['/event/'+event.id]"
-                 target="_blank"
-                 [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
-                 title="Otwórz szczegóły wydarzenia">
-                <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
-                <span class="sr-only">Otwórz szczegóły wydarzenia</span>
-              </a>
-            </dd>
-          </dl>
-        </li>
-      </ul>
+          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
+            <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+              <dt class="col-5 col-sm-4 text-end">
+                Status:
+              </dt>
+              <dd class="col-7 col-sm-8">
+                {{event.isActive()}}
+              </dd>
+              <dt class="col-5 col-sm-4 text-end">
+                Nazwa wydarzenia:
+              </dt>
+              <dd class="col-7 col-sm-8">
+                <span id="Nazwa-{{event.id}}">{{event.name}}</span>
+              </dd>
+              <dt class="col-5 col-sm-4 text-end">
+                Okres badań:
+              </dt>
+              <dd class="col-7 col-sm-8">
+                {{formatDate(event.researchStartDate)}} - {{formatDate(event.researchEndDate)}}
+              </dd>
+              <dt class="col-5 col-sm-4 text-end">
+                Akcje:
+              </dt>
+              <dd class="col-7 col-sm-8">
+                <button class="btn btn-icon"
+                        type="button"
+                        [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
+                        title="Przepisz wydarzenie do innego rekrutera"
+                        (click)="assignModalComponent.open(assignModalComponent.content, event, userId)">
+                  <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
+                  <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
+                </button>
+                <a class="btn btn-icon"
+                   [routerLink]="['/event/'+event.id]"
+                   target="_blank"
+                   [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
+                   title="Otwórz szczegóły wydarzenia">
+                  <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
+                  <span class="sr-only">Otwórz szczegóły wydarzenia</span>
+                </a>
+              </dd>
+            </dl>
+          </li>
+        </ul>
       </ng-container>
     </section>
   </section>

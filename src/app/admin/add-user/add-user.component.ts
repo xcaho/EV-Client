@@ -34,23 +34,22 @@ export class AddUserComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
-    }
-
-    this.adminService.getAllUsers().subscribe({
-      next: (users: User[]) => {
-      },
-      error: (error) => {
-        if (error?.status === 403) {
-          this.router.navigate(['/403'], {skipLocationChange: true})
-        } else {
-          this.router.navigate(['/404'], {skipLocationChange: true});
+    } else {
+      this.adminService.getAllUsers().subscribe({
+        next: (users: User[]) => { },
+        error: (error) => {
+          if (error?.status === 403) {
+            this.router.navigate(['/403'], {skipLocationChange: true})
+          } else {
+            this.router.navigate(['/404'], {skipLocationChange: true});
+          }
         }
-      }
-    })
+      })
 
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Definiowanie nowego użytkownika');
-    this.initFormGroup();
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Definiowanie nowego użytkownika');
+      this.initFormGroup();
+    }
   }
 
   private initFormGroup() {

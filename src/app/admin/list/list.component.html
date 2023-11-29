@@ -45,7 +45,7 @@
                 <span aria-labelledby="Email-Title"></span> {{ user.email }}
               </div>
               <div class="col-3">
-                <span aria-labelledby="Rola-Title"></span> {{ user.role }}
+                <span aria-labelledby="Rola-Title"></span> {{ roleToView[user.role] }}
               </div>
               <div class="col text-end">
                 <span aria-labelledby="Status-Title"></span> {{ user.isBlocked() }}
@@ -62,7 +62,7 @@
             <dt class="col-5 col-sm-4 text-end">E-mail:</dt>
             <dd class="col-7 col-sm-8">{{ user.email }}</dd>
             <dt class="col-5 col-sm-4 text-end">Rola:</dt>
-            <dd class="col-7 col-sm-8">{{ user.role }}</dd>
+            <dd class="col-7 col-sm-8">{{ roleToView[user.role] }}</dd>
             <dt class="col-5 col-sm-4 text-end">Status:</dt>
             <dd class="col-7 col-sm-8">{{ user.blocked }}</dd>
           </dl>
@@ -73,9 +73,5 @@
         </li>
       </ul>
     </section>
-    <!--    <section class="col-12" *ngIf="hasErrors">-->
-    <!--      <p class="h4 text-dark text-center mb-1">Wystąpił błąd.</p>-->
-    <!--      <p class="text-dark text-center mb-3">Skontakuj się z administratorem lub spróbuj ponownie.</p>-->
-    <!--    </section>-->
   </div>
 </div>
