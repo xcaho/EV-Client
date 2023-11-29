@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
@@ -7,7 +7,6 @@ import {Router} from "@angular/router";
 import {EmailValidator} from "../../shared/validators/email-validator";
 import {User} from "../../shared/dtos/User";
 import {UserUtils} from "../../shared/utils/UserUtils";
-import {NewUserDetailsComponent} from "./new-user-details/new-user-details.component";
 import {AdminService} from "../../shared/services/admin.service";
 
 @Component({
@@ -19,7 +18,6 @@ export class AddUserComponent {
   public formGroup!: FormGroup;
   public isEmailEmpty: string = '';
   private token: string | null = null;
-  @ViewChild(NewUserDetailsComponent) newUserDetailsComponent!: NewUserDetailsComponent;
 
   constructor(
     private authService: AuthService,
@@ -39,7 +37,8 @@ export class AddUserComponent {
     }
 
     this.adminService.getAllUsers().subscribe({
-      next: (users: User[]) => { },
+      next: (users: User[]) => {
+      },
       error: (error) => {
         if (error?.status === 403) {
           this.router.navigate(['/403'], {skipLocationChange: true})
@@ -74,6 +73,7 @@ export class AddUserComponent {
 
     return noErrors;
   }
+
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
@@ -82,8 +82,15 @@ export class AddUserComponent {
       this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono użytkownika.');
-          // this.router.navigate(['/admin/add-user/' + result.userId]);
-          console.log(result.password)
+          this.router.navigate(['/admin/add-user/' + result.userId], {
+            state:
+              {
+                login: formGroupValue.email,
+                password: result.password,
+                role: result.role,
+                name: user.name
+              },
+          });
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
         }
