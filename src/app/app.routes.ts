@@ -13,8 +13,9 @@ import {RegisterComponent} from "./common/register/register.component";
 import {ListComponent} from "./admin/list/list.component";
 import {AddUserComponent} from "./admin/add-user/add-user.component";
 import {PreviewComponent} from "./admin/preview/preview.component";
-import {ResetPasswordComponent} from "./common/login/reset-password/reset-password.component";
 import {ChangePasswordComponent} from "./common/change-password/change-password.component";
+import {NewUserDetailsComponent} from "./admin/add-user/new-user-details/new-user-details.component";
+import {NoAccessComponent} from "./common/no-access/no-access.component";
 
 const appRoute: Routes = [
   {
@@ -24,6 +25,10 @@ const appRoute: Routes = [
   {
     path: 'admin/add-user',
     component: AddUserComponent
+  },
+  {
+    path: 'admin/add-user/:user-id',
+    component: NewUserDetailsComponent
   },
   {
     path: 'admin/users/:user-id',
@@ -36,10 +41,6 @@ const appRoute: Routes = [
   {
     path: 'register',
     component: RegisterComponent
-  },
-  {
-    path: 'reset-password',
-    component: ResetPasswordComponent
   },
   {
     path: 'change-password',
@@ -84,6 +85,10 @@ const appRoute: Routes = [
   {
     path: 'register/:code/invalid-code',
     component: InvalidCodeComponent
+  },
+  {
+    path: '403',
+    component: NoAccessComponent,
   },
   {
     path: '404',
