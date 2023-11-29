@@ -19,7 +19,6 @@ export class LoginComponent {
   public passwdShown: boolean = false;
   public buttonTitle: string = "Pokaż hasło";
   private token: string | null = '';
-  private isExp = true;
 
   constructor(
     private authService: AuthService,
@@ -31,10 +30,10 @@ export class LoginComponent {
 
   ngOnInit() {
     this.token = this.authService.token;
-    this.isExp = this.authService.isTokenExpired(this.token!);
-    if (this.isExp) {
+    if (this.authService.isTokenExpired(this.token)) {
       this.authService.removeToken();
     }
+
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Panel logowania');
     this.initFormGroup();
@@ -70,6 +69,7 @@ export class LoginComponent {
           this.authService.saveAuthData(result.token, result.userId);
           if (this.authService.url) {
             this.router.navigate([this.authService.url]);
+            this.authService.removeURL();
           } else {
             this.router.navigate(['/users/'+ result.userId +'/appointments']);
           }

@@ -15,11 +15,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class YourAppointmentsComponent {
   public events: EventDto[] = [];
   public isFetching: boolean = false;
-  public hasErrors: boolean = false;
   public formatDate = FormatDate;
   public userId: number = 0;
   private token: string | null = null;
-  private isExp = true;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -28,15 +26,16 @@ export class YourAppointmentsComponent {
               private router: Router,
               private route: ActivatedRoute
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
-    this.token = this.authService.token;
-    this.isExp = this.authService.isTokenExpired(this.token);
-    if (this.isExp) {
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
     }
+
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Lista wydarzeń');
 
@@ -47,7 +46,6 @@ export class YourAppointmentsComponent {
     this.eventService.getEvents(this.userId).subscribe((events) => {
       this.events = this.eventSort(events);
     }, (err) => {
-      console.log(err)
       if (err.status === 403) {
         this.router.navigate(['/403'], {skipLocationChange: true})
       }
@@ -66,25 +64,25 @@ export class YourAppointmentsComponent {
 
     events.forEach(event => {
       if (event.active)
-        activeEvents.push(event)
+        activeEvents.push(event);
       if (!event.active)
-        disabledEvents.push(event)
+        disabledEvents.push(event);
     })
 
     activeEvents.sort((a: EventDto, b: EventDto) => {
-      let x = new Date(a.researchStartDate).getTime()
-      let y = new Date(b.researchStartDate).getTime()
+      let x = new Date(a.researchStartDate).getTime();
+      let y = new Date(b.researchStartDate).getTime();
 
-      return y - x
+      return y - x;
     })
 
     disabledEvents.sort((a: EventDto, b: EventDto) => {
-      let x = new Date(a.researchStartDate).getTime()
-      let y = new Date(b.researchStartDate).getTime()
+      let x = new Date(a.researchStartDate).getTime();
+      let y = new Date(b.researchStartDate).getTime();
 
-      return y - x
+      return y - x;
     })
 
-    return activeEvents.concat(disabledEvents)
+    return activeEvents.concat(disabledEvents);
   }
 }

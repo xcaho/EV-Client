@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {EmailValidator} from "../../shared/validators/email-validator";
 import {User} from "../../shared/dtos/User";
 import {UserUtils} from "../../shared/utils/UserUtils";
+import {NewUserDetailsComponent} from "./new-user-details/new-user-details.component";
 
 @Component({
   selector: 'app-add-user',
@@ -16,6 +17,8 @@ import {UserUtils} from "../../shared/utils/UserUtils";
 export class AddUserComponent {
   public formGroup!: FormGroup;
   public isEmailEmpty: string = '';
+  private token: string | null = null;
+  @ViewChild(NewUserDetailsComponent) newUserDetailsComponent!: NewUserDetailsComponent;
 
   constructor(
     private authService: AuthService,
@@ -26,6 +29,12 @@ export class AddUserComponent {
   }
 
   ngOnInit() {
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+    }
+
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Definiowanie nowego użytkownika');
     this.initFormGroup();
@@ -63,8 +72,8 @@ export class AddUserComponent {
       this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.alertService.showSuccess('Pomyślnie utworzono użytkownika.');
-          console.log(result)
-          this.router.navigate(['admin']);
+          this.newUserDetailsComponent.content = result;
+          this.router.navigate(['/admin/add-user/' + result.userId]);
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
         }

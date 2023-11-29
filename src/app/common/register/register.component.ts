@@ -65,7 +65,8 @@ export class RegisterComponent {
       this.authService.register(user).subscribe(result => {
         if (result.token) {
           this.authService.saveAuthData(result.token, result.userId);
-          this.router.navigate(['admin']);
+          this.router.navigate(['/users/'+ result.userId +'/appointments']);
+          this.authService.removeURL();
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
         }

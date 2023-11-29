@@ -32,6 +32,7 @@ export class EventComponent {
   public surveyDurationHHMM = "00:00";
   public trash = faTrash;
   public formatDate = FormatDate;
+  private token: string | null = null;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -42,12 +43,17 @@ export class EventComponent {
               private alertService: AlertService,
               private titleService: TitleService,
               private authService: AuthService) {
-
+    this.token = this.authService.token;
     this.event = {} as EventDto
   }
 
   ngOnInit() {
-    this.authService.saveURL(this.router);
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+    }
+
     document.getElementById('focusReset')?.focus();
     this.route.params.subscribe(params => {
       this.eventId = params['id'];
@@ -67,9 +73,9 @@ export class EventComponent {
       })
     }, (error) => {
       if (error.status === 403) {
-        this.router.navigate(['/403'])
+        this.router.navigate(['/403'], {skipLocationChange: true})
       } else {
-        this.router.navigate(['/404'])
+        this.router.navigate(['/404'], {skipLocationChange: true})
       }
     })
   }

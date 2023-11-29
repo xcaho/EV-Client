@@ -6,11 +6,12 @@ import {AlertService} from "../../common/alerts/service/alert.service";
 import {ResetPasswordModalComponent} from "./reset-password-modal/reset-password-modal.component";
 import {BlockUserModalComponent} from "./block-user-modal/block-user-modal.component";
 import { Role } from 'src/app/shared/enums/role';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AdminService} from "../../shared/services/admin.service";
 import {EventService} from "../../event.service";
 import {EventDto} from "../../shared/dtos/EventDto";
 import {FormatDate} from "../../shared/utils/format-date";
+import {AuthService} from "../../shared/services/auth.service";
 
 @Component({
   selector: 'app-preview',
@@ -25,6 +26,7 @@ export class PreviewComponent {
   public formatDate = FormatDate;
   public open = faArrowUpRightFromSquare;
   public showMore: boolean = false;
+  private token: string | null = null;
   @ViewChild(AssignModalComponent) assignModalComponent!: AssignModalComponent;
   @ViewChild(ResetPasswordModalComponent) resetPasswordModalComponent!: ResetPasswordModalComponent;
   @ViewChild(BlockUserModalComponent) blockUserModalComponent!: BlockUserModalComponent;
@@ -40,12 +42,21 @@ export class PreviewComponent {
     private alertService: AlertService,
     private route: ActivatedRoute,
     private adminService: AdminService,
-    private eventService: EventService
+    private eventService: EventService,
+    private authService: AuthService,
+    private router: Router,
   ) {
+    this.token = this.authService.token;
     this.user = new User('sample@gmail.com', 'sample', Role.RECRUITER)
   }
 
   ngOnInit() {
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+    }
+
     this.route.params.subscribe(params => {
       this.userId = params['user-id'];
     });

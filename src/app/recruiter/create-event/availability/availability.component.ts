@@ -26,6 +26,7 @@ export class AvailabilityComponent {
   public trash = faTrash;
   private eventId: number = 0;
   private userId: string | null | undefined;
+  private token: string | null = null;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -34,6 +35,7 @@ export class AvailabilityComponent {
               private route: ActivatedRoute,
               private alertService: AlertService,
               private authService: AuthService,) {
+    this.token = this.authService.token;
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -42,7 +44,12 @@ export class AvailabilityComponent {
   }
 
   async ngOnInit() {
-    this.authService.saveURL(this.router);
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+    }
+
     document.getElementById('focusReset')?.focus();
     this.event = this.eventService.getTemporaryEvent();
     this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
