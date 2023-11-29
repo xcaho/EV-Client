@@ -54,7 +54,6 @@ export class PreviewComponent {
       this.user = user;
 
       this.eventService.getEvents(this.userId).subscribe(events => {
-
         this.events = events;
       })
     })

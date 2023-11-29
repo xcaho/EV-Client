@@ -1,5 +1,5 @@
 <ng-template #content>
-  <form>
+  <form [formGroup]="formGroup">
     <div class="modal-header">
       <h3 class="modal-title" id="modalTitle">
         Przypisz wydarzenie do innego rekrutera
@@ -12,28 +12,22 @@
       </button>
     </div>
     <div class="modal-body" aria-live="polite" aria-relevant="additions" aria-atomic="true">
+      <p>Przypisanie wydarzenia do innego rekrutera sprawi, że wybrany rekruter będzie mógł zarządzać danym wydarzeniem.</p>
       <fieldset>
-        <legend class="font-rem">Lista rekruterów:</legend>
-        <ng-container *ngFor="let user of displayedUsers; index as i">
-          <div class="form-check mb-1">
-            <input class="form-check-input"
-                   type="radio"
-                   name="usersList"
-                   id="user{{i}}"
-                   [checked]="user.name === appointmentHolder"
-                   (change)="checkedUser = user.id">
-            <label class="form-check-label"
-                   for="user{{i}}">
-              {{user.name}}
-            </label>
-          </div>
-        </ng-container>
-        <button class="btn btn-outline-primary mt-2 w-100"
-                type="button"
-                (click)="loadMoreResults()"
-                *ngIf="this.displayedUsers.length < this.users.length">
-          Pokaż więcej rekruterów
-        </button>
+        <div class="form-outline my-2">
+          <select class="form-select"
+                  id="users"
+                  name="users"
+                  formControlName="users">
+            <ng-container *ngFor="let user of users; index as i">
+              <option [value]="user.id"
+                      [selected]="user.id === eventOwner">
+                {{user.name}}
+              </option>
+            </ng-container>
+          </select>
+          <label class="form-label" for="users">Lista użytkowników</label>
+        </div>
       </fieldset>
     </div>
     <div class="modal-footer px-0">

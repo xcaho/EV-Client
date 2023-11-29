@@ -32,9 +32,6 @@ export class RegisterComponent {
   }
 
   ngOnInit() {
-    if (this.authService.token && this.authService.getUserId()) {
-      this.router.navigate(['/users/'+ this.authService.getUserId() +'/appointments']);
-    }
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja');
     this.initFormGroup();
@@ -67,9 +64,7 @@ export class RegisterComponent {
 
       this.authService.register(user).subscribe(result => {
         if (result.token) {
-          this.alertService.showSuccess('Pomyślnie utworzono konto.');
-          console.log(result)
-          this.authService.saveAuthData(result.token, formGroupValue.email, result.userId);
+          this.authService.saveAuthData(result.token, result.userId);
           this.router.navigate(['admin']);
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')

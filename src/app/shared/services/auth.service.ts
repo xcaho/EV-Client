@@ -7,30 +7,29 @@ import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
 import {Router} from "@angular/router";
 import {LoginDto} from "../dtos/LoginDto";
-import {MenuService} from "../../menu.service";
+import {AdminService} from "./admin.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   public token: string | null;
-  public userLogin: string | null;
   public url: string | null;
   private userId: string | null;
+  public userName: string | null = null;
 
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
-    private router: Router,
-    private menuService: MenuService
+    private adminService: AdminService,
   ) {
     this.token = localStorage.getItem('token');
-    this.userLogin = localStorage.getItem('token_login');
     this.url = localStorage.getItem('token_url');
-    this.userId = localStorage.getItem('userId')
+    this.userId = localStorage.getItem('userId');
   }
 
   register(user: User): Observable<AuthDto> {
+    this.userName = user.name;
     return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
       .pipe(
         catchError((error: any) => {
@@ -55,7 +54,7 @@ export class AuthService {
   }
 
   resetPassword(userId: number): Observable<AuthDto> {
-    return this.http.patch<AuthDto>('http://localhost:8080/admin/users/'+ userId +'/resetPassword', null)
+    return this.http.patch<AuthDto>('http://localhost:8080/admin/users/' + userId + '/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {
@@ -72,12 +71,10 @@ export class AuthService {
     return !!this.token;
   }
 
-  saveAuthData(token: string, userLogin: string, userId: string) {
+  saveAuthData(token: string, userId: string) {
     this.token = token;
-    this.userLogin = userLogin;
     this.userId = userId;
     localStorage.setItem('token', token);
-    localStorage.setItem('token_login', userLogin);
     localStorage.setItem('userId', userId);
   }
 
@@ -96,15 +93,40 @@ export class AuthService {
 
   removeToken() {
     this.token = null;
-    this.userLogin = null;
     this.userId = null;
     localStorage.removeItem('token');
-    localStorage.removeItem('token_login');
     localStorage.removeItem('userId');
   }
 
   getUserId() {
-
     return this.userId;
+  }
+
+  // getUserName() {
+  //   this.adminService.getUser(Number(this.userId)).subscribe(user => {
+  //     this.userName = user.name
+  //   });
+  // }
+
+
+  isTokenExpired(token: string | null): boolean {
+    if (token) {
+      const tokenParts = token.split('.');
+      if (tokenParts.length !== 3) {
+        return true;
+      }
+
+      const payload = JSON.parse(atob(tokenParts[1]));
+
+      if (payload.exp === undefined) {
+        return false;
+      }
+
+      const now = Math.floor(Date.now() / 1000);
+
+      return payload.exp < now;
+    }
+
+    return true;
   }
 }

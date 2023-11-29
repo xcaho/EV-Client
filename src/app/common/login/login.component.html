@@ -75,15 +75,7 @@
         <div class="d-flex justify-content-end">
           <button type="submit"
                   class="btn btn-primary"
-                  *ngIf="!authService.url"
-                  (click)="loginAndGoToAppointments()"
-          >
-            Zaloguj
-          </button>
-          <button type="submit"
-                  class="btn btn-primary"
-                  *ngIf="authService.url"
-                  (click)="loginAndGoToPreviousPage()"
+                  (click)="loginSubmit()"
           >
             Zaloguj
           </button>
