@@ -64,7 +64,7 @@ export class RegisterComponent {
 
       this.authService.register(user).subscribe(result => {
         if (result.token) {
-          this.authService.saveAuthData(result.token, result.userId);
+          this.authService.saveAuthData(result.token, result.userId, user.name);
           this.router.navigate(['/users/'+ result.userId +'/appointments']);
           this.authService.removeURL();
         } else {

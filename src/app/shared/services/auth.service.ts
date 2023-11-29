@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable, throwError} from "rxjs";
+import {map, Observable, of, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {AlertService} from "../../common/alerts/service/alert.service";
 import {User} from "../dtos/User";
@@ -26,10 +26,10 @@ export class AuthService {
     this.token = localStorage.getItem('token');
     this.url = localStorage.getItem('token_url');
     this.userId = localStorage.getItem('userId');
+    this.userName = localStorage.getItem('userName');
   }
 
   register(user: User): Observable<AuthDto> {
-    this.userName = user.name;
     return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
       .pipe(
         catchError((error: any) => {
@@ -71,11 +71,22 @@ export class AuthService {
     return !!this.token;
   }
 
-  saveAuthData(token: string, userId: string) {
+  isAdmin(): Observable<boolean> {
+    return this.adminService.getUser(Number(this.userId)).pipe(
+      map(() => true),
+      catchError((error) => {
+        return of(false);
+      })
+    );
+  }
+
+  saveAuthData(token: string, userId: string, userName: string) {
     this.token = token;
     this.userId = userId;
+    this.userName = userName;
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
+    localStorage.setItem('userName', userName);
   }
 
   saveURL(router: Router) {
@@ -94,20 +105,15 @@ export class AuthService {
   removeToken() {
     this.token = null;
     this.userId = null;
+    this.userName = null;
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
   }
 
   getUserId() {
     return this.userId;
   }
-
-  // getUserName() {
-  //   this.adminService.getUser(Number(this.userId)).subscribe(user => {
-  //     this.userName = user.name
-  //   });
-  // }
-
 
   isTokenExpired(token: string | null): boolean {
     if (token) {

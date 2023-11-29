@@ -61,23 +61,27 @@ export class LoginComponent {
 
   public loginSubmit() {
     if (this.validateForm()) {
-      let formGroupValue = this.formGroup.value
-      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
+      let formGroupValue = this.formGroup.value;
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password, 'asd');
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
-          this.authService.saveAuthData(result.token, result.userId);
+          console.log(user.name)
+          this.authService.saveAuthData(result.token, result.userId, user.name);
+
           if (this.authService.url) {
             this.router.navigate([this.authService.url]);
             this.authService.removeURL();
+
           } else {
             this.router.navigate(['/users/'+ result.userId +'/appointments']);
           }
-          this.authService.removeURL();
+
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
         }
       })
+
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.');
     }

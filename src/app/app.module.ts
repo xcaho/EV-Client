@@ -16,7 +16,6 @@ import {EventComponent} from './recruiter/your-appointments/event/event.componen
 import {EditEventComponent} from "./recruiter/your-appointments/event/edit-event/edit-event.component";
 import {SurveyRegistrationComponent} from './participant/survey-registration/survey-registration.component';
 import {ConfirmationComponent} from './participant/confirmation/confirmation.component';
-import {MenuService} from "./menu.service";
 import {InvalidCodeComponent} from './participant/invalid-code/invalid-code.component';
 import {ErrorComponent} from './common/error/error.component';
 import {appRoutes} from './app.routes';
@@ -78,7 +77,6 @@ import { NewUserDetailsComponent } from './admin/add-user/new-user-details/new-u
     FontAwesomeModule,
   ],
   providers: [
-    MenuService,
     AlertService,
     Title,
     {

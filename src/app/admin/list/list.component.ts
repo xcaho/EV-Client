@@ -30,5 +30,18 @@ export class ListComponent {
     this.adminService.getAllUsers().subscribe(users => {
       this.users = users;
     })
+
+    this.adminService.getAllUsers().subscribe({
+      next: (users: User[]) => {
+        this.users = users;
+      },
+      error: (error) => {
+        if (error?.status === 403) {
+          this.router.navigate(['/403'], {skipLocationChange: true})
+        } else {
+          this.router.navigate(['/404'], {skipLocationChange: true});
+        }
+      }
+    })
   }
 }

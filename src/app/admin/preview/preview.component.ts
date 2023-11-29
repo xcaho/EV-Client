@@ -61,12 +61,31 @@ export class PreviewComponent {
       this.userId = params['user-id'];
     });
 
-    this.adminService.getUser(this.userId).subscribe(user => {
-      this.user = user;
 
-      this.eventService.getEvents(this.userId).subscribe(events => {
-        this.events = events;
-      })
+    this.adminService.getAllUsers().subscribe({
+      next: (users: User[]) => { },
+      error: (error) => {
+        if (error?.status === 403) {
+          this.router.navigate(['/403'], {skipLocationChange: true})
+        }
+      }
+    })
+
+    this.adminService.getUser(this.userId).subscribe({
+      next: (user: User) => {
+        this.user = user
+
+        this.eventService.getEvents(this.userId).subscribe(events => {
+          this.events = events;
+        })
+      },
+      error: (error) => {
+        if (error?.status === 403) {
+          this.router.navigate(['/403'], {skipLocationChange: true});
+        } else {
+          this.router.navigate(['/404'], {skipLocationChange: true});
+        }
+      }
     })
   }
 
