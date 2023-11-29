@@ -30,11 +30,11 @@ import {ListComponent} from './admin/list/list.component';
 import {PreviewComponent} from './admin/preview/preview.component';
 import {AddUserComponent} from './admin/add-user/add-user.component';
 import {AssignModalComponent} from './admin/preview/assign-modal/assign-modal.component';
-import { ResetPasswordModalComponent } from './admin/preview/reset-password-modal/reset-password-modal.component';
-import { BlockUserModalComponent } from './admin/preview/block-user-modal/block-user-modal.component';
-import { ChangePasswordComponent } from './common/change-password/change-password.component';
-import { NoAccessComponent } from './common/no-access/no-access.component';
-import { NewUserDetailsComponent } from './admin/add-user/new-user-details/new-user-details.component';
+import {ResetPasswordModalComponent} from './admin/preview/reset-password-modal/reset-password-modal.component';
+import {BlockUserModalComponent} from './admin/preview/block-user-modal/block-user-modal.component';
+import {ChangePasswordComponent} from './common/change-password/change-password.component';
+import {NoAccessComponent} from './common/no-access/no-access.component';
+import {NewUserDetailsComponent} from './admin/add-user/new-user-details/new-user-details.component';
 
 
 @NgModule({

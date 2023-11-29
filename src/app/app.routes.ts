@@ -16,6 +16,7 @@ import {PreviewComponent} from "./admin/preview/preview.component";
 import {ChangePasswordComponent} from "./common/change-password/change-password.component";
 import {NewUserDetailsComponent} from "./admin/add-user/new-user-details/new-user-details.component";
 import {NoAccessComponent} from "./common/no-access/no-access.component";
+import {ConsentComponent} from "./recruiter/create-event/consent/consent.component";
 
 const appRoute: Routes = [
   {
@@ -55,8 +56,16 @@ const appRoute: Routes = [
     component: AvailabilityComponent
   },
   {
+    path: 'consent',
+    component: ConsentComponent
+  },
+  {
     path: 'edit/:id/availability',
     component: AvailabilityComponent
+  },
+  {
+    path: 'edit/:id/consent',
+    component: ConsentComponent
   },
   {
     path: 'create',

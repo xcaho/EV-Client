@@ -1,0 +1,109 @@
+<div class="h64 flex-center border-bottom border-secondary mb-4">
+  <div class="container-xxl">
+    <h1 class="h2 mb-0">Tworzenie wydarzenia</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-5" id="maincontent">
+  <div class="row justify-content-center">
+    <section class="col-12 col-lg-9">
+      <h2 class="h5 mb-1">Dodaj zgody</h2>
+      <p>Każde wydarzenie posiada zestaw zgód, które użytkownicy będą mieli możliwość zaznaczyć podczas zapisu na
+        spotkanie.</p>
+      <form [formGroup]="formGroup">
+        <div class="row">
+          <div class="col-6 col-sm-4 col-md-3">
+            <div class="form-outline mb-4">
+              <select class="form-select"
+                      id="consentTemplate"
+                      name="consentTemplate"
+                      formControlName="consentTemplate">
+                <option value="" selected>Wybierz</option>
+                <option value="1">Zgoda na nagrywanie</option>
+                <option value="2">Zgoda na cos tam</option>
+                <option value="3">Zgoda na RODO</option>
+              </select>
+              <label class="form-label" for="consentTemplate">Szablon zgody</label>
+            </div>
+          </div>
+          <div class="col-6 col-sm-auto">
+            <button type="button"
+                    class="w-100 btn btn-outline-primary"
+                    (click)="addConsent()">
+              Dodaj zgodę
+            </button>
+          </div>
+        </div>
+        <div formArrayName="textAreas">
+          <div *ngFor="let control of textAreas; let i = index">
+            <div class="row">
+              <div class="col">
+                <div class="w-100 mb-3 form-outline">
+                    <textarea type="text"
+                              [id]="'consent'+i"
+                              [name]="'consent'+i"
+                              formControlName="{{i}}"
+                              maxlength="151"
+                              rows="3"
+                              class="form-control active w-100">
+                    </textarea>
+                  <label [for]="'consent'+i" class="form-label">
+                    Treść zgody
+                  </label>
+                </div>
+              </div>
+              <div class="col-auto">
+                <button type="button"
+                        class="btn btn-outline-primary"
+                        title="Usuń zgodę"
+                        (click)="deleteConsent(i)">
+                  <fa-icon [icon]="trash"></fa-icon>
+                  <span class="sr-only">Usuń zgodę</span>
+                </button>
+              </div>
+              <div class="col-12 mb-5">
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         [id]="'isRequired'+i"
+                         [name]="'isRequired'+i"
+                         (click)="markAsRequired(i)">
+                  <label class="form-check-label text-dark"
+                         [for]="'isRequired'+i">
+                    Czy zgoda ma być wymagana
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="justify-content-between flex-wrap row">
+        <div class="col-6 col-md-auto">
+          <button type="button"
+                  class="w-100 my-2 my-md-0 btn btn-outline-primary"
+                  (click)="goBack()"
+                  *ngIf="isEdit"
+                  [routerLink]="['/edit/', this.event.id]">
+            Wstecz
+          </button>
+          <button type="button"
+                  class="w-100 my-2 my-md-0 btn btn-outline-primary"
+                  (click)="goBack()"
+                  *ngIf="!isEdit"
+                  [routerLink]="['/create']">
+            Wstecz
+          </button>
+        </div>
+        <div class="col-6 col-md-auto">
+          <button type="submit"
+                  class="w-100 my-2 my-md-0 btn btn-primary"
+                  (click)="submit()"
+                  aria-label="Zapisz wydarzenie">
+            Zapisz
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

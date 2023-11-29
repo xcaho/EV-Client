@@ -98,47 +98,12 @@ export class AvailabilityComponent {
     }
   }
 
-  public submit() {
-    if (this.isEdit) {
-      this.eventService.modifyEvent(this.event).subscribe(
-        response => {
-          this.saveAvailability(response.id)
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        })
-    } else {
-      this.eventService.createEvent(this.event).subscribe(
-        response => {
-          this.saveAvailability(response.id);
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        })
-    }
-  }
-
-  private saveAvailability(eventId: number) {
-    let availabilityDtoList: AvailabilityDto[] = this.availabilityService.convertAvailabilityToDto(this.availabilityList)
-    if (this.isEdit) {
-      this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
-        response => {
-          this.eventService.clearTemporaryEvent();
-          this.availabilityService.clearTemporaryAvailabilities();
-          this.router.navigate(['/users/'+ this.userId +'/appointments']);
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        })
-    } else {
-      this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
-        response => {
-          this.eventService.clearTemporaryEvent();
-          this.availabilityService.clearTemporaryAvailabilities();
-          this.alertService.showSuccess('Pomyślnie dodano wydarzenie.');
-          this.router.navigate(['/users/'+ this.userId +'/appointments']);
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        }
-      )
-    }
+  goToConsent() {
+    this.router.navigate(['/consent/'], {
+      state: {
+        availabilityList: this.availabilityList
+      }
+    });
   }
 
   private addOneDay(currentDate: Date) {
@@ -147,7 +112,7 @@ export class AvailabilityComponent {
     return date
   }
 
-  public removeHour (availability: Availability, hours: any): void {
+  public removeHour(availability: Availability, hours: any): void {
     availability.hoursList.forEach((itemList, index) => {
       if (itemList === hours) {
         availability.hoursList.splice(index, 1)
