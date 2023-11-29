@@ -3,7 +3,7 @@ import login from "../pageObjects/login";
 
 const loginPage = login();
 
-fixture('Sign up page')
+fixture('Codes')
   .page("http://localhost:4200/")
   .beforeEach(async t => {
     await t.maximizeWindow()

@@ -8,7 +8,7 @@ const createEventPage = createEvent();
 const availabilityPage = availabilityAdd();
 const loginPage = login();
 
-fixture('Getting Started')
+fixture('Events page')
   .page('http://localhost:4200/')
 
 test
