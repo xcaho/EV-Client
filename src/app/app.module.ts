@@ -35,6 +35,7 @@ import {BlockUserModalComponent} from './admin/preview/block-user-modal/block-us
 import {ChangePasswordComponent} from './common/change-password/change-password.component';
 import {NoAccessComponent} from './common/no-access/no-access.component';
 import {NewUserDetailsComponent} from './admin/add-user/new-user-details/new-user-details.component';
+import { ViewConsentModalComponent } from './recruiter/your-appointments/event/view-consent-modal/view-consent-modal.component';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import {NewUserDetailsComponent} from './admin/add-user/new-user-details/new-use
     ChangePasswordComponent,
     NoAccessComponent,
     NewUserDetailsComponent,
+    ViewConsentModalComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 <app-delete-code></app-delete-code>
 <app-delete-event></app-delete-event>
+<app-view-consent-modal></app-view-consent-modal>
 <div class="h64 flex-center border-bottom border-secondary mb-4">
   <div class="container-xxl d-flex flex-column flex-wrap flex-sm-row justify-content-between">
     <div class="col-12 col-md-6">
@@ -66,6 +67,15 @@
                     (click)="copyToClipboard(survey.code)">
               <span class="sr-only">
                 Skopiuj link do spotkania - {{survey.code}}
+              </span>
+            </button>
+            <button type="button"
+                    class="btn btn-icon btn-list fa-solid"
+                    title="Zgody użytkownika"
+                    (click)="viewConsentModalComponent.open(viewConsentModalComponent.content)">
+              <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
+              <span class="sr-only">
+                Zgody użytkownika
               </span>
             </button>
           </td>
@@ -139,7 +149,16 @@
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
               <button type="button"
-                      class="btn btn-icon btn-list"
+                      class="btn btn-icon fa-solid"
+                      title="Zgody użytkownika"
+                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content)">
+                <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
+                <span class="sr-only">
+                Zgody użytkownika
+              </span>
+              </button>
+              <button type="button"
+                      class="btn btn-icon"
                       title="Odwołaj spotkanie"
                       *ngIf="survey.surveyState === 'USED'"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
@@ -147,7 +166,7 @@
                 <span class="d-none">Odwołaj spotkanie</span>
               </button>
               <button type="button"
-                      class="btn btn-icon btn-list"
+                      class="btn btn-icon"
                       title="Dezaktywuj kod"
                       *ngIf="survey.surveyState === 'UNUSED'"
                       (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">

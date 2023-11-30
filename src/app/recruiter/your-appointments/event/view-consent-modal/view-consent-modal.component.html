@@ -1,0 +1,33 @@
+<ng-template #content>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modalTitle">
+      Zgody użytkownika
+    </h3>
+    <button type="button"
+            class="btn-close"
+            aria-label="Zamknij modal"
+            (click)="closeModal()">
+      <span class="d-none">Zamknij modal</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-0">Lista zgód, które użytkownik zaakceptował:</p>
+    <ul class="mb-0">
+      <li>asd</li>
+      <li>asd</li>
+    </ul>
+  </div>
+  <div class="modal-footer px-0">
+    <div class="w-100 row m-0 justify-content-between">
+      <div class="col-6 col-sm-auto">
+      </div>
+      <div class="col-6 col-sm-auto">
+        <button type="submit"
+                class="w-100 btn btn-primary"
+                (click)="closeModal()">
+          Zamknij modal
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -7,7 +7,7 @@ import {AvailabilityService} from "../../../availability.service";
 import {EventUtils} from "../../../shared/utils/EventUtils";
 import {SurveyService} from "../../../survey.service";
 import {SurveyDto} from "../../../shared/dtos/SurveyDto";
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faListCheck, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {ClipboardService} from 'ngx-clipboard';
 import {DeleteCodeComponent} from "./delete-code/delete-code.component";
 import {DeleteEventComponent} from "./delete-event/delete-event.component";
@@ -16,6 +16,7 @@ import {TitleService} from "../../../shared/services/title.service";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {FormatDate} from "../../../shared/utils/format-date";
 import {AuthService} from "../../../shared/services/auth.service";
+import {ViewConsentModalComponent} from "./view-consent-modal/view-consent-modal.component";
 
 @Component({
   selector: 'app-event',
@@ -25,12 +26,14 @@ import {AuthService} from "../../../shared/services/auth.service";
 export class EventComponent {
   @ViewChild(DeleteCodeComponent) deleteCodeComponent!: DeleteCodeComponent;
   @ViewChild(DeleteEventComponent) deleteEventComponent!: DeleteEventComponent;
+  @ViewChild(ViewConsentModalComponent) viewConsentModalComponent!: ViewConsentModalComponent;
   public availabilityList: Availability[] = [];
   public surveyList: SurveyDto[] = []
   public event: EventDto;
   private eventId: number = -1;
   public surveyDurationHHMM = "00:00";
   public trash = faTrash;
+  public listCheck = faListCheck;
   public formatDate = FormatDate;
   private token: string | null = null;
 
