@@ -131,7 +131,7 @@ export class ConsentComponent {
   }
 
   public goBack() {
-
+    this.availabilityService.setTemporaryAvailabilities(this.availabilityList);
   }
 
   public addConsent() {
@@ -162,20 +162,20 @@ export class ConsentComponent {
   private defaultValuesForTextareas(value: any) {
     switch (value) {
       case '1': {
-        return 'Wyrażam zgodę na nagrywanie badania'
+        return 'Wyrażam zgodę na przetwarzanie moich danych osobowych przez ' +
+          'Sieć Badawczą Łukasiewicz - Poznański Instytut Technologiczny w celu ' +
+          'udzielenia odpowiedzi na pytanie zadane przez formularz kontaktowy zgodnie z ' +
+          'wymogami RODO. Oświadczam, że zapoznałem się i akceptuję informacje o ochronie danych ' +
+          'osobowych oraz politykę prywatności.'
       }
       case '2': {
-        return 'Wyrażam zgodę na '
+        return 'Wyrażam zgodę na nagrywanie spotkania.'
       }
       case '3': {
         return 'Wyrażam zgodę na '
       }
       default: {
-        return 'Wyrażam zgodę na przetwarzanie moich danych osobowych przez ' +
-          'Sieć Badawczą Łukasiewicz - Poznański Instytut Technologiczny w celu ' +
-          'udzielenia odpowiedzi na pytanie zadane przez formularz kontaktowy zgodnie z ' +
-          'wymogami RODO. Oświadczam, że zapoznałem się i akceptuję informacje o ochronie danych ' +
-          'osobowych oraz politykę prywatności.';
+        return '';
       }
     }
   }

@@ -84,7 +84,7 @@ export class AvailabilityComponent {
   }
 
   public goBack() {
-    this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
+    this.availabilityService.setTemporaryAvailabilities(this.availabilityList);
   }
 
   private generateDates(startDate: Date, endDate: Date) {

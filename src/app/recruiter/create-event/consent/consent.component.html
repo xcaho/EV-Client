@@ -7,20 +7,22 @@
   <div class="row justify-content-center">
     <section class="col-12 col-lg-9">
       <h2 class="h5 mb-1">Dodaj zgody</h2>
-      <p>Każde wydarzenie posiada zestaw zgód, które użytkownicy będą mieli możliwość zaznaczyć podczas zapisu na
+      <p class="mb-0">Każde wydarzenie posiada zestaw zgód, które użytkownicy będą mieli możliwość zaznaczyć podczas zapisu na
         spotkanie.</p>
+      <p class="mb-0">Możesz posłużyć się szablonem zgody, który możesz edytować lub wybrać pusty szablon.</p>
+      <p>Zgód nie można edytować po zapisaniu wydarzenia.</p>
       <form [formGroup]="formGroup">
         <div class="row">
           <div class="col-6 col-sm-4 col-md-3">
-            <div class="form-outline mb-4">
+            <div class="form-outline mb-3">
               <select class="form-select"
                       id="consentTemplate"
                       name="consentTemplate"
                       formControlName="consentTemplate">
-                <option value="" selected>Wybierz</option>
-                <option value="1">Zgoda na nagrywanie</option>
-                <option value="2">Zgoda na cos tam</option>
-                <option value="3">Zgoda na RODO</option>
+                <option value="" selected>Pusty szablon</option>
+                <option value="1">Zgoda na przetwarzanie danych</option>
+                <option value="2">Zgoda na nagrywanie</option>
+                <option value="3">Zgoda na cos tam</option>
               </select>
               <label class="form-label" for="consentTemplate">Szablon zgody</label>
             </div>
@@ -33,9 +35,9 @@
             </button>
           </div>
         </div>
-        <div formArrayName="textAreas">
+        <div formArrayName="textAreas" aria-live="polite" aria-relevant="all">
           <div *ngFor="let control of textAreas; let i = index">
-            <div class="row">
+            <div class="row mt-3">
               <div class="col">
                 <div class="w-100 mb-3 form-outline">
                     <textarea type="text"
@@ -60,7 +62,7 @@
                   <span class="sr-only">Usuń zgodę</span>
                 </button>
               </div>
-              <div class="col-12 mb-5">
+              <div class="col-12 mb-3">
                 <div class="form-check">
                   <input class="form-check-input"
                          type="checkbox"
@@ -77,21 +79,12 @@
           </div>
         </div>
       </form>
-
       <div class="justify-content-between flex-wrap row">
-        <div class="col-6 col-md-auto">
+        <div class="col-6 col-md-auto mt-1">
           <button type="button"
                   class="w-100 my-2 my-md-0 btn btn-outline-primary"
                   (click)="goBack()"
-                  *ngIf="isEdit"
-                  [routerLink]="['/edit/', this.event.id]">
-            Wstecz
-          </button>
-          <button type="button"
-                  class="w-100 my-2 my-md-0 btn btn-outline-primary"
-                  (click)="goBack()"
-                  *ngIf="!isEdit"
-                  [routerLink]="['/create']">
+                  [routerLink]="['/availability']">
             Wstecz
           </button>
         </div>
