@@ -233,6 +233,7 @@ export class DefiningEventComponent {
     if (this.researchStartDate.value >= this.dateToFormat(this.researchStartDateMin, false)) {
       this.researchEndDateMin = event.target.value;
       this.researchEndDate.updateValueAndValidity();
+      this.researchEndDate.markAsTouched();
     }
 
     if (this.researchEndDate.value < this.researchStartDate.value) {
@@ -240,7 +241,9 @@ export class DefiningEventComponent {
       this.researchEndDate.markAsTouched()
 
     } else {
-      this.researchEndDate.setErrors(null)
+      this.researchEndDate.setErrors(null);
+      this.researchEndDate.updateValueAndValidity();
+      this.researchEndDate.markAsTouched();
     }
   }
 

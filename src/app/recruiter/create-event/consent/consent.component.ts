@@ -78,10 +78,11 @@ export class ConsentComponent {
 
   public submit() {
     const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls;
-
-    // textAreasArray.forEach((control: AbstractControl) => {
-    //   console.log(control.errors)
-    // });
+    // TODO: Obsłużyć zwrotkę z textAreasArray.forEach
+    // Jezeli zgoda ma byc wymagany to ma control?.errors?.['required'] === true
+    textAreasArray.forEach((control: AbstractControl) => {
+      console.log(control.value + ' wymagany: ' + control?.errors?.['required'])
+    });
 
     if (textAreasArray.length === 0) {
       this.alertService.showError('Wydarzenie musi posiadać przynajmniej jedną zgodę.')
