@@ -18,6 +18,8 @@ export class YourAppointmentsComponent {
   public formatDate = FormatDate;
   public userId: number = 0;
   private token: string | null = null;
+  public filterAll: boolean = false;
+  public filterDisabled: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -27,6 +29,15 @@ export class YourAppointmentsComponent {
               private route: ActivatedRoute
   ) {
     this.token = this.authService.token;
+  }
+
+  filterEvents(): EventDto[] {
+    if (this.filterAll) {
+      return this.events;
+    } else if (this.filterDisabled) {
+      return this.events.filter(event => !event.active);
+    }
+    return this.events.filter(event => event.active);
   }
 
   ngOnInit() {

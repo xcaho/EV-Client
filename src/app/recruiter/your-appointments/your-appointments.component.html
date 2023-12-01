@@ -17,7 +17,7 @@
 <div class="main-content container-xxl mb-4">
   <div class="row justify-content-center">
     <section class="col-12 col-md-8 col-lg-6 d-flex flex-column justify-content-center align-items-center"
-             *ngIf="!isFetching && !events[0]">
+             *ngIf="!isFetching && !filterEvents()[0]">
       <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplanowanych wydarzeń</p>
       <a class="btn btn-outline-primary w-auto"
          (click)="goToCreate()"
@@ -25,7 +25,21 @@
         Dodaj wydarzenie
       </a>
     </section>
-    <section class="col-12" *ngIf="events[0]">
+
+    <!-- Filtrowanie wydarzeń -->
+    <div class="mb-3">
+      <label class="form-label">Filtruj wydarzenia:</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="filterActive" [(ngModel)]="filterAll">
+        <label class="form-check-label" for="filterActive">Pokaż wszystkie</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="filterDisabled" [(ngModel)]="filterDisabled">
+        <label class="form-check-label" for="filterDisabled">Pokaż archiwalne</label>
+      </div>
+    </div>
+
+    <section class="col-12" *ngIf="filterEvents()[0]">
       <ul class="list-group d-none d-md-block" aria-labelledby="pageTitle">
         <li class="list-group-item p-3 li-header d-block" aria-hidden="true">
           <div class="row">
@@ -37,7 +51,7 @@
           </div>
         </li>
         <li class="list-group-item d-block"
-            *ngFor="let event of events">
+            *ngFor="let event of filterEvents()">
           <a [routerLink]="['/event/', event.id]"
              class="p-3 d-block">
             <div class="row">
@@ -68,7 +82,7 @@
       </ul>
 
       <ul class="list-group d-block d-md-none" aria-labelledby="pageTitle">
-        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
+        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of filterEvents()">
           <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
             <dt class="col-5 col-sm-4 text-end">Status:</dt>
             <dd class="col-7 col-sm-8">{{ event.isActive() }}</dd>
