@@ -34,22 +34,23 @@ export class YourAppointmentsComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
+
+    } else {
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Lista wydarzeń');
+
+      this.route.params.subscribe(params => {
+        this.userId = params['user-id'];
+      });
+
+      this.eventService.getEvents(this.userId).subscribe((events) => {
+        this.events = this.eventSort(events);
+      }, (err) => {
+        if (err.status === 403) {
+          this.router.navigate(['/403'], {skipLocationChange: true})
+        }
+      });
     }
-
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Lista wydarzeń');
-
-    this.route.params.subscribe(params => {
-      this.userId = params['user-id'];
-    });
-
-    this.eventService.getEvents(this.userId).subscribe((events) => {
-      this.events = this.eventSort(events);
-    }, (err) => {
-      if (err.status === 403) {
-        this.router.navigate(['/403'], {skipLocationChange: true})
-      }
-    });
   }
 
   goToCreate() {
