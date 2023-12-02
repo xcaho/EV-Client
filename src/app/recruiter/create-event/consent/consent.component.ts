@@ -68,6 +68,7 @@ export class ConsentComponent {
     }
 
     this.consentList = this.consentService.getTemporaryConsents()
+    this.availabilityList = this.availabilityService.getTemporaryAvailabilities()
 
     if (this.consentList) {
       this.patchForm()
