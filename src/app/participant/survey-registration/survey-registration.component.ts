@@ -53,7 +53,7 @@ export class SurveyRegistrationComponent {
   }
 
   ngOnInit(): void {
-    this.fetchSurvey()
+    this.fetchSurvey();
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja na badanie');
     this.initFormGroup();
@@ -62,16 +62,15 @@ export class SurveyRegistrationComponent {
   private initFormGroup() {
     this.form = new FormGroup({
       dayChoice: new FormControl(null, [Validators.required]),
-      hourChoice: new FormControl(null, [Validators.required]),
-      consents: new FormControl(false, [Validators.requiredTrue])
+      hourChoice: new FormControl(null, [Validators.required])
     })
   }
 
   private fetchSurvey() {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
-      this.survey = surveyDto
+      this.survey = surveyDto;
       this.fetchEvent(this.survey.eventId, true);
-      this.fetchConsents()
+      this.fetchConsents();
     }, (error) => {
       this.router.navigate(['/404'])
     })
@@ -79,7 +78,14 @@ export class SurveyRegistrationComponent {
 
   private fetchConsents() {
     this.consentService.getConsentsForEvent(this.survey.eventId).subscribe(consents => {
-      this.consentList = consents
+      this.consentList = consents;
+      this.consentList.forEach(consent => {
+        if (consent.mandatory) {
+          this.form.addControl((consent.id).toString(), new FormControl(false, Validators.requiredTrue))
+        } else {
+          this.form.addControl((consent.id).toString(), new FormControl(false))
+        }
+      })
     })
   }
 
@@ -106,16 +112,25 @@ export class SurveyRegistrationComponent {
 
   save() {
     if (this.validate()) {
-
-      let date: Date = new Date(this.selectedDay)
+      let date: Date = new Date(this.selectedDay);
+      let consentsChecked: number[] = [];
       const [hours, minutes] = this.selectedHour.split(':').map(Number);
-      date.setHours(hours, minutes)
-      this.survey.date = date
-      this.survey.surveyState = SurveyState.USED
+
+      this.consentList.forEach(consent => {
+        if (this.consentFromId(consent.id).value === true) {
+          consentsChecked.push(consent.id);
+        }
+      });
+
+      //TODO: Lista zaznaczonych zgod - consentsChecked. Dodac ją podczas zapisu
+      console.log(consentsChecked)
+
+      date.setHours(hours, minutes);
+      this.survey.date = date;
+      this.survey.surveyState = SurveyState.USED;
 
       this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-
-        this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
+        this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date));
         this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
 
       }, (exception) => {
@@ -217,5 +232,9 @@ export class SurveyRegistrationComponent {
 
   get consents() {
     return this.form.get('consents')!;
+  }
+
+  consentFromId(consentId: number) {
+    return this.form.get(consentId.toString())!;
   }
 }

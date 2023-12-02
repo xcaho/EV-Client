@@ -130,7 +130,7 @@ export class ConsentComponent {
     } else {
       this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
-          this.saveConsents(eventId)
+          this.saveConsents(eventId);
         }, error => {
           this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
@@ -206,8 +206,11 @@ export class ConsentComponent {
     const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls;
 
     textAreasArray.forEach((control: AbstractControl) => {
-      this.consentList = []
-      this.consentList.push(new ConsentDto(control.value, control?.errors?.['required']))
+      let isRequired: boolean = false;
+      if (control?.errors?.['required'] === true) {
+        isRequired = true;
+      }
+      this.consentList.push(new ConsentDto(control.value, isRequired))
     });
   }
 

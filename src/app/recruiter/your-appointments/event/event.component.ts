@@ -17,6 +17,7 @@ import {AlertService} from "../../../common/alerts/service/alert.service";
 import {FormatDate} from "../../../shared/utils/format-date";
 import {AuthService} from "../../../shared/services/auth.service";
 import {ViewConsentModalComponent} from "./view-consent-modal/view-consent-modal.component";
+import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-event',
@@ -45,7 +46,8 @@ export class EventComponent {
               private clipboardService: ClipboardService,
               private alertService: AlertService,
               private titleService: TitleService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private consentService: ConsentService) {
     this.token = this.authService.token;
     this.event = {} as EventDto
   }
