@@ -99,11 +99,8 @@ export class AvailabilityComponent {
   }
 
   goToConsent() {
-    this.router.navigate(['/consent/'], {
-      state: {
-        availabilityList: this.availabilityList
-      }
-    });
+    this.router.navigate(['/consent/'])
+    this.availabilityService.setTemporaryAvailabilities(this.availabilityList);
   }
 
   private addOneDay(currentDate: Date) {

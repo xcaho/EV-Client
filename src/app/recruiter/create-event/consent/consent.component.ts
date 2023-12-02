@@ -10,6 +10,8 @@ import {EventUtils} from "../../../shared/utils/EventUtils";
 import {firstValueFrom} from "rxjs";
 import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FormBuilder, FormControl, FormGroup, Validators, FormArray, AbstractControl, Form} from "@angular/forms";
+import { ConsentDto } from 'src/app/shared/dtos/ConsentDto';
+import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-consent',
@@ -20,7 +22,7 @@ export class ConsentComponent {
   public formGroup!: FormGroup;
   public event!: EventDto;
   public availabilityList: Availability[] = [];
-  public consentList: string[] = ['asd'];
+  public consentList: ConsentDto[] = [];
   public isEdit: boolean = false;
   public formControl = FormControl
   private eventId: number = 0;
@@ -35,12 +37,9 @@ export class ConsentComponent {
               private route: ActivatedRoute,
               private alertService: AlertService,
               private authService: AuthService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private consentService: ConsentService) {
     this.token = this.authService.token;
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation && navigation.extras.state) {
-      this.availabilityList = navigation.extras.state['availabilityList'];
-    }
   }
 
   // @HostListener('window:beforeunload', ['$event'])
@@ -67,6 +66,20 @@ export class ConsentComponent {
     if (this.event == undefined && this.isEdit) {
       this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
     }
+
+    this.consentList = this.consentService.getTemporaryConsents()
+
+    if (this.consentList) {
+      this.patchForm()
+      return
+    }
+
+    if (this.isEdit) {
+      this.consentService.getConsentsForEvent(this.eventId).subscribe(consents => {
+        this.consentList = consents
+        this.patchForm()
+      })
+    }
   }
 
   private initFormGroup() {
@@ -76,15 +89,14 @@ export class ConsentComponent {
     })
   }
 
-  public submit() {
-    const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls;
-    // TODO: Obsłużyć zwrotkę z textAreasArray.forEach
-    // Jezeli zgoda ma byc wymagany to ma control?.errors?.['required'] === true
-    textAreasArray.forEach((control: AbstractControl) => {
-      console.log(control.value + ' wymagany: ' + control?.errors?.['required'])
-    });
+  private patchForm() {
+    //TODO
+  }
 
-    if (textAreasArray.length === 0) {
+  public submit() {
+    this.setConsentsListWithTextAreas()
+
+    if (this.consentList.length === 0) {
       this.alertService.showError('Wydarzenie musi posiadać przynajmniej jedną zgodę.')
     } else {
       if (this.isEdit) {
@@ -111,19 +123,13 @@ export class ConsentComponent {
     if (this.isEdit) {
       this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
-          this.eventService.clearTemporaryEvent();
-          this.availabilityService.clearTemporaryAvailabilities();
-          this.router.navigate(['/users/' + this.userId + '/appointments']);
         }, error => {
           this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         })
     } else {
       this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
         response => {
-          this.eventService.clearTemporaryEvent();
-          this.availabilityService.clearTemporaryAvailabilities();
-          this.alertService.showSuccess('Pomyślnie dodano wydarzenie.');
-          this.router.navigate(['/users/' + this.userId + '/appointments']);
+          this.saveConsents(eventId)
         }, error => {
           this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
         }
@@ -131,8 +137,22 @@ export class ConsentComponent {
     }
   }
 
+  private saveConsents(eventId: number) {
+    this.consentService.saveConsentsForEvent(this.consentList, eventId).subscribe(response => {
+
+      this.eventService.clearTemporaryEvent();
+      this.availabilityService.clearTemporaryAvailabilities();
+      if (!this.isEdit) {
+        this.alertService.showSuccess('Pomyślnie dodano wydarzenie.');
+      }
+      this.router.navigate(['/users/' + this.userId + '/appointments']);
+    }, error => {
+      this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
+    })
+  }
+
   public goBack() {
-    this.availabilityService.setTemporaryAvailabilities(this.availabilityList);
+    this.consentService.setTemporaryConsents(this.consentList)
   }
 
   public addConsent() {
@@ -179,6 +199,15 @@ export class ConsentComponent {
         return '';
       }
     }
+  }
+
+  setConsentsListWithTextAreas() {
+    const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls;
+
+    textAreasArray.forEach((control: AbstractControl) => {
+      this.consentList = []
+      this.consentList.push(new ConsentDto(control.value, control?.errors?.['required']))
+    });
   }
 
   get textAreas(): AbstractControl[] {

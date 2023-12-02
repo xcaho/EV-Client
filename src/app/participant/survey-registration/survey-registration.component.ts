@@ -12,6 +12,8 @@ import {TitleService} from "../../shared/services/title.service";
 import {SurveyState} from "../../shared/enums/survey-state";
 import {AlertService} from "../../common/alerts/service/alert.service";
 import {FormatDate} from "../../shared/utils/format-date";
+import {ConsentService} from "../../shared/services/consent.service";
+import {ConsentDto} from "../../shared/dtos/ConsentDto";
 
 @Component({
   selector: 'app-survey-registration',
@@ -23,6 +25,7 @@ export class SurveyRegistrationComponent {
   private survey!: SurveyDto;
   private event!: EventDto;
   public availabilityList: Availability[] = [];
+  public consentList: ConsentDto[] = [];
   private surveyCode!: string;
   public form!: FormGroup;
   public selectedDay: string = '';
@@ -41,7 +44,8 @@ export class SurveyRegistrationComponent {
               private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private consentService: ConsentService) {
 
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
@@ -67,8 +71,15 @@ export class SurveyRegistrationComponent {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
       this.survey = surveyDto
       this.fetchEvent(this.survey.eventId, true);
+      this.fetchConsents()
     }, (error) => {
       this.router.navigate(['/404'])
+    })
+  }
+
+  private fetchConsents() {
+    this.consentService.getConsentsForEvent(this.survey.eventId).subscribe(consents => {
+      this.consentList = consents
     })
   }
 
