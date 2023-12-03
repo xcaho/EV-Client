@@ -24,7 +24,6 @@ import {DeleteEventComponent} from './recruiter/your-appointments/event/delete-e
 import {AlertsComponent} from "./common/alerts/alerts.component";
 import {AlertService} from "./common/alerts/service/alert.service";
 import {LoginComponent} from './common/login/login.component';
-import {RegisterComponent} from './common/register/register.component';
 import {TokenInterceptorService} from "./token-interceptor.service";
 import {ListComponent} from './admin/list/list.component';
 import {PreviewComponent} from './admin/preview/preview.component';
@@ -56,7 +55,6 @@ import { ViewConsentModalComponent } from './recruiter/your-appointments/event/v
     DeleteEventComponent,
     AlertsComponent,
     LoginComponent,
-    RegisterComponent,
     ListComponent,
     PreviewComponent,
     AddUserComponent,

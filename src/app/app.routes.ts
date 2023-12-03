@@ -9,7 +9,6 @@ import {ConfirmationComponent} from "./participant/confirmation/confirmation.com
 import {InvalidCodeComponent} from "./participant/invalid-code/invalid-code.component";
 import {ErrorComponent} from "./common/error/error.component";
 import {LoginComponent} from "./common/login/login.component";
-import {RegisterComponent} from "./common/register/register.component";
 import {ListComponent} from "./admin/list/list.component";
 import {AddUserComponent} from "./admin/add-user/add-user.component";
 import {PreviewComponent} from "./admin/preview/preview.component";
@@ -38,10 +37,6 @@ const appRoute: Routes = [
   {
     path: 'login',
     component: LoginComponent
-  },
-  {
-    path: 'register',
-    component: RegisterComponent
   },
   {
     path: 'change-password',
