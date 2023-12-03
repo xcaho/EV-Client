@@ -30,6 +30,7 @@ export class LoginComponent {
   }
 
   ngOnInit() {
+    this.token = this.authService.token;
     if (this.authService.isTokenExpired(this.token)) {
       this.authService.removeToken();
     }
@@ -62,11 +63,11 @@ export class LoginComponent {
   public loginSubmit() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value;
-      let user = new LoginDto(formGroupValue.login, formGroupValue.password, 'no-name');
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password, '');
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
-          this.authService.saveAuthData(result.token, result.userId, user.name, btoa(result.role));
+          this.authService.saveAuthData(result.token, result.userId, result.name, btoa(result.role));
 
           if (this.authService.url) {
             this.router.navigate([this.authService.url]);

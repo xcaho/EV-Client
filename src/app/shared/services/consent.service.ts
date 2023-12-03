@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {throwError} from "rxjs";
 import {ConsentDto} from "../dtos/ConsentDto";
@@ -60,6 +60,26 @@ export class ConsentService {
   getConsentsForSurvey(surveyId: number) {
 
     return this.http.get<ConsentDto[]>(this.apiUrl + '/consents/surveys/' + surveyId)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  getSurveysCsv() {
+
+    return this.http.get(this.apiUrl + '/surveys/export', {responseType: "text",  observe: "response"})
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  getConsentsCsv() {
+
+    return this.http.get(this.apiUrl + '/consents/export', {responseType: "text",  observe: "response"})
       .pipe(
         catchError((error: any) => {
           return throwError(error);
