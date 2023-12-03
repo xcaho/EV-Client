@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {ResolveEnd, Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth.service";
 import {AdminService} from "../../shared/services/admin.service";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -11,7 +10,6 @@ import {Observable} from "rxjs";
 })
 export class HeaderComponent {
   public route: string | undefined;
-  isAdmin$!: Observable<boolean>;
 
   constructor(private router: Router,
               public authService: AuthService,
@@ -21,10 +19,6 @@ export class HeaderComponent {
         this.route =  routerData.url.split('#')[0]
       }
     })
-  }
-
-  ngOnInit() {
-    this.isAdmin$ = this.authService.isAdmin();
   }
 
   public deleteToken() {

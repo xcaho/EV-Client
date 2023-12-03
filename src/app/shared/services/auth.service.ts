@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {map, Observable, of, throwError} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {AlertService} from "../../common/alerts/service/alert.service";
 import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
 import {Router} from "@angular/router";
 import {LoginDto} from "../dtos/LoginDto";
-import {AdminService} from "./admin.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +16,17 @@ export class AuthService {
   public url: string | null;
   private userId: string | null;
   public userName: string | null = null;
+  public role: string | null = null;
 
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
-    private adminService: AdminService,
   ) {
     this.token = localStorage.getItem('token');
     this.url = localStorage.getItem('token_url');
     this.userId = localStorage.getItem('userId');
     this.userName = localStorage.getItem('userName');
+    this.role = localStorage.getItem('cache')!;
   }
 
   register(user: User): Observable<AuthDto> {
@@ -71,22 +71,22 @@ export class AuthService {
     return !!this.token;
   }
 
-  isAdmin(): Observable<boolean> {
-    return this.adminService.getUser(Number(this.userId)).pipe(
-      map(() => true),
-      catchError((error) => {
-        return of(false);
-      })
-    );
+  isAdmin(): boolean {
+    if (this.role !== null && this.role !== undefined) {
+      return atob(this.role!) === 'ADMIN';
+    }
+    return false
   }
 
-  saveAuthData(token: string, userId: string, userName: string) {
+  saveAuthData(token: string, userId: string, userName: string, role: string) {
     this.token = token;
     this.userId = userId;
     this.userName = userName;
+    this.role = role;
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
     localStorage.setItem('userName', userName);
+    localStorage.setItem('cache', role);
   }
 
   saveURL(router: Router) {
@@ -106,13 +106,19 @@ export class AuthService {
     this.token = null;
     this.userId = null;
     this.userName = null;
+    this.role = null;
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
+    localStorage.removeItem('cache');
   }
 
   getUserId() {
     return this.userId;
+  }
+
+  getRole() {
+    return this.role;
   }
 
   isTokenExpired(token: string | null): boolean {

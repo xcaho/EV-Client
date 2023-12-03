@@ -34,13 +34,13 @@ export class CreateEventComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
+    } else {
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Definiowanie wydarzenia');
+      this.textChangeService.h1$.subscribe(h1 => {
+        this.h1 = h1;
+      })
     }
-
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Definiowanie wydarzenia');
-    this.textChangeService.h1$.subscribe(h1 => {
-      this.h1 = h1;
-    })
   }
 
   onFormDirtyChange(isFormDirty: boolean) {

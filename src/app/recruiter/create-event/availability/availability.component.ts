@@ -48,29 +48,30 @@ export class AvailabilityComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
-    }
-
-    document.getElementById('focusReset')?.focus();
-    this.event = this.eventService.getTemporaryEvent();
-    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
-    this.eventId = EventUtils.getIdFromRoute(this.route);
-    this.userId = this.authService.getUserId()
-
-    if (this.event == undefined && this.isEdit) {
-      this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
-    }
-
-    let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities();
-    this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate));
-
-    if (!temporaryAvailabilities || temporaryAvailabilities.length == 0) {
-      if (this.isEdit) {
-        this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
-          this.includeAvailabilities(this.availabilityService.mapFromDto(availabilityDtoList))
-        })
-      }
     } else {
-      this.includeAvailabilities(temporaryAvailabilities)
+
+      document.getElementById('focusReset')?.focus();
+      this.event = this.eventService.getTemporaryEvent();
+      this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
+      this.eventId = EventUtils.getIdFromRoute(this.route);
+      this.userId = this.authService.getUserId()
+
+      if (this.event == undefined && this.isEdit) {
+        this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
+      }
+
+      let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities();
+      this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate));
+
+      if (!temporaryAvailabilities || temporaryAvailabilities.length == 0) {
+        if (this.isEdit) {
+          this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
+            this.includeAvailabilities(this.availabilityService.mapFromDto(availabilityDtoList))
+          })
+        }
+      } else {
+        this.includeAvailabilities(temporaryAvailabilities)
+      }
     }
   }
 

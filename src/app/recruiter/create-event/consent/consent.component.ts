@@ -54,33 +54,34 @@ export class ConsentComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
-    }
+    } else {
 
-    document.getElementById('focusReset')?.focus();
-    this.initFormGroup();
+      document.getElementById('focusReset')?.focus();
+      this.initFormGroup();
 
-    this.event = this.eventService.getTemporaryEvent();
-    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
-    this.eventId = EventUtils.getIdFromRoute(this.route);
-    this.userId = this.authService.getUserId();
+      this.event = this.eventService.getTemporaryEvent();
+      this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
+      this.eventId = EventUtils.getIdFromRoute(this.route);
+      this.userId = this.authService.getUserId();
 
-    if (this.event == undefined && this.isEdit) {
-      this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
-    }
+      if (this.event == undefined && this.isEdit) {
+        this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
+      }
 
-    this.availabilityList = this.availabilityService.getTemporaryAvailabilities();
-    this.consentList = this.consentService.getTemporaryConsents();
+      this.availabilityList = this.availabilityService.getTemporaryAvailabilities();
+      this.consentList = this.consentService.getTemporaryConsents();
 
-    if (this.consentList) {
-      this.patchForm()
-      return
-    }
+      if (this.consentList) {
+        this.patchForm()
+        return
+      }
 
-    if (this.isEdit) {
-      this.consentService.getConsentsForEvent(this.event.id).subscribe(consents => {
-        this.consentList = consents;
-        this.patchForm();
-      })
+      if (this.isEdit) {
+        this.consentService.getConsentsForEvent(this.event.id).subscribe(consents => {
+          this.consentList = consents;
+          this.patchForm();
+        })
+      }
     }
   }
 

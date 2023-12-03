@@ -62,12 +62,11 @@ export class LoginComponent {
   public loginSubmit() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value;
-      let user = new LoginDto(formGroupValue.login, formGroupValue.password, 'asd');
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password, 'no-name');
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
-          console.log(user.name)
-          this.authService.saveAuthData(result.token, result.userId, user.name);
+          this.authService.saveAuthData(result.token, result.userId, user.name, btoa(result.role));
 
           if (this.authService.url) {
             this.router.navigate([this.authService.url]);

@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {AlertService} from "../alerts/service/alert.service";
 import {PasswordValidator} from "../../shared/validators/password-validator";
-import { passwordMatchValidator } from 'src/app/shared/validators/password-match-validator';
+import {passwordMatchValidator} from 'src/app/shared/validators/password-match-validator';
 import {AdminService} from "../../shared/services/admin.service";
 
 @Component({
@@ -23,6 +23,7 @@ export class ChangePasswordComponent {
   public buttonTitle1: string = "Pokaż hasło";
   public buttonTitle2: string = "Pokaż hasło";
   public buttonTitle3: string = "Pokaż hasło";
+  private token: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -30,9 +31,14 @@ export class ChangePasswordComponent {
     private alertService: AlertService,
     private adminService: AdminService
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+    }
+
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Formularz zmiany hasła');
     this.initFormGroup();
@@ -43,7 +49,7 @@ export class ChangePasswordComponent {
       //oldPassword: new FormControl('', [Validators.required]),
       newPassword: new FormControl('', [Validators.required, PasswordValidator]),
       repeatNewPassword: new FormControl('', [Validators.required, PasswordValidator]),
-    }, { validators: passwordMatchValidator })
+    }, {validators: passwordMatchValidator})
   }
 
   public validateForm() {

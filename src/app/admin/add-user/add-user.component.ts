@@ -35,6 +35,7 @@ export class AddUserComponent {
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
     } else {
+
       this.adminService.getAllUsers().subscribe({
         next: (users: User[]) => { },
         error: (error) => {

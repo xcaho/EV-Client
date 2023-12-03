@@ -38,7 +38,7 @@
             class="navbar-nav me-auto mt-2 mt-lg-0">
           <li class="nav-item d-flex"
               [routerLinkActive]="['active']"
-              *ngIf="(isAdmin$ | async)">
+              *ngIf="authService.isAdmin()">
             <a class="nav-link px-2"
                routerLink="admin">
               Panel administratora

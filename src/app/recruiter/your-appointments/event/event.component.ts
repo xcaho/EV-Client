@@ -17,7 +17,6 @@ import {AlertService} from "../../../common/alerts/service/alert.service";
 import {FormatDate} from "../../../shared/utils/format-date";
 import {AuthService} from "../../../shared/services/auth.service";
 import {ViewConsentModalComponent} from "./view-consent-modal/view-consent-modal.component";
-import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-event',
@@ -46,8 +45,7 @@ export class EventComponent {
               private clipboardService: ClipboardService,
               private alertService: AlertService,
               private titleService: TitleService,
-              private authService: AuthService,
-              private consentService: ConsentService) {
+              private authService: AuthService) {
     this.token = this.authService.token;
     this.event = {} as EventDto
   }
@@ -57,32 +55,33 @@ export class EventComponent {
       this.authService.removeToken();
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
-    }
+    } else {
 
-    document.getElementById('focusReset')?.focus();
-    this.route.params.subscribe(params => {
-      this.eventId = params['id'];
-    });
-
-    this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
-      this.event = eventDto;
-      this.titleService.setTitle('Szczegóły wydarzenia ' + this.event.name);
-      this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
-
-      this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
-        this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
+      document.getElementById('focusReset')?.focus();
+      this.route.params.subscribe(params => {
+        this.eventId = params['id'];
       });
 
-      this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
-        this.surveyList = surveys;
+      this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
+        this.event = eventDto;
+        this.titleService.setTitle('Szczegóły wydarzenia ' + this.event.name);
+        this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
+
+        this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
+          this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
+        });
+
+        this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
+          this.surveyList = surveys;
+        })
+      }, (error) => {
+        if (error.status === 403) {
+          this.router.navigate(['/403'], {skipLocationChange: true})
+        } else {
+          this.router.navigate(['/404'], {skipLocationChange: true})
+        }
       })
-    }, (error) => {
-      if (error.status === 403) {
-        this.router.navigate(['/403'], {skipLocationChange: true})
-      } else {
-        this.router.navigate(['/404'], {skipLocationChange: true})
-      }
-    })
+    }
   }
 
   public copyToClipboard(code: string) {
