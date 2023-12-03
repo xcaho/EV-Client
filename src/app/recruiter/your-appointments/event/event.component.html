@@ -73,7 +73,7 @@
                     *ngIf="survey.surveyState === 'USED'"
                     class="btn btn-icon btn-list fa-solid"
                     title="Zgody użytkownika"
-                    (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey)">
+                    (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey, eventId)">
               <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
               <span class="sr-only">
                 Zgody użytkownika
@@ -153,7 +153,7 @@
                       class="btn btn-icon fa-solid"
                       *ngIf="survey.surveyState === 'USED'"
                       title="Zgody użytkownika"
-                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey)">
+                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey, eventId)">
                 <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
                 <span class="sr-only">
                 Zgody użytkownika

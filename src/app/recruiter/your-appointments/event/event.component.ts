@@ -30,7 +30,7 @@ export class EventComponent {
   public availabilityList: Availability[] = [];
   public surveyList: SurveyDto[] = []
   public event: EventDto;
-  private eventId: number = -1;
+  public eventId: number = -1;
   public surveyDurationHHMM = "00:00";
   public trash = faTrash;
   public listCheck = faListCheck;

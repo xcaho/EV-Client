@@ -21,7 +21,7 @@ export class ViewConsentModalComponent {
     this.survey = {} as SurveyDto
   }
 
-  open(content: any, survey: SurveyDto): void {
+  open(content: any, survey: SurveyDto, eventId: number): void {
 
     this.survey = survey;
 
@@ -29,12 +29,12 @@ export class ViewConsentModalComponent {
 
       this.consentList = consents;
 
-      this.consentService.getSurveysCsv().subscribe(response => {
+      this.consentService.getSurveysCsv(eventId).subscribe(response => {
 
         this.downloadCsv(response);
       })
 
-      this.consentService.getConsentsCsv().subscribe(response => {
+      this.consentService.getConsentsCsv(eventId).subscribe(response => {
 
         this.downloadCsv(response)
       })

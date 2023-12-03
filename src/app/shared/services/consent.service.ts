@@ -67,9 +67,9 @@ export class ConsentService {
       )
   }
 
-  getSurveysCsv() {
+  getSurveysCsv(eventId: number) {
 
-    return this.http.get(this.apiUrl + '/surveys/export', {responseType: "text",  observe: "response"})
+    return this.http.get(this.apiUrl + '/surveys/export/' + eventId, {responseType: "text",  observe: "response"})
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -77,9 +77,9 @@ export class ConsentService {
       )
   }
 
-  getConsentsCsv() {
+  getConsentsCsv(eventId: number) {
 
-    return this.http.get(this.apiUrl + '/consents/export', {responseType: "text",  observe: "response"})
+    return this.http.get(this.apiUrl + '/consents/export/' + eventId, {responseType: "text",  observe: "response"})
       .pipe(
         catchError((error: any) => {
           return throwError(error);
