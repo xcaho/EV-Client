@@ -13,8 +13,9 @@
   <div class="modal-body">
     <p class="mb-0">Lista zgód, które użytkownik zaakceptował:</p>
     <ul class="mb-0">
-      <li>asd</li>
-      <li>asd</li>
+      <ng-container *ngFor="let consent of consentList">
+        <li class="ms-4">{{consent.content}}</li>
+      </ng-container>
     </ul>
   </div>
   <div class="modal-footer px-0">

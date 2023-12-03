@@ -37,9 +37,9 @@ export class ConsentService {
       )
   }
 
-  saveConsentsForSurvey(consentIds: number[], eventId: number) {
+  saveConsentsForSurvey(consentIds: number[], surveyId: number) {
 
-    return this.http.post<ConsentDto[]>(this.apiUrl + '/consents/surveys/' + eventId, consentIds)
+    return this.http.patch<ConsentDto[]>(this.apiUrl + '/consents/surveys/' + surveyId, consentIds)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

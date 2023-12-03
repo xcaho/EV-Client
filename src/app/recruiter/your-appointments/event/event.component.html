@@ -72,7 +72,7 @@
             <button type="button"
                     class="btn btn-icon btn-list fa-solid"
                     title="Zgody użytkownika"
-                    (click)="viewConsentModalComponent.open(viewConsentModalComponent.content)">
+                    (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey)">
               <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
               <span class="sr-only">
                 Zgody użytkownika
@@ -151,7 +151,7 @@
               <button type="button"
                       class="btn btn-icon fa-solid"
                       title="Zgody użytkownika"
-                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content)">
+                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey)">
                 <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
                 <span class="sr-only">
                 Zgody użytkownika

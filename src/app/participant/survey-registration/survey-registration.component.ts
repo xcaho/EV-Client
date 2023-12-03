@@ -122,16 +122,17 @@ export class SurveyRegistrationComponent {
         }
       });
 
-      //TODO: Lista zaznaczonych zgod - consentsChecked. Dodac ją podczas zapisu
-      console.log(consentsChecked)
-
       date.setHours(hours, minutes);
       this.survey.date = date;
       this.survey.surveyState = SurveyState.USED;
 
       this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-        this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date));
-        this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+
+        this.consentService.saveConsentsForSurvey(consentsChecked, survey.id).subscribe( consentDtos => {
+
+          this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date));
+          this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+        })
 
       }, (exception) => {
 
