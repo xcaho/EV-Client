@@ -70,6 +70,7 @@
               </span>
             </button>
             <button type="button"
+                    *ngIf="survey.surveyState === 'USED'"
                     class="btn btn-icon btn-list fa-solid"
                     title="Zgody użytkownika"
                     (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey)">
@@ -150,6 +151,7 @@
               </button>
               <button type="button"
                       class="btn btn-icon fa-solid"
+                      *ngIf="survey.surveyState === 'USED'"
                       title="Zgody użytkownika"
                       (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey)">
                 <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>

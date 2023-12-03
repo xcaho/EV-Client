@@ -18,11 +18,12 @@
               <select class="form-select"
                       id="consentTemplate"
                       name="consentTemplate"
+                      [disabled]="isEdit"
                       formControlName="consentTemplate">
                 <option value="" selected>Pusty szablon</option>
                 <option value="1">Zgoda na przetwarzanie danych</option>
                 <option value="2">Zgoda na nagrywanie</option>
-                <option value="3">Zgoda na cos tam</option>
+                <option value="3">Zgoda na udział w badaniach</option>
               </select>
               <label class="form-label" for="consentTemplate">Szablon zgody</label>
             </div>
@@ -30,6 +31,7 @@
           <div class="col-6 col-sm-auto">
             <button type="button"
                     class="w-100 btn btn-outline-primary"
+                    [disabled]="isEdit"
                     (click)="addConsent()">
               Dodaj zgodę
             </button>
@@ -44,17 +46,27 @@
                               [id]="'consent'+i"
                               [name]="'consent'+i"
                               formControlName="{{i}}"
-                              maxlength="151"
                               rows="3"
-                              class="form-control active w-100">
+                              class="form-control active w-100"
+                              [attr.aria-describedby]="getConsent(i)+'Error'"
+                              [class.is-invalid]="getConsent(i).invalid && (getConsent(i).dirty || getConsent(i).touched)">
                     </textarea>
                   <label [for]="'consent'+i" class="form-label">
                     Treść zgody
                   </label>
+                  <div *ngIf="getConsent(i).invalid && (getConsent(i).dirty || getConsent(i).touched)"
+                       class="invalid-feedback">
+                    <p *ngIf="getConsent(i).errors?.['required']"
+                       [id]="getConsent(i)+'Error'"
+                       class="mb-0">
+                      Podaj treść zgody
+                    </p>
+                  </div>
                 </div>
               </div>
               <div class="col-auto">
                 <button type="button"
+                        [disabled]="isEdit"
                         class="btn btn-outline-primary"
                         title="Usuń zgodę"
                         (click)="deleteConsent(i)">
@@ -68,6 +80,8 @@
                          type="checkbox"
                          [id]="'isRequired'+i"
                          [name]="'isRequired'+i"
+                         [checked]="isRequired[i]"
+                         [disabled]="isEdit"
                          (click)="markAsRequired(i)">
                   <label class="form-check-label text-dark"
                          [for]="'isRequired'+i">

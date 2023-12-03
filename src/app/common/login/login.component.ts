@@ -26,10 +26,10 @@ export class LoginComponent {
     private alertService: AlertService,
     private router: Router,
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
-    this.token = this.authService.token;
     if (this.authService.isTokenExpired(this.token)) {
       this.authService.removeToken();
     }

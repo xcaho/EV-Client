@@ -11,12 +11,17 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="mb-0">Lista zgód, które użytkownik zaakceptował:</p>
-    <ul class="mb-0">
-      <ng-container *ngFor="let consent of consentList">
-        <li class="ms-4">{{consent.content}}</li>
-      </ng-container>
-    </ul>
+    <ng-container *ngIf="consentList.length === 0">
+      <p class="mb-0">Użytkownik nie zaakceptował żadnych zgód.</p>
+    </ng-container>
+    <ng-container *ngIf="consentList.length > 0">
+      <p class="mb-0">Lista zgód, które użytkownik zaakceptował:</p>
+      <ul class="mb-0 ps-0">
+        <ng-container *ngFor="let consent of consentList">
+          <li class="ms-4 my-2">{{consent.content}}</li>
+        </ng-container>
+      </ul>
+    </ng-container>
   </div>
   <div class="modal-footer px-0">
     <div class="w-100 row m-0 justify-content-between">

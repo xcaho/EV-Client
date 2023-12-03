@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {EventDto} from "../../../shared/dtos/EventDto";
 import {Availability, AvailabilityDto} from "../../../shared/dtos/Availability";
 import {EventService} from "../../../event.service";
@@ -9,8 +9,8 @@ import {AuthService} from "../../../shared/services/auth.service";
 import {EventUtils} from "../../../shared/utils/EventUtils";
 import {firstValueFrom} from "rxjs";
 import {faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
-import {FormBuilder, FormControl, FormGroup, Validators, FormArray, AbstractControl, Form} from "@angular/forms";
-import { ConsentDto } from 'src/app/shared/dtos/ConsentDto';
+import {FormBuilder, FormControl, FormGroup, Validators, FormArray, AbstractControl} from "@angular/forms";
+import {ConsentDto} from 'src/app/shared/dtos/ConsentDto';
 import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
@@ -30,6 +30,7 @@ export class ConsentComponent {
   private token: string | null = null;
   public plus = faPlus;
   public trash = faTrash;
+  public isRequired: boolean[] = [];
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -42,10 +43,10 @@ export class ConsentComponent {
     this.token = this.authService.token;
   }
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // notification($event: any): void {
-  //   $event.returnValue = 'Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?';
-  // }
+  @HostListener('window:beforeunload', ['$event'])
+  notification($event: any): void {
+    $event.returnValue = 'Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?';
+  }
 
 
   async ngOnInit() {
@@ -67,8 +68,8 @@ export class ConsentComponent {
       this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
     }
 
-    this.consentList = this.consentService.getTemporaryConsents()
-    this.availabilityList = this.availabilityService.getTemporaryAvailabilities()
+    this.availabilityList = this.availabilityService.getTemporaryAvailabilities();
+    this.consentList = this.consentService.getTemporaryConsents();
 
     if (this.consentList) {
       this.patchForm()
@@ -76,9 +77,9 @@ export class ConsentComponent {
     }
 
     if (this.isEdit) {
-      this.consentService.getConsentsForEvent(this.eventId).subscribe(consents => {
-        this.consentList = consents
-        this.patchForm()
+      this.consentService.getConsentsForEvent(this.event.id).subscribe(consents => {
+        this.consentList = consents;
+        this.patchForm();
       })
     }
   }
@@ -91,31 +92,63 @@ export class ConsentComponent {
   }
 
   private patchForm() {
-    //TODO
+    const textAreasArray = this.formGroup.get('textAreas') as FormArray;
+
+    this.consentList.forEach((consent: ConsentDto) => {
+      let index = 0;
+      const control = this.fb.control({value: consent.content, disabled: true}) as FormControl;
+      textAreasArray.push(control);
+      if(consent.mandatory) {
+        setTimeout(() => {
+          // @ts-ignore
+          let checkbox: HTMLInputElement = document.getElementById('isRequired'+index)!
+          checkbox.checked = true;
+
+        },50)
+      }
+    });
+  }
+
+  validateForm(): boolean {
+    let noErrors: boolean = true;
+    (this.formGroup.get('textAreas') as FormArray).controls.forEach(control => {
+      if (control.value === '' || control.invalid) {
+        control.markAsTouched();
+        noErrors = false;
+      }
+    })
+
+    return noErrors;
   }
 
   public submit() {
-    this.setConsentsListWithTextAreas()
+    this.setConsentsListWithTextAreas();
 
-    if (this.consentList.length === 0) {
-      this.alertService.showError('Wydarzenie musi posiadać przynajmniej jedną zgodę.')
-    } else {
-      if (this.isEdit) {
-        this.eventService.modifyEvent(this.event).subscribe(
-          response => {
-            this.saveAvailability(response.id)
-          }, error => {
-            this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-          })
+    if (this.validateForm()) {
+      if (this.consentList.length === 0) {
+        this.alertService.showError('Wydarzenie musi posiadać przynajmniej jedną zgodę.')
       } else {
-        this.eventService.createEvent(this.event).subscribe(
-          response => {
-            this.saveAvailability(response.id);
-          }, error => {
-            this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-          })
+        if (this.isEdit) {
+          this.consentService.patchConsentsList(this.consentList, this.event.id)
+          this.eventService.modifyEvent(this.event).subscribe(
+            response => {
+              this.saveAvailability(response.id);
+              this.router.navigate(['/event/' + this.event.id]);
+            }, error => {
+              this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
+            })
+        } else {
+          this.eventService.createEvent(this.event).subscribe(
+            response => {
+              this.saveAvailability(response.id);
+              this.consentService.saveConsentsForEvent(this.consentList, this.event.id);
+            }, error => {
+              this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
+            })
+        }
       }
-
+    } else {
+      this.alertService.showError('Formularz zawiera błędy.')
     }
   }
 
@@ -194,7 +227,7 @@ export class ConsentComponent {
         return 'Wyrażam zgodę na nagrywanie spotkania.'
       }
       case '3': {
-        return 'Wyrażam zgodę na '
+        return 'Wyrażam zgodę na udział w badaniach mających na celu ocenę jakości świadczonych usług.'
       }
       default: {
         return '';
@@ -203,6 +236,7 @@ export class ConsentComponent {
   }
 
   setConsentsListWithTextAreas() {
+    this.consentList = [];
     const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls;
 
     textAreasArray.forEach((control: AbstractControl) => {
@@ -216,5 +250,9 @@ export class ConsentComponent {
 
   get textAreas(): AbstractControl[] {
     return (this.formGroup.get('textAreas') as FormArray)?.controls;
+  }
+
+  getConsent(id: number) {
+    return (this.formGroup.get('textAreas') as FormArray)?.controls[id];
   }
 }

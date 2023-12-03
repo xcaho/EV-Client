@@ -22,6 +22,7 @@ export class RegisterComponent {
   public passwdShown: boolean = false;
   public isEmailEmpty: string = '';
   public buttonTitle: string = "Pokaż hasło";
+  private token: string | null = '';
 
   constructor(
     private authService: AuthService,
@@ -29,9 +30,14 @@ export class RegisterComponent {
     private alertService: AlertService,
     private router: Router,
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+    }
+
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja');
     this.initFormGroup();

@@ -47,6 +47,16 @@ export class ConsentService {
       )
   }
 
+  patchConsentsList(consents: ConsentDto[], eventId: number) {
+
+    return this.http.patch<ConsentDto[]>(this.apiUrl + '/consents/events/' + eventId, consents)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
   getConsentsForSurvey(surveyId: number) {
 
     return this.http.get<ConsentDto[]>(this.apiUrl + '/consents/surveys/' + surveyId)
@@ -58,10 +68,7 @@ export class ConsentService {
   }
 
   getTemporaryConsents(): ConsentDto[] {
-    if (this._temporaryConsents) {
-      return <ConsentDto[]>this._temporaryConsents;
-    }
-    return []
+    return <ConsentDto[]>this._temporaryConsents;
   }
 
   setTemporaryConsents(consents: ConsentDto[]) {

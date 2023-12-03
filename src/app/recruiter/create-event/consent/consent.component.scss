@@ -1,3 +1,14 @@
 .btn-outline-danger {
   color: #000;
 }
+
+textarea:disabled {
+  background-color: #e3e3e3;
+}
+
+.btn:disabled {
+  color: #3b3162 !important;
+  border-color: #393154 !important;
+  background-color: #ededed !important;
+  pointer-events: none !important;
+}
