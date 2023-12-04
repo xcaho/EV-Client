@@ -36,6 +36,8 @@ export class EventComponent {
   public listCheck = faListCheck;
   public formatDate = FormatDate;
   private token: string | null = null;
+  private role: string | null = 'null';
+  public canModify: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -62,8 +64,16 @@ export class EventComponent {
         this.eventId = params['id'];
       });
 
+      this.role = atob(this.authService.getRole()!)
+
+
       this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
         this.event = eventDto;
+
+        if (this.role === 'ADMIN' || this.event.userId === Number(this.authService.getUserId())) {
+          this.canModify = true;
+        }
+
         this.titleService.setTitle('Szczegóły wydarzenia ' + this.event.name);
         this.surveyDurationHHMM = EventUtils.convertMinutesToHHMM(this.event.surveyDuration)
 
