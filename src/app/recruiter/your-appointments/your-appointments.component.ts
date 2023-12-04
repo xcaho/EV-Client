@@ -46,6 +46,10 @@ export class YourAppointmentsComponent {
         this.userId = params['user-id'];
       });
 
+      this.eventService.getAllEvents().subscribe((allEvents) => {
+        this.allEvents = this.eventSort(allEvents)
+      });
+
       this.eventService.getEvents(this.userId).subscribe((events) => {
         this.events = this.eventSort(events);
       }, (err) => {
@@ -56,20 +60,20 @@ export class YourAppointmentsComponent {
     }
   }
 
-    filterEvents(): EventDto[] {
-        if (this.filterAll && this.filterDisabled) {
-            return this.allEvents.filter((event) => !event.active);
-        } else if (this.filterAll) {
-            return this.allEvents;
-        } else if (this.filterDisabled) {
-            return this.events.filter((event) => !event.active);
-        } else {
-            return this.events.filter((event) => event.active);
-        }
+  filterEvents(): EventDto[] {
+    if (this.filterAll && this.filterDisabled) {
+      return this.allEvents.filter((event) => !event.active);
+    } else if (this.filterAll) {
+      return this.allEvents;
+    } else if (this.filterDisabled) {
+      return this.events.filter((event) => !event.active);
+    } else {
+      return this.events.filter((event) => event.active);
     }
+  }
 
 
-    goToCreate() {
+  goToCreate() {
     this.eventService.clearTemporaryEvent()
     this.eventService.setIsEdit(false)
     this.availabilityService.clearTemporaryAvailabilities()

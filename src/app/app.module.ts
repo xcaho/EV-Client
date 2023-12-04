@@ -35,6 +35,9 @@ import {ChangePasswordComponent} from './common/change-password/change-password.
 import {NoAccessComponent} from './common/no-access/no-access.component';
 import {NewUserDetailsComponent} from './admin/add-user/new-user-details/new-user-details.component';
 import { ViewConsentModalComponent } from './recruiter/your-appointments/event/view-consent-modal/view-consent-modal.component';
+import {
+  ShowNewPasswordModalComponent
+} from "./admin/preview/reset-password-modal/show-new-password-modal/show-new-password-modal.component";
 
 
 @NgModule({
@@ -65,6 +68,7 @@ import { ViewConsentModalComponent } from './recruiter/your-appointments/event/v
     NoAccessComponent,
     NewUserDetailsComponent,
     ViewConsentModalComponent,
+    ShowNewPasswordModalComponent,
   ],
   imports: [
     BrowserModule,
