@@ -1,0 +1,52 @@
+<ng-template #content>
+  <form [formGroup]="formGroup">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">
+        Przypisz wydarzenie do innego rekrutera
+      </h3>
+      <button type="button"
+              class="btn-close"
+              aria-label="Zamknij modal"
+              (click)="closeModal()">
+        <span class="d-none">Zamknij modal</span>
+      </button>
+    </div>
+    <div class="modal-body" aria-live="polite" aria-relevant="additions" aria-atomic="true">
+      <p>Przypisanie wydarzenia do innego rekrutera sprawi, że wybrany rekruter będzie mógł zarządzać danym wydarzeniem.</p>
+      <fieldset>
+        <div class="form-outline my-2">
+          <select class="form-select"
+                  id="users"
+                  name="users"
+                  formControlName="users">
+            <ng-container *ngFor="let user of users; index as i">
+              <option [value]="user.id"
+                      [selected]="user.id === eventOwner">
+                {{user.name}}
+              </option>
+            </ng-container>
+          </select>
+          <label class="form-label" for="users">Lista użytkowników</label>
+        </div>
+      </fieldset>
+    </div>
+    <div class="modal-footer px-0">
+      <div class="w-100 row m-0 justify-content-between">
+        <div class="col-6 col-sm-auto">
+          <button type="button"
+                  class="w-100 btn btn-outline-primary"
+                  (click)="closeModal()">
+            Anuluj
+          </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+          <button type="submit"
+                  class="w-100 btn btn-primary"
+                  (click)="save()">
+            Przypisz wydarzenie
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

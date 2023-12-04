@@ -5,6 +5,7 @@ import {map, Observable, throwError} from "rxjs";
 import {catchError} from 'rxjs/operators';
 import {environment} from "../environments/environment";
 import {Router} from "@angular/router";
+import {AuthService} from "./shared/services/auth.service";
 
 @Injectable({
   providedIn: 'root',
@@ -17,14 +18,12 @@ export class EventService {
 
   apiUrl: string = environment.apiUrl
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   createEvent(event: EventDto): Observable<EventDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.post<EventDto>(this.apiUrl + '/events', event, options)
+    return this.http.post<EventDto>(this.apiUrl + '/users/'+ this.authService.getUserId() +'/events', event)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -33,10 +32,8 @@ export class EventService {
   }
 
   modifyEvent(event: EventDto): Observable<EventDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.patch<EventDto>(this.apiUrl + '/events/' + event.id, event, options)
+    return this.http.patch<EventDto>(this.apiUrl + '/users/'+ this.authService.getUserId() +'/events/' + event.id, event)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -44,11 +41,32 @@ export class EventService {
       )
   }
 
-  getEvents(): Observable<EventDto[]> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
+  getAllEvents(): Observable<EventDto[]> {
 
-    return this.http.get<EventDto[]>(this.apiUrl + '/events', options)
+    return this.http.get<EventDto[]>(this.apiUrl + '/events')
+      .pipe(
+        map(events => events.map(event => new EventDto(
+          event.name,
+          event.description,
+          event.researchStartDate,
+          event.researchEndDate,
+          event.endDate,
+          event.maxUsers,
+          event.surveyDuration,
+          event.surveyBreakTime,
+          event.slotsTaken,
+          event.id,
+          event.active
+        ))),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
+  getEvents(userId: number): Observable<EventDto[]> {
+
+    return this.http.get<EventDto[]>(this.apiUrl + '/users/'+ userId +'/events')
       .pipe(
         map(events => events.map(event => new EventDto(
           event.name,
@@ -70,10 +88,8 @@ export class EventService {
   }
 
   getEvent(id: number): Observable<EventDto> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<EventDto>(this.apiUrl + '/events/' + id, options)
+    return this.http.get<EventDto>(this.apiUrl + '/users/'+ this.authService.getUserId() +'/events/' + id)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

@@ -1,0 +1,86 @@
+<div class="h64 flex-center border-bottom border-secondary mb-5">
+  <div class="container-xxl">
+    <h1 class="h2 mb-0">Logowanie</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-4">
+  <div class="row justify-content-center">
+    <section class="col-12 col-sm-8 col-md-6 col-lg-4">
+      <form [formGroup]="formGroup">
+        <fieldset class="form">
+          <legend class="h5 mb-3">Panel logowania</legend>
+          <div class="form-outline mb-3">
+            <input type="text"
+                   id="login"
+                   name="login"
+                   formControlName="login"
+                   aria-describedby="loginError"
+                   required
+                   class="form-control"
+                   [class.is-invalid]="login.invalid && (login.dirty || login.touched)">
+            <label for="login"
+                   class="form-label">
+              Login
+            </label>
+            <div *ngIf="login.invalid && (login.dirty || login.touched)" class="invalid-feedback">
+              <p *ngIf="login.errors?.['required']"
+                 id="loginError"
+                 class="mb-0">
+                Podaj login
+              </p>
+            </div>
+          </div>
+          <div class="form-outline mb-3">
+            <input [type]="passwdShown ? 'text': 'password'"
+                   id="password"
+                   name="password"
+                   formControlName="password"
+                   aria-describedby="passwdError"
+                   required
+                   class="form-control input-with-button"
+                   [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+            <label for="password"
+                   class="form-label">
+              Hasło
+              <span class="sr-only" *ngIf="passwdShown">widoczne</span>
+            </label>
+            <button class="btn btn-outline-primary show-passwd-btn"
+                    type="button"
+                    [attr.title]="buttonTitle"
+                    (click)="passwordShowToggler()">
+              <ng-container *ngIf="!passwdShown">
+                <fa-icon [icon]="eye" aria-hidden="true"></fa-icon>
+                <span class="sr-only">Pokaż hasło</span>
+              </ng-container>
+              <ng-container *ngIf="passwdShown">
+                <fa-icon [icon]="eyeSlash" aria-hidden="true"></fa-icon>
+                <span class="sr-only">Ukryj hasło</span>
+              </ng-container>
+            </button>
+            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback">
+              <p *ngIf="password.errors?.['required']"
+                 id="passwdError"
+                 class="mb-0">
+                Podaj hasło
+              </p>
+              <p *ngIf="password.errors?.['wrongPasswd']"
+                 id="passwdError2"
+                 class="mb-0">
+                Hasło jest niepoprawne
+              </p>
+            </div>
+          </div>
+        </fieldset>
+        <p>Jeżeli zapomniałeś hasła, skontaktuj się z Administratorem.</p>
+        <div class="d-flex justify-content-end">
+          <button type="submit"
+                  class="btn btn-primary"
+                  (click)="loginSubmit()"
+          >
+            Zaloguj
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

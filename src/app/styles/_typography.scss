@@ -1,5 +1,6 @@
 h1{
   color: $text-dark !important;
+  word-wrap: break-word;
 }
 
 .text-primary {
@@ -16,4 +17,8 @@ h1{
 
 .form-control, .form-label, .form-text {
   color: $text-gray-color;
+}
+
+.font-rem {
+  font-size: 1.125rem !important;
 }

@@ -6,6 +6,7 @@
         <a class="w-100 btn btn-primary"
            (click)="goToCreate()"
            id="id1"
+           *ngIf="authService.isLoggedIn()"
            [routerLink]="['/create']">
           Dodaj wydarzenie
         </a>
@@ -15,16 +16,35 @@
 </div>
 <div class="main-content container-xxl mb-4">
   <div class="row justify-content-center">
-    <section class="col-12 col-md-8 col-lg-6"
-             *ngIf="!isFetching && !events[0]">
-      <p class="h4 text-dark text-center mb-3">Nie masz jeszcze zaplanowanych wydarzeń</p>
-      <a class="col-12 col-md-4 btn btn-outline-primary offset-md-4"
-         (click)="goToCreate()"
-         [routerLink]="['/create']">
-        Dodaj wydarzenie
-      </a>
-    </section>
-    <section class="col-12" *ngIf="events[0]">
+    <section class="col-12">
+      <fieldset class="row mx-0">
+        <div class="col-sm-12 col-md-auto border border-light border-bottom-0 px-3 py-2">
+          <legend class="font-rem mb-1 w-auto">Filtry:</legend>
+          <div class="d-flex flex-wrap">
+            <div class="form-check form-check-inline mb-2 mb-md-0">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="filterActive"
+                     [(ngModel)]="filterAll">
+              <label class="form-check-label"
+                     for="filterActive">
+                Pokaż wydarzenia wszystkich badaczy
+              </label>
+            </div>
+            <div class="form-check form-check-inline me-0">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="filterDisabled"
+                     [(ngModel)]="filterDisabled">
+              <label class="form-check-label"
+                     for="filterDisabled">
+                Pokaż archiwalne wydarzenia
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
       <ul class="list-group d-none d-md-block" aria-labelledby="pageTitle">
         <li class="list-group-item p-3 li-header d-block" aria-hidden="true">
           <div class="row">
@@ -32,58 +52,66 @@
             <div class="col-3" id="Nazwa-Title">Nazwa wydarzenia:</div>
             <div class="col-2 col-lg-3" id="Trwanie-Title">Czas trwania:</div>
             <div class="col-3" id="Koniec-Title">Data zakończenia zapisów:</div>
-            <div class="col-1 text-end" id="Sloty-Title">Sloty:</div>
+            <div class="col-2 col-lg-1 text-end" id="Sloty-Title">Sloty:</div>
           </div>
         </li>
         <li class="list-group-item d-block"
-            *ngFor="let event of events">
+            *ngFor="let event of filterEvents()">
           <a [routerLink]="['/event/', event.id]"
              class="p-3 d-block">
-          <div class="row">
-            <div class="col-2">
-              <span aria-labelledby="Status-Title"></span> {{ event.isActive() }}
+            <div class="row">
+              <div class="col-2">
+                <span aria-labelledby="Status-Title"></span> {{ event.isActive() }}
+              </div>
+              <div class="col-3">
+                <span aria-labelledby="Nazwa-Title"></span> {{ event.name }}
+              </div>
+              <div class="col-2 col-lg-3">
+                <span aria-labelledby="Trwanie-Title"></span>
+                <span class="text-nowrap">
+              <span aria-label="Od"></span>
+                  {{ formatDate(event.researchStartDate) }}
+              </span>
+                <span aria-label="do"></span> -
+                <span class="text-nowrap">{{ formatDate(event.researchEndDate) }}</span>
+              </div>
+              <div class="col-3">
+                <span aria-labelledby="Koniec-Title"></span> {{ formatDate(event.endDate) }}
+              </div>
+              <div class="col-2 col-lg-1 text-end">
+                <span aria-labelledby="Sloty-Title"></span> {{ event.slotsTaken }}/{{ event.maxUsers }}
+              </div>
             </div>
-            <div class="col-3">
-              <span aria-labelledby="Nazwa-Title"></span> {{ event.name }}
-            </div>
-            <div class="col-2 col-lg-3">
-              <span aria-labelledby="Trwanie-Title"></span>
-              <span class="text-nowrap">
-                <span aria-label="Od"></span>
-                {{ event.researchStartDate }}</span>
-              <span aria-label="do"></span> -
-              <span class="text-nowrap">{{ event.researchEndDate }}</span>
-            </div>
-            <div class="col-3">
-              <span aria-labelledby="Koniec-Title"></span> {{ event.endDate }}
-            </div>
-            <div class="col-1 text-end">
-              <span aria-labelledby="Sloty-Title"></span> {{ event.slotsTaken }}/{{ event.maxUsers }}
-            </div>
-          </div>
           </a>
         </li>
       </ul>
 
       <ul class="list-group d-block d-md-none" aria-labelledby="pageTitle">
-        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
-          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
-            <dt class="col-5 col-sm-4 text-end">Status:</dt>
-            <dd class="col-7 col-sm-8">{{ event.isActive() }}</dd>
-            <dt class="col-5 col-sm-4 text-end">Nazwa wydarzenia:</dt>
-            <dd class="col-7 col-sm-8">{{ event.name }}</dd>
-            <dt class="col-5 col-sm-4 text-end">Czas trwania:</dt>
-            <dd class="col-7 col-sm-8">{{ event.researchStartDate }} - {{ event.researchEndDate }}</dd>
-            <dt class="col-5 col-sm-4 text-end">Data zakończenia zapisów:</dt>
-            <dd class="col-7 col-sm-8">{{ event.endDate }}</dd>
-            <dt class="col-5 col-sm-4 text-end">Sloty:</dt>
-            <dd class="col-7 col-sm-8">{{ event.slotsTaken }}/{{ event.maxUsers }}</dd>
-          </dl>
-          <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
-            <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0" [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
-          </div>
-        </li>
-      </ul>
+          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of filterEvents()">
+            <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+              <dt class="col-5 col-sm-4 text-end">Status:</dt>
+              <dd class="col-7 col-sm-8">{{ event.isActive() }}</dd>
+              <dt class="col-5 col-sm-4 text-end">Nazwa wydarzenia:</dt>
+              <dd class="col-7 col-sm-8">{{ event.name }}</dd>
+              <dt class="col-5 col-sm-4 text-end">Czas trwania:</dt>
+              <dd class="col-7 col-sm-8">{{ formatDate(event.researchStartDate) }}
+                - {{ formatDate(event.researchEndDate) }}</dd>
+              <dt class="col-5 col-sm-4 text-end">Data zakończenia zapisów:</dt>
+              <dd class="col-7 col-sm-8">{{ formatDate(event.endDate) }}</dd>
+              <dt class="col-5 col-sm-4 text-end">Sloty:</dt>
+              <dd class="col-7 col-sm-8">{{ event.slotsTaken }}/{{ event.maxUsers }}</dd>
+            </dl>
+            <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
+              <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0"
+                 [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
+            </div>
+          </li>
+        </ul>
+
+      <p *ngIf="filterEvents().length === 0"
+         class="bg-white border border-light border-top-0 text-center py-3">
+        Brak wyników spełniających parametry filtrowania.
+      </p>
     </section>
   </div>
 </div>

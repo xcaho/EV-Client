@@ -11,6 +11,9 @@ import {ConfirmationDto} from "../../shared/dtos/ConfirmationDto";
 import {TitleService} from "../../shared/services/title.service";
 import {SurveyState} from "../../shared/enums/survey-state";
 import {AlertService} from "../../common/alerts/service/alert.service";
+import {FormatDate} from "../../shared/utils/format-date";
+import {ConsentService} from "../../shared/services/consent.service";
+import {ConsentDto} from "../../shared/dtos/ConsentDto";
 
 @Component({
   selector: 'app-survey-registration',
@@ -22,16 +25,18 @@ export class SurveyRegistrationComponent {
   private survey!: SurveyDto;
   private event!: EventDto;
   public availabilityList: Availability[] = [];
-  private isFetching: boolean = false;
+  public consentList: ConsentDto[] = [];
   private surveyCode!: string;
   public form!: FormGroup;
   public selectedDay: string = '';
   public selectedHour: string = '';
   public filteredHoursList: any[] = [];
   private updatedAvailabilityList: any[] = [];
+  private endHours: any[] = [];
   public formEventName: string = "";
   public formSurveyDuration: number = 0;
   public formEventEndDate: string = "";
+  public formatDate = FormatDate;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -39,16 +44,16 @@ export class SurveyRegistrationComponent {
               private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private consentService: ConsentService) {
 
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
     });
-
   }
 
   ngOnInit(): void {
-    this.fetchSurvey()
+    this.fetchSurvey();
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja na badanie');
     this.initFormGroup();
@@ -57,34 +62,46 @@ export class SurveyRegistrationComponent {
   private initFormGroup() {
     this.form = new FormGroup({
       dayChoice: new FormControl(null, [Validators.required]),
-      hourChoice: new FormControl(null, [Validators.required]),
-      consents: new FormControl(false, [Validators.requiredTrue])
+      hourChoice: new FormControl(null, [Validators.required])
     })
   }
 
   private fetchSurvey() {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
-      this.survey = surveyDto
-      this.fetchEvent(this.survey.eventId);
+      this.survey = surveyDto;
+      this.fetchEvent(this.survey.eventId, true);
+      this.fetchConsents();
     }, (error) => {
       this.router.navigate(['/404'])
     })
   }
 
-  private fetchEvent(eventId: number): void {
-    this.isFetching = true;
+  private fetchConsents() {
+    this.consentService.getConsentsForEvent(this.survey.eventId).subscribe(consents => {
+      this.consentList = consents;
+      this.consentList.forEach(consent => {
+        if (consent.mandatory) {
+          this.form.addControl((consent.id).toString(), new FormControl(false, Validators.requiredTrue))
+        } else {
+          this.form.addControl((consent.id).toString(), new FormControl(false))
+        }
+      })
+    })
+  }
+
+  private fetchEvent(eventId: number, shouldNavigate: boolean): void {
     this.eventService.getEvent(eventId).subscribe((event) => {
       this.event = event;
       this.formEventName = event.name
       this.formSurveyDuration = event.surveyDuration
       this.formEventEndDate = event.endDate
 
-      if (this.survey.surveyState != SurveyState.UNUSED || this.event.slotsTaken == this.event.maxUsers) {
+      if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED
+        || this.event.slotsTaken === this.event.maxUsers || new Date() > new Date(this.event.endDate)) {
         this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
       }
 
       this.fetchAvailabilityList();
-      this.isFetching = false;
     });
   }
 
@@ -96,35 +113,46 @@ export class SurveyRegistrationComponent {
 
   save() {
     if (this.validate()) {
-      const updatedAvailabilites: Availability[] = this.availabilityService.updateAvailableHours(this.updatedAvailabilityList,
-        this.selectedHour, this.selectedDay, this.availabilityList, this.event);
-
-      let date: Date = new Date(this.selectedDay)
+      let date: Date = new Date(this.selectedDay);
+      let consentsChecked: number[] = [];
       const [hours, minutes] = this.selectedHour.split(':').map(Number);
-      date.setHours(hours, minutes)
-      this.survey.date = date
-      this.survey.surveyState = SurveyState.USED
+
+      this.consentList.forEach(consent => {
+        if (this.consentFromId(consent.id).value === true) {
+          consentsChecked.push(consent.id);
+        }
+      });
+
+      date.setHours(hours, minutes);
+      this.survey.date = date;
+      this.survey.surveyState = SurveyState.USED;
 
       this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-        this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
 
-        this.availabilityService.patchAvailabilityList(this.availabilityService.convertAvailabilityToDto(
-          updatedAvailabilites), this.event.id).subscribe(
-          (response) => {
-          }, (exception) => {
-          }
-        )
+        this.consentService.saveConsentsForSurvey(consentsChecked, survey.id).subscribe( consentDtos => {
 
-        this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+          this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date));
+          this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+        })
+
       }, (exception) => {
 
         if (exception.status === 409) {
-          this.alertService.showError('Wybrany termin już jest zajęty, wybierz inny lub odśwież stronę.');
+          this.handleHttp409();
         }
       })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.');
     }
+  }
+
+  private handleHttp409() {
+    this.alertService.showError('Wybrany termin już jest zajęty, wybierz inny.');
+    this.fetchEvent(this.survey.eventId, false);
+    this.form.get('dayChoice')?.setValue('');
+    this.form.get('dayChoice')?.updateValueAndValidity();
+    this.form.get('hourChoice')?.setValue('');
+    this.form.get('hourChoice')?.updateValueAndValidity();
   }
 
   private validate(): boolean {
@@ -153,6 +181,9 @@ export class SurveyRegistrationComponent {
     if (selectedDayIndex !== -1) {
       this.availabilityList[selectedDayIndex].hoursList.forEach((hourItem) => {
         const {startHour, endHour} = hourItem;
+
+        this.endHours.push(endHour)
+
         const [startHourValue, startMinuteValue] = startHour.split(':').map(part => parseInt(part, 10));
         const [endHourValue, endMinuteValue] = endHour.split(':').map(part => parseInt(part, 10));
 
@@ -203,5 +234,9 @@ export class SurveyRegistrationComponent {
 
   get consents() {
     return this.form.get('consents')!;
+  }
+
+  consentFromId(consentId: number) {
+    return this.form.get(consentId.toString())!;
   }
 }

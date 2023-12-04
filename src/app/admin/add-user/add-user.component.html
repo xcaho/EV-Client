@@ -1,0 +1,101 @@
+<div class="h64 flex-center border-bottom border-secondary mb-5">
+  <div class="container-xxl">
+    <h1 class="h2 mb-0">Definiowanie nowego użytkownika</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-4">
+  <div class="row justify-content-center">
+    <section class="col-12 col-sm-8 col-md-6 col-lg-4">
+      <form [formGroup]="formGroup">
+        <fieldset class="form">
+          <legend class="h5 mb-3 sr-only">Formularz rejestracji użytkownika</legend>
+          <div class="form-outline mb-3">
+            <input type="text"
+                   id="name"
+                   name="name"
+                   formControlName="name"
+                   aria-describedby="nameError"
+                   required
+                   class="form-control"
+                   [class.is-invalid]="name.invalid && (name.dirty || name.touched)">
+            <label for="email"
+                   class="form-label">
+              Nazwa użytkownika
+            </label>
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="invalid-feedback">
+              <p *ngIf="name.errors?.['required']"
+                 id="nameError"
+                 class="mb-0">
+                Podaj nazwę użytkownika
+              </p>
+            </div>
+          </div>
+          <div class="form-outline mb-3">
+            <input type="email"
+                   id="email"
+                   name="email"
+                   [(ngModel)]="isEmailEmpty"
+                   [ngClass]="{'active': isEmailEmpty}"
+                   formControlName="email"
+                   aria-describedby="emailError emailError2 emailHelper"
+                   required
+                   class="form-control input-mail"
+                   [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
+            <label for="email"
+                   class="form-label">
+              E-mail
+            </label>
+            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
+              <p *ngIf="email.errors?.['required']"
+                 id="emailError"
+                 class="mb-0">
+                Podaj e-mail
+              </p>
+              <p *ngIf="email.errors?.['invalidEmail']"
+                 id="emailError2"
+                 class="mb-0">
+                Podaj e-mail w formacie: mail@domena.com
+              </p>
+            </div>
+            <p id="emailHelper" class="form-text">Format: mail@domena.com</p>
+          </div>
+          <div class="form-outline mb-3">
+            <select class="form-select"
+                    id="role"
+                    name="role"
+                    formControlName="role"
+                    aria-describedby="roleError"
+                    required
+                    [class.is-invalid]="role.invalid && (role.dirty || role.touched)">
+              <option value="administrator">Administrator</option>
+              <option value="rekruter">Badacz</option>
+              <option value="readonly">Obserwator</option>
+            </select>
+            <label class="form-label" for="role">Rola użytkownika</label>
+            <div *ngIf="role.invalid && (role.dirty || role.touched)" class="invalid-feedback">
+              <p *ngIf="role.errors?.['required']"
+                 id="roleError"
+                 class="mb-0">
+                Wybierz rolę użytkownika
+              </p>
+            </div>
+          </div>
+        </fieldset>
+        <p>Po utworzeniu użytkownika wygenerowanie zostanie tymczasowe hasła do logowania. Hasło będzie widoczne na kolejnej stronie.</p>
+        <div class="d-flex justify-content-between">
+          <a class="btn btn-outline-primary"
+             [routerLink]="['/admin']"
+          >
+            Anuluj
+          </a>
+          <button type="submit"
+                  class="btn btn-primary"
+                  (click)="save()"
+          >
+            Utwórz użytkownika
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

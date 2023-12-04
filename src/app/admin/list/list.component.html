@@ -1,0 +1,77 @@
+<div class="h64 flex-center border-bottom border-secondary mb-5">
+  <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
+    <h1 class="h2 mb-0" id="pageTitle">Lista użytkowników</h1>
+    <div class="row mt-2 mt-md-0">
+      <div class="col-12 col-sm-auto">
+        <a class="w-100 btn btn-primary"
+           id="id1"
+           [routerLink]="['/admin/add-user']">
+          Dodaj użytkownika
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-content container-xxl mb-4">
+  <div class="row justify-content-center">
+    <section class="col-12 col-md-8 col-lg-6 d-flex flex-column justify-content-center align-items-center"
+             *ngIf="!users[0]">
+      <p class="h4 text-dark text-center mb-3">Lista użytkowników jest pusta</p>
+      <a class="btn btn-outline-primary w-auto"
+         [routerLink]="['/admin/add-user']">
+        Dodaj rekrutera
+      </a>
+    </section>
+    <section class="col-12"
+             *ngIf="users[0]">
+      <ul class="list-group d-none d-md-block" aria-labelledby="pageTitle">
+        <li class="list-group-item p-3 li-header d-block" aria-hidden="true">
+          <div class="row">
+            <div class="col-3" id="Nazwa-Title">Nazwa:</div>
+            <div class="col-3" id="Email-Title">E-mail:</div>
+            <div class="col-3" id="Rola-Title">Rola:</div>
+            <div class="col text-end" id="Status-Title">Status:</div>
+          </div>
+        </li>
+        <li class="list-group-item d-block"
+            *ngFor="let user of users">
+          <a [routerLink]="['/admin/users/', user.id]"
+             class="p-3 d-block">
+            <div class="row">
+              <div class="col-3">
+                <span aria-labelledby="Nazwa-Title"></span> {{ user.name }}
+              </div>
+              <div class="col-3">
+                <span aria-labelledby="Email-Title"></span> {{ user.email }}
+              </div>
+              <div class="col-3">
+                <span aria-labelledby="Rola-Title"></span> {{ roleToView[user.role] }}
+              </div>
+              <div class="col text-end">
+                <span aria-labelledby="Status-Title"></span> {{ user.isBlocked() }}
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <ul class="list-group d-block d-md-none" aria-labelledby="pageTitle">
+        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let user of users">
+          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+            <dt class="col-5 col-sm-4 text-end">Nazwa:</dt>
+            <dd class="col-7 col-sm-8">{{ user.name }}</dd>
+            <dt class="col-5 col-sm-4 text-end">E-mail:</dt>
+            <dd class="col-7 col-sm-8">{{ user.email }}</dd>
+            <dt class="col-5 col-sm-4 text-end">Rola:</dt>
+            <dd class="col-7 col-sm-8">{{ roleToView[user.role] }}</dd>
+            <dt class="col-5 col-sm-4 text-end">Status:</dt>
+            <dd class="col-7 col-sm-8">{{ user.blocked }}</dd>
+          </dl>
+          <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
+            <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0"
+               [routerLink]="['/event/']">Szczegoły użytkownika</a>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>

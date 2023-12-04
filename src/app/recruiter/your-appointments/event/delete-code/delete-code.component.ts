@@ -23,7 +23,7 @@ export class DeleteCodeComponent {
   }
 
   open(content: any, survey: SurveyDto, surveyList: SurveyDto[]): void {
-    this.modalRef = this.modalService.open(content);
+    this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
     this.survey = survey;
     this.surveyList = surveyList;
   }
@@ -37,9 +37,8 @@ export class DeleteCodeComponent {
       this.generateNewCode()
       this.closeModal()
 
-      this.alertService.showSuccess('Dezktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
+      this.alertService.showSuccess('Dezaktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
     })
-
   }
 
   generateNewCode() {

@@ -1,7 +1,9 @@
 import {TimeValidator} from './time-validator';
+import {FormControl} from "@angular/forms";
 
 describe('TimeValidator', () => {
   it('should create an instance', () => {
-    // expect(new TimeValidator()).toBeTruthy();
+    const control = new FormControl('');
+    expect(TimeValidator(control)).toBeNull();
   });
 });

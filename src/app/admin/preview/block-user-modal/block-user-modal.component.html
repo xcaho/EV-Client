@@ -1,0 +1,56 @@
+<ng-template #content>
+  <form>
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">
+        <ng-container *ngIf="!user.blocked">
+          Zablokuj konto użytkownika
+        </ng-container>
+        <ng-container *ngIf="user.blocked">
+          Odblokuj konto użytkownika
+        </ng-container>
+      </h3>
+      <button type="button"
+              class="btn-close"
+              aria-label="Zamknij modal"
+              (click)="closeModal()">
+        <span class="d-none">Zamknij modal</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="mb-0">
+        <ng-container *ngIf="!user.blocked">
+          Zablokowanie konta użytkownika spowoduje uniemożliwienie logowania się na to konto.
+        </ng-container>
+        <ng-container *ngIf="user.blocked">
+          Odblokowanie konta użytkownika spowoduje umożliwienie logowania się na to konto.
+        </ng-container>
+      </p>
+    </div>
+    <div class="modal-footer px-0">
+      <div class="w-100 row m-0 justify-content-between">
+        <div class="col-6 col-sm-auto">
+          <button type="button"
+                  title="Wygeneruj nowe tymczasowe hasło"
+                  class="w-100 btn btn-outline-primary"
+                  (click)="closeModal()">
+            Anuluj
+          </button>
+        </div>
+        <div class="col-6 col-sm-auto">
+          <button type="submit"
+                  class="w-100 h-100 btn btn-primary"
+                  (click)="blockUser()"
+                  *ngIf="!user.blocked">
+            Zablokuj
+          </button>
+          <button type="submit"
+                  class="w-100 h-100 btn btn-primary"
+                  (click)="unlockUser()"
+                  *ngIf="user.blocked">
+            Odblokuj
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

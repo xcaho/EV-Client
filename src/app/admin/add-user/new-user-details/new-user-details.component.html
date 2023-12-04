@@ -1,0 +1,81 @@
+<div class="h64 flex-center border-bottom border-secondary mb-5">
+  <div class="container-xxl">
+    <h1 class="h2 mb-0">Nowy użytkownik: {{name}}</h1>
+  </div>
+</div>
+<div class="main-content container-xxl mb-4">
+  <div class="row justify-content-center">
+    <section class="col-12 col-sm-8 col-md-6 col-lg-5">
+      <p>Utworzyłeś użytkownika: <strong>{{name}}</strong> - {{role}}</p>
+      <p>Aby umożliwić mu zalogowanie się na konto, przekaż mu login oraz tymczasowe hasło.</p>
+      <p class="mb-4">Dane z tej strony znikną po jej opuszczeniu.</p>
+      <div class="form-outline mb-4 position-relative">
+        <input type="text"
+               id="login"
+               name="login"
+               value="{{login}}"
+               readonly
+               class="form-control ng-valid input-with-button"
+        >
+        <label for="login"
+               class="form-label">
+          Login:
+        </label>
+        <div class="button-in-input">
+          <button class="btn btn-outline-primary"
+                  type="button"
+                  title="Skopiuj login do schowka"
+                  style="min-width: 45.6px;"
+                  (click)="copyToClipboard(login)">
+            <fa-icon [icon]="copy" aria-hidden="true"></fa-icon>
+            <span class="sr-only">Skopiuj login do schowka</span>
+          </button>
+        </div>
+      </div>
+      <div class="form-outline mb-4 position-relative">
+        <input [type]="isPasswordShown ? 'text': 'password'"
+               id="password"
+               name="password"
+               value="{{password}}"
+               readonly
+               class="form-control ng-valid input-with-button"
+        >
+        <label for="password"
+               class="form-label">
+          Hasło tymczasowe:
+        </label>
+        <div class="buttons-in-input">
+          <button class="btn btn-outline-primary"
+                  type="button"
+                  [attr.title]="buttonTitle"
+                  style="min-width: 45.6px;"
+                  (click)="passwordShowToggler()">
+            <ng-container *ngIf="!isPasswordShown">
+              <fa-icon [icon]="eye" aria-hidden="true"></fa-icon>
+              <span class="sr-only">Pokaż hasło</span>
+            </ng-container>
+            <ng-container *ngIf="isPasswordShown">
+              <fa-icon [icon]="eyeSlash" aria-hidden="true"></fa-icon>
+              <span class="sr-only">Ukryj hasło</span>
+            </ng-container>
+          </button>
+          <button class="btn btn-outline-primary"
+                  type="button"
+                  title="Skopiuj hasło do schowka"
+                  style="min-width: 45.6px;"
+                  (click)="copyToClipboard(password)">
+            <fa-icon [icon]="copy" aria-hidden="true"></fa-icon>
+            <span class="sr-only">Skopiuj hasło do schowka</span>
+          </button>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end">
+        <a class="btn btn-primary"
+           [routerLink]="['/admin']"
+        >
+          Dalej
+        </a>
+      </div>
+    </section>
+  </div>
+</div>

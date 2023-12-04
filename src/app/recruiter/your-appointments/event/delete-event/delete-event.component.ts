@@ -24,7 +24,7 @@ export class DeleteEventComponent {
   }
 
   open(content: any, event: EventDto, surveyList: SurveyDto[]): void {
-    this.modalRef = this.modalService.open(content);
+    this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
     this.event = event;
     this.surveyList = surveyList;
   }

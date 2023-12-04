@@ -8,10 +8,42 @@ import {SurveyRegistrationComponent} from "./participant/survey-registration/sur
 import {ConfirmationComponent} from "./participant/confirmation/confirmation.component";
 import {InvalidCodeComponent} from "./participant/invalid-code/invalid-code.component";
 import {ErrorComponent} from "./common/error/error.component";
+import {LoginComponent} from "./common/login/login.component";
+import {ListComponent} from "./admin/list/list.component";
+import {AddUserComponent} from "./admin/add-user/add-user.component";
+import {PreviewComponent} from "./admin/preview/preview.component";
+import {ChangePasswordComponent} from "./common/change-password/change-password.component";
+import {NewUserDetailsComponent} from "./admin/add-user/new-user-details/new-user-details.component";
+import {NoAccessComponent} from "./common/no-access/no-access.component";
+import {ConsentComponent} from "./recruiter/create-event/consent/consent.component";
 
 const appRoute: Routes = [
   {
-    path: 'appointments',
+    path: 'admin',
+    component: ListComponent
+  },
+  {
+    path: 'admin/add-user',
+    component: AddUserComponent
+  },
+  {
+    path: 'admin/add-user/:user-id',
+    component: NewUserDetailsComponent
+  },
+  {
+    path: 'admin/users/:user-id',
+    component: PreviewComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'change-password',
+    component: ChangePasswordComponent
+  },
+  {
+    path: 'users/:user-id/appointments',
     component: YourAppointmentsComponent
   },
   {
@@ -19,12 +51,20 @@ const appRoute: Routes = [
     component: AvailabilityComponent
   },
   {
+    path: 'consent',
+    component: ConsentComponent
+  },
+  {
     path: 'edit/:id/availability',
     component: AvailabilityComponent
   },
   {
+    path: 'edit/:id/consent',
+    component: ConsentComponent
+  },
+  {
     path: 'create',
-    component: CreateEventComponent
+    component: CreateEventComponent,
   },
   {
     path: 'event/:id',
@@ -36,7 +76,7 @@ const appRoute: Routes = [
   },
   {
     path: '',
-    redirectTo: 'appointments',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -49,6 +89,10 @@ const appRoute: Routes = [
   {
     path: 'register/:code/invalid-code',
     component: InvalidCodeComponent
+  },
+  {
+    path: '403',
+    component: NoAccessComponent,
   },
   {
     path: '404',

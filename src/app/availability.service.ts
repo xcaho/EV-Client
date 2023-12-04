@@ -20,10 +20,8 @@ export class AvailabilityService {
   }
 
   saveAvailabilityList(availability: AvailabilityDto[], eventId: number) {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.post<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
+    return this.http.post<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -32,10 +30,8 @@ export class AvailabilityService {
   }
 
   patchAvailabilityList(availability: AvailabilityDto[], eventId: number) {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.patch<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability, options)
+    return this.http.patch<EventDto>(this.apiUrl + '/events/' + eventId + '/availabilities', availability)
       .pipe(
         catchError((error: any) => {
           return throwError(error);
@@ -44,10 +40,8 @@ export class AvailabilityService {
   }
 
   getAvailabilityList(eventId: number): Observable<AvailabilityDto[]> {
-    const headers = {"Content-Type": "application/json"};
-    const options = {"headers": headers};
 
-    return this.http.get<AvailabilityDto[]>(this.apiUrl + '/events/' + eventId + '/availabilities', options)
+    return this.http.get<AvailabilityDto[]>(this.apiUrl + '/events/' + eventId + '/availabilities')
       .pipe(
         map(res => res.map(tmp => new AvailabilityDto(tmp.startDate, tmp.endDate))),
         catchError((error: any) => {
@@ -61,8 +55,7 @@ export class AvailabilityService {
   }
 
   setTemporaryAvailabilities(availabilities: Availability[]) {
-    this.temporaryAvailabilities = availabilities
-    console.log(this.temporaryAvailabilities)
+    this.temporaryAvailabilities = availabilities;
   }
 
   clearTemporaryAvailabilities() {
@@ -93,7 +86,8 @@ export class AvailabilityService {
   }
 
   updateAvailableHours(hoursList: string[], selectedHour: string, selectedDay: string, availabilities: Availability[],
-                       event: EventDto): Availability[] {
+                       event: EventDto, endHours: string[]): Availability[] {
+
     const totalLength = event.surveyDuration + event.surveyBreakTime;
     const totalLengthDate = new Date();
     totalLengthDate.setHours(Math.floor(totalLength / 60), totalLength % 60);
@@ -122,12 +116,24 @@ export class AvailabilityService {
     let startHour = updatedHoursList[0];
     let endHour = updatedHoursList[0];
 
+    endHours.pop()
+
     for (let i = 1; i<updatedHoursList.length; i++){
       const currentHour = updatedHoursList[i];
-      const diff = this.getHourDiff(endHour, currentHour);
+      let diff = this.getHourDiff(endHour, currentHour);
 
       if(diff == 30) {
-        endHour = currentHour;
+        if(endHours.includes(endHour)){
+          if (startHour !== endHour) {
+            ranges.push(`${startHour}-${endHour}`);
+          } else {
+            ranges.push(startHour);
+          }
+          startHour = currentHour
+          endHour = currentHour
+        } else {
+          endHour = currentHour;
+        }
       } else {
         if (startHour !== endHour) {
           ranges.push(`${startHour}-${endHour}`);

@@ -2,6 +2,10 @@
   margin-bottom: 0.25rem !important;
 }
 
+.form-check-input {
+  border-color: $border-color;
+}
+
 .form-control, .form-select {
   background-color: $bg-secondary;
   border-color: #BDBDBD;
@@ -37,6 +41,13 @@
   }
 
   input.form-control:valid {
+    + .form-label {
+      transform: translateY(-1rem) translateY(0.1rem) scale(.8);
+      background-color: $secondary-color;
+    }
+  }
+
+  .input-mail.active {
     + .form-label {
       transform: translateY(-1rem) translateY(0.1rem) scale(.8);
       background-color: $secondary-color;
@@ -109,6 +120,11 @@ textarea {
 }
 
 .form-check-input:checked[type=checkbox] {
+  border-color: $primary-color;
+  background-color: #6750A4;
+}
+
+.form-check-input:checked[type=radio] {
   border-color: $primary-color;
   background-color: #6750A4;
 }

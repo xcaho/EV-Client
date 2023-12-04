@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {EventDto} from "../../../shared/dtos/EventDto";
 import {EventService} from "../../../event.service";
@@ -9,6 +9,8 @@ import {AvailabilityService} from "../../../availability.service";
 import {TextChangeService} from "../../../shared/services/text-change.service";
 import {TimeValidator} from "../../../shared/validators/time-validator";
 import {AlertService} from "../../../common/alerts/service/alert.service";
+import {AuthService} from "../../../shared/services/auth.service";
+import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-defining-event',
@@ -26,14 +28,18 @@ export class DefiningEventComponent {
   private hours: string[] = [];
   private minutes: string[] = [];
   public eventId: number = 0;
+  private userId: string | null | undefined;
   public h2: string = 'Zdefiniuj nowe wydarzenie';
+  @Output() formDirtyChange = new EventEmitter<boolean>();
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private router: Router,
               private route: ActivatedRoute,
               private textChangeService: TextChangeService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private authService: AuthService,
+              private consentService: ConsentService) {
     this.event = {} as EventDto
     this.generateHours();
   }
@@ -43,11 +49,16 @@ export class DefiningEventComponent {
     this.textChangeService.h2$.subscribe(h2 => {
       this.h2 = h2;
     })
-    this.initFormGroup()
+    this.initFormGroup();
+
+    this.reactiveForm.valueChanges.subscribe(() => {
+      this.formDirtyChange.emit(this.reactiveForm.dirty);
+    })
 
     this.event = this.eventService.getTemporaryEvent()
     this.isEdit = this.eventService.getIsEditConsideringRouter(this.router)
     this.eventId = EventUtils.getIdFromRoute(this.route)
+    this.userId = this.authService.getUserId();
 
     //fill form initally, case when event exists locally
     if (this.event) {
@@ -56,12 +67,10 @@ export class DefiningEventComponent {
     }
 
     if (this.isEdit) {
-
       //fill form by fetching from the server, case when event doesn't exist locally, and it's edit mode
       this.eventService.getEvent(this.eventId).subscribe((eventDto) => {
         this.event = eventDto;
         this.patchForm();
-
         this.researchStartDateMin = new Date(this.event.researchStartDate);
         this.researchEndDateMin = new Date(this.event.researchStartDate);
         const today = new Date();
@@ -72,6 +81,12 @@ export class DefiningEventComponent {
           this.endDate.clearValidators();
           this.endDate.updateValueAndValidity();
           this.editableDateValidation();
+        }
+      }, (error) => {
+        if (error.status === 403) {
+          this.router.navigate(['/403']);
+        } else {
+          this.router.navigate(['/404']);
         }
       })
     }
@@ -91,7 +106,7 @@ export class DefiningEventComponent {
   }
 
   public goToAvailability(form: FormGroupDirective) {
-    if (this.validate()){
+    if (this.validate()) {
       this.saveEvent(form);
 
       if (this.isEdit) {
@@ -108,8 +123,10 @@ export class DefiningEventComponent {
     let noErrors: boolean = true;
 
     Object.keys(this.reactiveForm.controls).forEach(key => {
-      if (this.reactiveForm.get(key)?.invalid)
+      if (this.reactiveForm.get(key)?.invalid) {
+        this.reactiveForm.get(key)?.markAsTouched();
         noErrors = false;
+      }
     })
 
     return noErrors;
@@ -133,9 +150,25 @@ export class DefiningEventComponent {
     this.eventService.setTemporaryEvent(this.event)
   }
 
-  goBack() {
+  public goBack() {
+    if (this.reactiveForm.dirty) {
+      if (window.confirm('Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?')) {
+        this.clearServicesAndNavigate()
+      }
+    } else {
+      this.clearServicesAndNavigate()
+    }
+  }
+
+  private clearServicesAndNavigate() {
     this.eventService.clearTemporaryEvent();
     this.availabilityService.clearTemporaryAvailabilities();
+    this.consentService.clearTemporaryConsents();
+    if (this.isEdit) {
+      this.router.navigate(['/event/', this.eventId]).then();
+    } else {
+      this.router.navigate(['/users/'+ this.userId +'/appointments']).then();
+    }
   }
 
   private patchForm() {
@@ -201,6 +234,7 @@ export class DefiningEventComponent {
     if (this.researchStartDate.value >= this.dateToFormat(this.researchStartDateMin, false)) {
       this.researchEndDateMin = event.target.value;
       this.researchEndDate.updateValueAndValidity();
+      this.researchEndDate.markAsTouched();
     }
 
     if (this.researchEndDate.value < this.researchStartDate.value) {
@@ -208,7 +242,9 @@ export class DefiningEventComponent {
       this.researchEndDate.markAsTouched()
 
     } else {
-      this.researchEndDate.setErrors(null)
+      this.researchEndDate.setErrors(null);
+      this.researchEndDate.updateValueAndValidity();
+      this.researchEndDate.markAsTouched();
     }
   }
 

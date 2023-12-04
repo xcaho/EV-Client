@@ -21,7 +21,9 @@ const availabilityAdd = () => ({
   },
 
   submit: async () => {
-    await t.click(submitBtn)
+    await t
+      .wait(1000)
+      .click(submitBtn)
   },
 
   countOfDaysAreEqual: async (value) => {
