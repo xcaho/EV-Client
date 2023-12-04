@@ -10,6 +10,7 @@ import {TextChangeService} from "../../../shared/services/text-change.service";
 import {TimeValidator} from "../../../shared/validators/time-validator";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {AuthService} from "../../../shared/services/auth.service";
+import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-defining-event',
@@ -37,7 +38,8 @@ export class DefiningEventComponent {
               private route: ActivatedRoute,
               private textChangeService: TextChangeService,
               private alertService: AlertService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private consentService: ConsentService) {
     this.event = {} as EventDto
     this.generateHours();
   }
@@ -151,22 +153,21 @@ export class DefiningEventComponent {
   public goBack() {
     if (this.reactiveForm.dirty) {
       if (window.confirm('Masz niezapisane zmiany. Czy na pewno chcesz opuścić tę stronę?')) {
-        this.eventService.clearTemporaryEvent();
-        this.availabilityService.clearTemporaryAvailabilities();
-        if (this.isEdit) {
-          this.router.navigate(['/event/', this.eventId]).then();
-        } else {
-          this.router.navigate(['/users/'+ this.userId +'/appointments']).then();
-        }
+        this.clearServicesAndNavigate()
       }
     } else {
-      this.eventService.clearTemporaryEvent();
-      this.availabilityService.clearTemporaryAvailabilities();
-      if (this.isEdit) {
-        this.router.navigate(['/event/', this.eventId]).then();
-      } else {
-        this.router.navigate(['/users/'+ this.userId +'/appointments']).then();
-      }
+      this.clearServicesAndNavigate()
+    }
+  }
+
+  private clearServicesAndNavigate() {
+    this.eventService.clearTemporaryEvent();
+    this.availabilityService.clearTemporaryAvailabilities();
+    this.consentService.clearTemporaryConsents();
+    if (this.isEdit) {
+      this.router.navigate(['/event/', this.eventId]).then();
+    } else {
+      this.router.navigate(['/users/'+ this.userId +'/appointments']).then();
     }
   }
 
@@ -233,6 +234,7 @@ export class DefiningEventComponent {
     if (this.researchStartDate.value >= this.dateToFormat(this.researchStartDateMin, false)) {
       this.researchEndDateMin = event.target.value;
       this.researchEndDate.updateValueAndValidity();
+      this.researchEndDate.markAsTouched();
     }
 
     if (this.researchEndDate.value < this.researchStartDate.value) {
@@ -240,7 +242,9 @@ export class DefiningEventComponent {
       this.researchEndDate.markAsTouched()
 
     } else {
-      this.researchEndDate.setErrors(null)
+      this.researchEndDate.setErrors(null);
+      this.researchEndDate.updateValueAndValidity();
+      this.researchEndDate.markAsTouched();
     }
   }
 

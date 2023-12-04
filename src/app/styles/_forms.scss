@@ -2,6 +2,10 @@
   margin-bottom: 0.25rem !important;
 }
 
+.form-check-input {
+  border-color: $border-color;
+}
+
 .form-control, .form-select {
   background-color: $bg-secondary;
   border-color: #BDBDBD;

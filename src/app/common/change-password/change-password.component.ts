@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {AlertService} from "../alerts/service/alert.service";
 import {PasswordValidator} from "../../shared/validators/password-validator";
-import { passwordMatchValidator } from 'src/app/shared/validators/password-match-validator';
+import {passwordMatchValidator} from 'src/app/shared/validators/password-match-validator';
 import {AdminService} from "../../shared/services/admin.service";
+import {Router} from "@angular/router";
+import {PasswordDto} from "../../shared/dtos/PasswordDto";
 
 @Component({
   selector: 'app-change-password',
@@ -23,27 +25,37 @@ export class ChangePasswordComponent {
   public buttonTitle1: string = "Pokaż hasło";
   public buttonTitle2: string = "Pokaż hasło";
   public buttonTitle3: string = "Pokaż hasło";
+  private token: string | null = null;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private router: Router,
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Formularz zmiany hasła');
-    this.initFormGroup();
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+
+    } else {
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Formularz zmiany hasła');
+      this.initFormGroup();
+    }
   }
 
   private initFormGroup() {
     this.formGroup = new FormGroup({
-      //oldPassword: new FormControl('', [Validators.required]),
+      oldPassword: new FormControl('', [Validators.required]),
       newPassword: new FormControl('', [Validators.required, PasswordValidator]),
       repeatNewPassword: new FormControl('', [Validators.required, PasswordValidator]),
-    }, { validators: passwordMatchValidator })
+    }, {validators: passwordMatchValidator})
   }
 
   public validateForm() {
@@ -61,10 +73,19 @@ export class ChangePasswordComponent {
 
   public save() {
     if (this.validateForm()) {
-      this.adminService.changePassword(Number(this.authService.getUserId()), this.newPassword.value)
-        .subscribe(passwordDto => {
-          console.log(passwordDto.password)
-          this.alertService.showSuccess('Zmieniono hasło dla użytkownika.');
+      this.adminService.changePassword(Number(this.authService.getUserId()), new PasswordDto(this.newPassword.value, this.oldPassword.value))
+        .subscribe({
+          next: passwordDto => {
+            this.alertService.showSuccess('Hasło zostało zmienione.');
+            this.router.navigate(['/users/' + this.authService.getUserId() + '/appointments'])
+          },
+          error: err => {
+            if(err?.status === 406) {
+              this.alertService.showError('Podaj poprawne stare hasło.')
+            } else {
+              this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
+            }
+          }
         })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.')

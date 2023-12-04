@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {MenuService} from "../../menu.service";
 import {ResolveEnd, Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth.service";
+import {AdminService} from "../../shared/services/admin.service";
 
 @Component({
   selector: 'app-header',
@@ -9,13 +9,11 @@ import {AuthService} from "../../shared/services/auth.service";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  public displayMenu$ = this.menuService.displayMenu$;
   public route: string | undefined;
-  public userId: string | null = '';
 
-  constructor(public menuService: MenuService,
-              private router: Router,
-              public authService: AuthService) {
+  constructor(private router: Router,
+              public authService: AuthService,
+              public adminService: AdminService) {
     this.router.events.subscribe((routerData) => {
       if(routerData instanceof ResolveEnd){
         this.route =  routerData.url.split('#')[0]

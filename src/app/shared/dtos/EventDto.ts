@@ -11,6 +11,7 @@ export class EventDto {
   public surveyBreakTime: number
   public slotsTaken: number = 0
   public active: boolean = true
+  public userId: number | null = null;
 
   public constructor(name: string,
                      description: string,

@@ -12,6 +12,8 @@ import {TitleService} from "../../shared/services/title.service";
 import {SurveyState} from "../../shared/enums/survey-state";
 import {AlertService} from "../../common/alerts/service/alert.service";
 import {FormatDate} from "../../shared/utils/format-date";
+import {ConsentService} from "../../shared/services/consent.service";
+import {ConsentDto} from "../../shared/dtos/ConsentDto";
 
 @Component({
   selector: 'app-survey-registration',
@@ -23,6 +25,7 @@ export class SurveyRegistrationComponent {
   private survey!: SurveyDto;
   private event!: EventDto;
   public availabilityList: Availability[] = [];
+  public consentList: ConsentDto[] = [];
   private surveyCode!: string;
   public form!: FormGroup;
   public selectedDay: string = '';
@@ -41,7 +44,8 @@ export class SurveyRegistrationComponent {
               private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
-              private titleService: TitleService) {
+              private titleService: TitleService,
+              private consentService: ConsentService) {
 
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
@@ -49,7 +53,7 @@ export class SurveyRegistrationComponent {
   }
 
   ngOnInit(): void {
-    this.fetchSurvey()
+    this.fetchSurvey();
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Rejestracja na badanie');
     this.initFormGroup();
@@ -58,17 +62,30 @@ export class SurveyRegistrationComponent {
   private initFormGroup() {
     this.form = new FormGroup({
       dayChoice: new FormControl(null, [Validators.required]),
-      hourChoice: new FormControl(null, [Validators.required]),
-      consents: new FormControl(false, [Validators.requiredTrue])
+      hourChoice: new FormControl(null, [Validators.required])
     })
   }
 
   private fetchSurvey() {
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
-      this.survey = surveyDto
+      this.survey = surveyDto;
       this.fetchEvent(this.survey.eventId, true);
+      this.fetchConsents();
     }, (error) => {
       this.router.navigate(['/404'])
+    })
+  }
+
+  private fetchConsents() {
+    this.consentService.getConsentsForEvent(this.survey.eventId).subscribe(consents => {
+      this.consentList = consents;
+      this.consentList.forEach(consent => {
+        if (consent.mandatory) {
+          this.form.addControl((consent.id).toString(), new FormControl(false, Validators.requiredTrue))
+        } else {
+          this.form.addControl((consent.id).toString(), new FormControl(false))
+        }
+      })
     })
   }
 
@@ -79,7 +96,8 @@ export class SurveyRegistrationComponent {
       this.formSurveyDuration = event.surveyDuration
       this.formEventEndDate = event.endDate
 
-      if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED || this.event.slotsTaken === this.event.maxUsers) {
+      if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED
+        || this.event.slotsTaken === this.event.maxUsers || new Date() > new Date(this.event.endDate)) {
         this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
       }
 
@@ -95,17 +113,27 @@ export class SurveyRegistrationComponent {
 
   save() {
     if (this.validate()) {
-
-      let date: Date = new Date(this.selectedDay)
+      let date: Date = new Date(this.selectedDay);
+      let consentsChecked: number[] = [];
       const [hours, minutes] = this.selectedHour.split(':').map(Number);
-      date.setHours(hours, minutes)
-      this.survey.date = date
-      this.survey.surveyState = SurveyState.USED
+
+      this.consentList.forEach(consent => {
+        if (this.consentFromId(consent.id).value === true) {
+          consentsChecked.push(consent.id);
+        }
+      });
+
+      date.setHours(hours, minutes);
+      this.survey.date = date;
+      this.survey.surveyState = SurveyState.USED;
 
       this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
 
-        this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date))
-        this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+        this.consentService.saveConsentsForSurvey(consentsChecked, survey.id).subscribe( consentDtos => {
+
+          this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date));
+          this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
+        })
 
       }, (exception) => {
 
@@ -206,5 +234,9 @@ export class SurveyRegistrationComponent {
 
   get consents() {
     return this.form.get('consents')!;
+  }
+
+  consentFromId(consentId: number) {
+    return this.form.get(consentId.toString())!;
   }
 }

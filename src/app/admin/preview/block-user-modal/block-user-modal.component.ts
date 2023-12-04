@@ -5,6 +5,7 @@ import {AdminService} from "../../../shared/services/admin.service";
 import {ActivatedRoute} from "@angular/router";
 import {User} from "../../../shared/dtos/User";
 import {Role} from "../../../shared/enums/role";
+import {PreloaderService} from "../../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-block-user-modal',
@@ -20,7 +21,8 @@ export class BlockUserModalComponent {
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
               private adminService: AdminService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private preloader: PreloaderService,) {
 
     this.route.params.subscribe(params => {
       this.userId = params['user-id'];
@@ -38,18 +40,16 @@ export class BlockUserModalComponent {
 
   public blockUser() {
     this.adminService.blockUser(this.userId).subscribe(user => {
-      console.log('Blocked user:')
-      console.log(user)
-      this.closeModal()
+      this.preloader.show();
+      this.closeModal();
       window.location.reload();
     })
   }
 
   public unlockUser() {
     this.adminService.unlockUser(this.userId).subscribe(user => {
-      console.log('Unlocked user:')
-      console.log(user)
-      this.closeModal()
+      this.preloader.show();
+      this.closeModal();
       window.location.reload();
     })
   }

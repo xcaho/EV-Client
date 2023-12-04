@@ -26,6 +26,7 @@ export class AvailabilityComponent {
   public trash = faTrash;
   private eventId: number = 0;
   private userId: string | null | undefined;
+  private token: string | null = null;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -34,6 +35,7 @@ export class AvailabilityComponent {
               private route: ActivatedRoute,
               private alertService: AlertService,
               private authService: AuthService,) {
+    this.token = this.authService.token;
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -42,28 +44,34 @@ export class AvailabilityComponent {
   }
 
   async ngOnInit() {
-    this.authService.saveURL(this.router);
-    document.getElementById('focusReset')?.focus();
-    this.event = this.eventService.getTemporaryEvent();
-    this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
-    this.eventId = EventUtils.getIdFromRoute(this.route);
-    this.userId = this.authService.getUserId()
-
-    if (this.event == undefined && this.isEdit) {
-      this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
-    }
-
-    let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities();
-    this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate));
-
-    if (!temporaryAvailabilities || temporaryAvailabilities.length == 0) {
-      if (this.isEdit) {
-        this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
-          this.includeAvailabilities(this.availabilityService.mapFromDto(availabilityDtoList))
-        })
-      }
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
     } else {
-      this.includeAvailabilities(temporaryAvailabilities)
+
+      document.getElementById('focusReset')?.focus();
+      this.event = this.eventService.getTemporaryEvent();
+      this.isEdit = this.eventService.getIsEditConsideringRouter(this.router);
+      this.eventId = EventUtils.getIdFromRoute(this.route);
+      this.userId = this.authService.getUserId()
+
+      if (this.event == undefined && this.isEdit) {
+        this.event = await firstValueFrom(this.eventService.getEvent(this.eventId));
+      }
+
+      let temporaryAvailabilities = this.availabilityService.getTemporaryAvailabilities();
+      this.generateDates(new Date(this.event.researchStartDate), new Date(this.event.researchEndDate));
+
+      if (!temporaryAvailabilities || temporaryAvailabilities.length == 0) {
+        if (this.isEdit) {
+          this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
+            this.includeAvailabilities(this.availabilityService.mapFromDto(availabilityDtoList))
+          })
+        }
+      } else {
+        this.includeAvailabilities(temporaryAvailabilities)
+      }
     }
   }
 
@@ -77,7 +85,7 @@ export class AvailabilityComponent {
   }
 
   public goBack() {
-    this.availabilityService.setTemporaryAvailabilities(this.availabilityList)
+    this.availabilityService.setTemporaryAvailabilities(this.availabilityList);
   }
 
   private generateDates(startDate: Date, endDate: Date) {
@@ -91,47 +99,9 @@ export class AvailabilityComponent {
     }
   }
 
-  public submit() {
-    if (this.isEdit) {
-      this.eventService.modifyEvent(this.event).subscribe(
-        response => {
-          this.saveAvailability(response.id)
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        })
-    } else {
-      this.eventService.createEvent(this.event).subscribe(
-        response => {
-          this.saveAvailability(response.id);
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        })
-    }
-  }
-
-  private saveAvailability(eventId: number) {
-    let availabilityDtoList: AvailabilityDto[] = this.availabilityService.convertAvailabilityToDto(this.availabilityList)
-    if (this.isEdit) {
-      this.availabilityService.patchAvailabilityList(availabilityDtoList, eventId).subscribe(
-        response => {
-          this.eventService.clearTemporaryEvent();
-          this.availabilityService.clearTemporaryAvailabilities();
-          this.router.navigate(['/users/'+ this.userId +'/appointments']);
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        })
-    } else {
-      this.availabilityService.saveAvailabilityList(availabilityDtoList, eventId).subscribe(
-        response => {
-          this.eventService.clearTemporaryEvent();
-          this.availabilityService.clearTemporaryAvailabilities();
-          this.alertService.showSuccess('Pomyślnie dodano wydarzenie.');
-          this.router.navigate(['/users/'+ this.userId +'/appointments']);
-        }, error => {
-          this.alertService.showError('Wystąpił błąd. Spróbuj ponownie.');
-        }
-      )
-    }
+  goToConsent() {
+    this.router.navigate(['/consent/'])
+    this.availabilityService.setTemporaryAvailabilities(this.availabilityList);
   }
 
   private addOneDay(currentDate: Date) {
@@ -140,7 +110,7 @@ export class AvailabilityComponent {
     return date
   }
 
-  public removeHour (availability: Availability, hours: any): void {
+  public removeHour(availability: Availability, hours: any): void {
     availability.hoursList.forEach((itemList, index) => {
       if (itemList === hours) {
         availability.hoursList.splice(index, 1)

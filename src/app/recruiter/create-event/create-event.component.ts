@@ -13,11 +13,13 @@ import {Router} from "@angular/router";
 export class CreateEventComponent {
   public h1: string = 'Tworzenie wydarzenia';
   public isFormDirty: boolean = false;
+  private token: string | null = null;
 
   constructor(private textChangeService: TextChangeService,
               private titleService: TitleService,
               private authService: AuthService,
               private router: Router) {
+    this.token = this.authService.token;
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -28,12 +30,17 @@ export class CreateEventComponent {
   }
 
   ngOnInit() {
-    this.authService.saveURL(this.router);
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Definiowanie wydarzenia');
-    this.textChangeService.h1$.subscribe(h1 => {
-      this.h1 = h1;
-    })
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+    } else {
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Definiowanie wydarzenia');
+      this.textChangeService.h1$.subscribe(h1 => {
+        this.h1 = h1;
+      })
+    }
   }
 
   onFormDirtyChange(isFormDirty: boolean) {

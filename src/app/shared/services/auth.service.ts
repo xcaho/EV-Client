@@ -7,27 +7,26 @@ import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
 import {Router} from "@angular/router";
 import {LoginDto} from "../dtos/LoginDto";
-import {MenuService} from "../../menu.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   public token: string | null;
-  public userLogin: string | null;
   public url: string | null;
   private userId: string | null;
+  public userName: string | null = null;
+  public role: string | null = null;
 
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
-    private router: Router,
-    private menuService: MenuService
   ) {
     this.token = localStorage.getItem('token');
-    this.userLogin = localStorage.getItem('token_login');
     this.url = localStorage.getItem('token_url');
-    this.userId = localStorage.getItem('userId')
+    this.userId = localStorage.getItem('userId');
+    this.userName = localStorage.getItem('userName');
+    this.role = localStorage.getItem('cache')!;
   }
 
   register(user: User): Observable<AuthDto> {
@@ -55,7 +54,7 @@ export class AuthService {
   }
 
   resetPassword(userId: number): Observable<AuthDto> {
-    return this.http.patch<AuthDto>('http://localhost:8080/admin/users/'+ userId +'/resetPassword', null)
+    return this.http.patch<AuthDto>('http://localhost:8080/admin/users/' + userId + '/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {
@@ -72,13 +71,22 @@ export class AuthService {
     return !!this.token;
   }
 
-  saveAuthData(token: string, userLogin: string, userId: string) {
+  isAdmin(): boolean {
+    if (this.role !== null && this.role !== undefined) {
+      return atob(this.role!) === 'ADMIN';
+    }
+    return false
+  }
+
+  saveAuthData(token: string, userId: string, userName: string, role: string) {
     this.token = token;
-    this.userLogin = userLogin;
     this.userId = userId;
+    this.userName = userName;
+    this.role = role;
     localStorage.setItem('token', token);
-    localStorage.setItem('token_login', userLogin);
     localStorage.setItem('userId', userId);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('cache', role);
   }
 
   saveURL(router: Router) {
@@ -96,15 +104,41 @@ export class AuthService {
 
   removeToken() {
     this.token = null;
-    this.userLogin = null;
     this.userId = null;
+    this.userName = null;
+    this.role = null;
     localStorage.removeItem('token');
-    localStorage.removeItem('token_login');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('cache');
   }
 
   getUserId() {
-
     return this.userId;
+  }
+
+  getRole() {
+    return this.role;
+  }
+
+  isTokenExpired(token: string | null): boolean {
+    if (token) {
+      const tokenParts = token.split('.');
+      if (tokenParts.length !== 3) {
+        return true;
+      }
+
+      const payload = JSON.parse(atob(tokenParts[1]));
+
+      if (payload.exp === undefined) {
+        return false;
+      }
+
+      const now = Math.floor(Date.now() / 1000);
+
+      return payload.exp < now;
+    }
+
+    return true;
   }
 }

@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {EmailValidator} from "../../shared/validators/email-validator";
 import {User} from "../../shared/dtos/User";
 import {UserUtils} from "../../shared/utils/UserUtils";
+import {AdminService} from "../../shared/services/admin.service";
 
 @Component({
   selector: 'app-add-user',
@@ -16,19 +17,41 @@ import {UserUtils} from "../../shared/utils/UserUtils";
 export class AddUserComponent {
   public formGroup!: FormGroup;
   public isEmailEmpty: string = '';
+  private token: string | null = null;
 
   constructor(
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
     private router: Router,
+    private adminService: AdminService,
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Definiowanie nowego użytkownika');
-    this.initFormGroup();
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
+    } else {
+
+      this.adminService.getAllUsers().subscribe({
+        next: (users: User[]) => {
+        },
+        error: (error) => {
+          if (error?.status === 403) {
+            this.router.navigate(['/403'], {skipLocationChange: true})
+          } else {
+            this.router.navigate(['/404'], {skipLocationChange: true});
+          }
+        }
+      })
+
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Definiowanie nowego użytkownika');
+      this.initFormGroup();
+    }
   }
 
   private initFormGroup() {
@@ -52,21 +75,30 @@ export class AddUserComponent {
     return noErrors;
   }
 
-  public goBack() {
-  }
-
   public save() {
     if (this.validateForm()) {
       let formGroupValue = this.formGroup.value
       let user = new User(formGroupValue.email, formGroupValue.name, UserUtils.getRoleFromString(formGroupValue.role))
 
-      this.authService.register(user).subscribe(result => {
-        if (result.token) {
+      this.authService.register(user).subscribe({
+        next: res => {
           this.alertService.showSuccess('Pomyślnie utworzono użytkownika.');
-          console.log(result)
-          this.router.navigate(['admin']);
-        } else {
-          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
+          this.router.navigate(['/admin/add-user/' + res.userId], {
+            state:
+              {
+                login: formGroupValue.email,
+                password: res.password,
+                role: res.role,
+                name: user.name
+              },
+          });
+        },
+        error: err => {
+          if (err?.status === 406) {
+            this.alertService.showError("Użytkownik o podanym e-mailu już istnieje.")
+          } else {
+            this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
+          }
         }
       })
     } else {

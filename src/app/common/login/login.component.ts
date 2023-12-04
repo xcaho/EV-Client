@@ -4,7 +4,6 @@ import {AuthService} from "../../shared/services/auth.service";
 import {TitleService} from "../../shared/services/title.service";
 import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
-import {User} from "../../shared/dtos/User";
 import {Router} from "@angular/router";
 import {LoginDto} from "../../shared/dtos/LoginDto";
 
@@ -19,19 +18,23 @@ export class LoginComponent {
   public eyeSlash = faEyeSlash;
   public passwdShown: boolean = false;
   public buttonTitle: string = "Pokaż hasło";
+  private token: string | null = '';
 
   constructor(
-    public authService: AuthService,
+    private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
     private router: Router,
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
-    if (this.authService.token) {
-      this.router.navigate(['/users/'+ this.authService.getUserId() +'/appointments']);
+    this.token = this.authService.token;
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
     }
+
     document.getElementById('focusReset')?.focus();
     this.titleService.setTitle('Panel logowania');
     this.initFormGroup();
@@ -57,41 +60,28 @@ export class LoginComponent {
     return noErrors;
   }
 
-  public loginAndGoToAppointments() {
+  public loginSubmit() {
     if (this.validateForm()) {
-      let formGroupValue = this.formGroup.value
-      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
+      let formGroupValue = this.formGroup.value;
+      let user = new LoginDto(formGroupValue.login, formGroupValue.password, '');
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
-          this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveAuthData(result.token, formGroupValue.login, result.userId);
-          this.router.navigate(['/users/'+ result.userId +'/appointments']);
-          this.authService.removeURL();
+          this.authService.saveAuthData(result.token, result.userId, result.name, btoa(result.role));
+
+          if (this.authService.url) {
+            this.router.navigate([this.authService.url]);
+            this.authService.removeURL();
+
+          } else {
+            this.router.navigate(['/users/'+ result.userId +'/appointments']);
+          }
+
         } else {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
         }
       })
-    } else {
-      this.alertService.showError('Uzupełnij wymagane pola.');
-    }
-  }
 
-  public loginAndGoToPreviousPage() {
-    if (this.validateForm()) {
-      let formGroupValue = this.formGroup.value
-      let user = new LoginDto(formGroupValue.login, formGroupValue.password)
-
-      this.authService.login(user).subscribe(result => {
-        if (result.token) {
-          this.alertService.showSuccess('Zalogowano pomyślnie.');
-          this.authService.saveAuthData(result.token, formGroupValue.login, result.userId);
-          this.router.navigate([this.authService.url]);
-          this.authService.removeURL();
-        } else {
-          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
-        }
-      })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.');
     }

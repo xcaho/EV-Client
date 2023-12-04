@@ -6,6 +6,7 @@ import {TitleService} from "../../shared/services/title.service";
 import {FormatDate} from "../../shared/utils/format-date";
 import {AuthService} from "../../shared/services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PreloaderService} from "../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-your-appointments',
@@ -13,35 +14,69 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./your-appointments.component.scss']
 })
 export class YourAppointmentsComponent {
+  public allEvents: EventDto[] = [];
   public events: EventDto[] = [];
-  public isFetching: boolean = false;
-  public hasErrors: boolean = false;
   public formatDate = FormatDate;
   public userId: number = 0;
+  private token: string | null = null;
+  public filterAll: boolean = false;
+  public filterDisabled: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
               private titleService: TitleService,
               public authService: AuthService,
               private router: Router,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private preloader: PreloaderService
   ) {
+    this.token = this.authService.token;
   }
 
   ngOnInit() {
-    this.authService.saveURL(this.router);
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Lista wydarzeń');
+    if (this.authService.isTokenExpired(this.token)) {
+      this.authService.removeToken();
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
 
-    this.route.params.subscribe(params => {
-      this.userId = params['user-id'];
-    });
+    } else {
+      this.preloader.show();
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Lista wydarzeń');
 
-    this.eventService.getEvents(this.userId).subscribe((events) => {
-        this.events = this.eventSort(events);
-      }, (err) => {
-        this.hasErrors = true;
+      this.route.params.subscribe(params => {
+        this.userId = params['user-id'];
       });
+
+      this.eventService.getAllEvents().subscribe((allEvents) => {
+        this.allEvents = this.eventSort(allEvents)
+      });
+
+      this.eventService.getEvents(this.userId).subscribe((events) => {
+        this.events = this.eventSort(events);
+        this.preloader.hide();
+      }, (err) => {
+        if (err.status === 403) {
+          this.preloader.hide();
+          this.router.navigate(['/403'], {skipLocationChange: true})
+        } else {
+          this.preloader.hide();
+          this.router.navigate(['/404'], {skipLocationChange: true})
+        }
+      });
+    }
+  }
+
+  filterEvents(): EventDto[] {
+    if (this.filterAll && this.filterDisabled) {
+      return this.allEvents.filter((event) => !event.active);
+    } else if (this.filterAll) {
+      return this.allEvents;
+    } else if (this.filterDisabled) {
+      return this.events.filter((event) => !event.active);
+    } else {
+      return this.events.filter((event) => event.active);
+    }
   }
 
   goToCreate() {
@@ -56,25 +91,25 @@ export class YourAppointmentsComponent {
 
     events.forEach(event => {
       if (event.active)
-        activeEvents.push(event)
+        activeEvents.push(event);
       if (!event.active)
-        disabledEvents.push(event)
+        disabledEvents.push(event);
     })
 
     activeEvents.sort((a: EventDto, b: EventDto) => {
-      let x = new Date(a.researchStartDate).getTime()
-      let y = new Date(b.researchStartDate).getTime()
+      let x = new Date(a.researchStartDate).getTime();
+      let y = new Date(b.researchStartDate).getTime();
 
-      return y - x
+      return y - x;
     })
 
     disabledEvents.sort((a: EventDto, b: EventDto) => {
-      let x = new Date(a.researchStartDate).getTime()
-      let y = new Date(b.researchStartDate).getTime()
+      let x = new Date(a.researchStartDate).getTime();
+      let y = new Date(b.researchStartDate).getTime();
 
-      return y - x
+      return y - x;
     })
 
-    return activeEvents.concat(disabledEvents)
+    return activeEvents.concat(disabledEvents);
   }
 }

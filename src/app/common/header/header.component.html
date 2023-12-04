@@ -17,15 +17,9 @@
         </li>
       </ul>
       <span
-         class="navbar-brand me-auto">
+        class="navbar-brand me-auto">
         easy <span class="smaller">visit</span>
       </span>
-<!--      <a [routerLink]="['/login']"-->
-<!--         *ngIf="!authService.token"-->
-<!--         class="navbar-brand me-auto"-->
-<!--         aria-label="Przejdź do strony głównej">-->
-<!--        easy <span class="smaller">visit</span>-->
-<!--      </a>-->
       <button *ngIf="authService.token"
               class="navbar-toggler"
               type="button"
@@ -43,7 +37,8 @@
         <ul *ngIf="authService.token"
             class="navbar-nav me-auto mt-2 mt-lg-0">
           <li class="nav-item d-flex"
-              [routerLinkActive]="['active']">
+              [routerLinkActive]="['active']"
+              *ngIf="authService.isAdmin()">
             <a class="nav-link px-2"
                routerLink="admin">
               Panel administratora
@@ -58,9 +53,9 @@
           </li>
         </ul>
         <div class="spacer"></div>
-        <p *ngIf="authService.userLogin"
+        <p *ngIf="authService.userName"
            class="d-block ms-auto text-white text-end mb-0 me-2">
-          {{authService.userLogin}}
+          {{authService.userName}}
         </p>
         <div class="d-flex justify-content-end">
           <a [routerLink]="['/change-password']"

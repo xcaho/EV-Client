@@ -55,8 +55,7 @@ export class AvailabilityService {
   }
 
   setTemporaryAvailabilities(availabilities: Availability[]) {
-    this.temporaryAvailabilities = availabilities
-    console.log(this.temporaryAvailabilities)
+    this.temporaryAvailabilities = availabilities;
   }
 
   clearTemporaryAvailabilities() {
