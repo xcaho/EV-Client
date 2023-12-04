@@ -41,6 +41,29 @@ export class EventService {
       )
   }
 
+  getAllEvents(): Observable<EventDto[]> {
+
+    return this.http.get<EventDto[]>(this.apiUrl + '/events')
+      .pipe(
+        map(events => events.map(event => new EventDto(
+          event.name,
+          event.description,
+          event.researchStartDate,
+          event.researchEndDate,
+          event.endDate,
+          event.maxUsers,
+          event.surveyDuration,
+          event.surveyBreakTime,
+          event.slotsTaken,
+          event.id,
+          event.active
+        ))),
+        catchError((error: any) => {
+          return throwError(error);
+        })
+      )
+  }
+
   getEvents(userId: number): Observable<EventDto[]> {
 
     return this.http.get<EventDto[]>(this.apiUrl + '/users/'+ userId +'/events')

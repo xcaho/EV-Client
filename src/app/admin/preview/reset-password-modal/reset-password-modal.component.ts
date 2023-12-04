@@ -1,9 +1,8 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AlertService} from "../../../common/alerts/service/alert.service";
-import {faCopy, faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
-import {ClipboardService} from "ngx-clipboard";
 import {AuthService} from "../../../shared/services/auth.service";
+import {ShowNewPasswordModalComponent} from "./show-new-password-modal/show-new-password-modal.component";
 
 @Component({
   selector: 'app-reset-password-modal',
@@ -12,19 +11,14 @@ import {AuthService} from "../../../shared/services/auth.service";
 })
 export class ResetPasswordModalComponent {
   @ViewChild('content') content: ElementRef | undefined;
+  @ViewChild(ShowNewPasswordModalComponent) showNewPasswordModalComponent!: ShowNewPasswordModalComponent;
   private modalRef: NgbModalRef = null!;
-  public isPasswordShown: boolean = false;
-  public buttonTitle: string = "Pokaż hasło";
-  public temporaryPassword: string = "HasloJestTajne";
-  public eye = faEye;
-  public eyeSlash = faEyeSlash;
-  public copy = faCopy;
   public userId: number = 0;
 
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
-              private clipboardService: ClipboardService,
-              private authServce: AuthService,) {
+              private authService: AuthService,
+  ) {
   }
 
   public open(content: any, id: number): void {
@@ -36,23 +30,14 @@ export class ResetPasswordModalComponent {
     this.modalRef?.dismiss();
   }
 
-  public passwordShowToggler() {
-    this.isPasswordShown = !this.isPasswordShown;
-    if (!this.isPasswordShown) {
-      this.buttonTitle = 'Pokaż hasło';
-    } else {
-      this.buttonTitle = 'Ukryj hasło';
-    }
-  }
-
-  public copyToClipboard(password: string) {
-    this.clipboardService.copyFromContent(password);
-    this.alertService.showInfo('Skopiowano hasło tymczasowe.')
+  public submit(): void {
+    this.generateNewPassword();
   }
 
   public generateNewPassword() {
-    this.authServce.resetPassword(this.userId).subscribe(passwordDto => {
-      console.log(passwordDto.password)
+    this.authService.resetPassword(this.userId).subscribe(passwordDto => {
+      this.closeModal();
+      this.showNewPasswordModalComponent.open(this.showNewPasswordModalComponent.content, passwordDto.password)
       this.alertService.showSuccess('Wygenerowano nowe tymczasowe hasło dla użytkownika.');
     });
   }

@@ -13,11 +13,14 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./your-appointments.component.scss']
 })
 export class YourAppointmentsComponent {
+  public allEvents: EventDto[] = [];
   public events: EventDto[] = [];
   public isFetching: boolean = false;
   public formatDate = FormatDate;
   public userId: number = 0;
   private token: string | null = null;
+  public filterAll: boolean = false;
+  public filterDisabled: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -53,7 +56,20 @@ export class YourAppointmentsComponent {
     }
   }
 
-  goToCreate() {
+    filterEvents(): EventDto[] {
+        if (this.filterAll && this.filterDisabled) {
+            return this.allEvents.filter((event) => !event.active);
+        } else if (this.filterAll) {
+            return this.allEvents;
+        } else if (this.filterDisabled) {
+            return this.events.filter((event) => !event.active);
+        } else {
+            return this.events.filter((event) => event.active);
+        }
+    }
+
+
+    goToCreate() {
     this.eventService.clearTemporaryEvent()
     this.eventService.setIsEdit(false)
     this.availabilityService.clearTemporaryAvailabilities()
