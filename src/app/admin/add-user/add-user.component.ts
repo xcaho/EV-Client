@@ -37,7 +37,8 @@ export class AddUserComponent {
     } else {
 
       this.adminService.getAllUsers().subscribe({
-        next: (users: User[]) => { },
+        next: (users: User[]) => {
+        },
         error: (error) => {
           if (error?.status === 403) {
             this.router.navigate(['/403'], {skipLocationChange: true})
@@ -79,20 +80,25 @@ export class AddUserComponent {
       let formGroupValue = this.formGroup.value
       let user = new User(formGroupValue.email, formGroupValue.name, UserUtils.getRoleFromString(formGroupValue.role))
 
-      this.authService.register(user).subscribe(result => {
-        if (result.token) {
+      this.authService.register(user).subscribe({
+        next: res => {
           this.alertService.showSuccess('Pomyślnie utworzono użytkownika.');
-          this.router.navigate(['/admin/add-user/' + result.userId], {
+          this.router.navigate(['/admin/add-user/' + res.userId], {
             state:
               {
                 login: formGroupValue.email,
-                password: result.password,
-                role: result.role,
+                password: res.password,
+                role: res.role,
                 name: user.name
               },
           });
-        } else {
-          this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
+        },
+        error: err => {
+          if (err?.status === 406) {
+            this.alertService.showError("Użytkownik o podanym e-mailu już istnieje.")
+          } else {
+            this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
+          }
         }
       })
     } else {

@@ -74,9 +74,18 @@ export class ChangePasswordComponent {
   public save() {
     if (this.validateForm()) {
       this.adminService.changePassword(Number(this.authService.getUserId()), new PasswordDto(this.newPassword.value, this.oldPassword.value))
-        .subscribe(passwordDto => {
-          console.log(passwordDto.password)
-          this.alertService.showSuccess('Zmieniono hasło.');
+        .subscribe({
+          next: passwordDto => {
+            this.alertService.showSuccess('Hasło zostało zmienione.');
+            this.router.navigate(['/users/' + this.authService.getUserId() + '/appointments'])
+          },
+          error: err => {
+            if(err?.status === 406) {
+              this.alertService.showError('Podaj poprawne stare hasło.')
+            } else {
+              this.alertService.showError('Wystąpił błąd, spróbuj ponownie.')
+            }
+          }
         })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.')
