@@ -7,6 +7,7 @@ import {AlertService} from "../alerts/service/alert.service";
 import {PasswordValidator} from "../../shared/validators/password-validator";
 import {passwordMatchValidator} from 'src/app/shared/validators/password-match-validator';
 import {AdminService} from "../../shared/services/admin.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-change-password',
@@ -29,7 +30,8 @@ export class ChangePasswordComponent {
     private authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private router: Router,
   ) {
     this.token = this.authService.token;
   }
@@ -37,11 +39,15 @@ export class ChangePasswordComponent {
   ngOnInit() {
     if (this.authService.isTokenExpired(this.token)) {
       this.authService.removeToken();
-    }
+      this.authService.saveURL(this.router);
+      this.router.navigate(['/login']);
 
-    document.getElementById('focusReset')?.focus();
-    this.titleService.setTitle('Formularz zmiany hasła');
-    this.initFormGroup();
+    } else {
+      document.getElementById('focusReset')?.focus();
+      this.titleService.setTitle('Formularz zmiany hasła');
+      this.initFormGroup();
+
+    }
   }
 
   private initFormGroup() {
@@ -70,7 +76,7 @@ export class ChangePasswordComponent {
       this.adminService.changePassword(Number(this.authService.getUserId()), this.newPassword.value)
         .subscribe(passwordDto => {
           console.log(passwordDto.password)
-          this.alertService.showSuccess('Zmieniono hasło dla użytkownika.');
+          this.alertService.showSuccess('Zmieniono hasło.');
         })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.')
