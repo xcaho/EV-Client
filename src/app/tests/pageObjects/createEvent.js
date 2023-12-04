@@ -21,15 +21,15 @@ const researchStartError = Selector('[id*="researchStartDateError"]')
 const researchEndError = Selector('[id*="researchEndDateError"]')
 
 const createEvent = () => ({
-  fillForm: async ({
-                     nameValue,
-                     surveyDurationValue,
-                     surveyBreakTimeValue,
-                     endDateValue,
-                     maxUsersValue,
-                     researchStartDateValue,
-                     researchEndDateValue
-                   } = {}) => {
+
+  //clickCreateEvent: async () => {
+  //  await t
+  //    .click()
+  //},
+
+  fillForm: async ({nameValue, surveyDurationValue, surveyBreakTimeValue, endDateValue, maxUsersValue,
+                     researchStartDateValue, researchEndDateValue} = {}) => {
+
     await setInputValue(inputName, nameValue);
     await setInputValue(inputEndDate, endDateValue);
     await setInputValue(inputMaxUsers, maxUsersValue);
