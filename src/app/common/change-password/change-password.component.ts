@@ -27,7 +27,7 @@ export class ChangePasswordComponent {
   private token: string | null = null;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private titleService: TitleService,
     private alertService: AlertService,
     private adminService: AdminService,
@@ -46,7 +46,6 @@ export class ChangePasswordComponent {
       document.getElementById('focusReset')?.focus();
       this.titleService.setTitle('Formularz zmiany hasła');
       this.initFormGroup();
-
     }
   }
 
