@@ -81,9 +81,9 @@ export class AdminService {
       )
   }
 
-  public changePassword(id: number, newPassword: string) {
+  public changePassword(userId: number, passwordDto: PasswordDto) {
 
-    return this.http.patch<PasswordDto>(this.apiUrl + '/admin/users/'+ id +'/changePassword', new PasswordDto(newPassword))
+    return this.http.patch<PasswordDto>(this.apiUrl + '/admin/users/'+ userId +'/changePassword', passwordDto)
       .pipe(
         catchError((error: any) => {
           return throwError(error);

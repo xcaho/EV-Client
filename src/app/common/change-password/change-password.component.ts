@@ -8,6 +8,7 @@ import {PasswordValidator} from "../../shared/validators/password-validator";
 import {passwordMatchValidator} from 'src/app/shared/validators/password-match-validator';
 import {AdminService} from "../../shared/services/admin.service";
 import {Router} from "@angular/router";
+import {PasswordDto} from "../../shared/dtos/PasswordDto";
 
 @Component({
   selector: 'app-change-password',
@@ -72,7 +73,7 @@ export class ChangePasswordComponent {
 
   public save() {
     if (this.validateForm()) {
-      this.adminService.changePassword(Number(this.authService.getUserId()), this.newPassword.value)
+      this.adminService.changePassword(Number(this.authService.getUserId()), new PasswordDto(this.newPassword.value, this.oldPassword.value))
         .subscribe(passwordDto => {
           console.log(passwordDto.password)
           this.alertService.showSuccess('Zmieniono hasło.');

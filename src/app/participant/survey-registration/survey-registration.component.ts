@@ -96,7 +96,8 @@ export class SurveyRegistrationComponent {
       this.formSurveyDuration = event.surveyDuration
       this.formEventEndDate = event.endDate
 
-      if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED || this.event.slotsTaken === this.event.maxUsers) {
+      if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED
+        || this.event.slotsTaken === this.event.maxUsers || new Date() > new Date(this.event.endDate)) {
         this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
       }
 
