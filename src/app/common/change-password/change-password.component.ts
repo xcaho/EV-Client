@@ -46,7 +46,7 @@ export class ChangePasswordComponent {
 
   private initFormGroup() {
     this.formGroup = new FormGroup({
-      //oldPassword: new FormControl('', [Validators.required]),
+      oldPassword: new FormControl('', [Validators.required]),
       newPassword: new FormControl('', [Validators.required, PasswordValidator]),
       repeatNewPassword: new FormControl('', [Validators.required, PasswordValidator]),
     }, {validators: passwordMatchValidator})
