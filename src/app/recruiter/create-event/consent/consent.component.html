@@ -48,16 +48,14 @@
                               formControlName="{{i}}"
                               rows="3"
                               class="form-control active w-100"
-                              [attr.aria-describedby]="getConsent(i)+'Error'"
-                              [class.is-invalid]="getConsent(i).invalid && (getConsent(i).dirty || getConsent(i).touched)">
+                              [attr.aria-describedby]="getConsent(i)+'Error'">
                     </textarea>
                   <label [for]="'consent'+i" class="form-label">
                     Treść zgody
                   </label>
-                  <div *ngIf="getConsent(i).invalid && (getConsent(i).dirty || getConsent(i).touched)"
+                  <div *ngIf="getConsent(i).touched"
                        class="invalid-feedback">
-                    <p *ngIf="getConsent(i).errors?.['required']"
-                       [id]="getConsent(i)+'Error'"
+                    <p [id]="getConsent(i)+'Error'"
                        class="mb-0">
                       Podaj treść zgody
                     </p>

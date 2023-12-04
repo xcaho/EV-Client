@@ -99,23 +99,30 @@ export class ConsentComponent {
       let index = 0;
       const control = this.fb.control({value: consent.content, disabled: true}) as FormControl;
       textAreasArray.push(control);
-      if(consent.mandatory) {
+      if (consent.mandatory) {
         setTimeout(() => {
           // @ts-ignore
-          let checkbox: HTMLInputElement = document.getElementById('isRequired'+index)!
+          let checkbox: HTMLInputElement = document.getElementById('isRequired' + index)!
           checkbox.checked = true;
 
-        },50)
+        }, 50)
       }
     });
   }
 
   validateForm(): boolean {
     let noErrors: boolean = true;
-    (this.formGroup.get('textAreas') as FormArray).controls.forEach(control => {
-      if (control.value === '' || control.invalid) {
+
+    (this.formGroup.get('textAreas') as FormArray).controls.forEach((control, index) => {
+      if (control.value === '') {
+        const element = document.getElementById('consent'+index.toString());
+        element!.classList.add('is-invalid');
         control.markAsTouched();
         noErrors = false;
+      } else {
+        const element = document.getElementById('consent'+index.toString());
+        element!.classList.remove('is-invalid');
+        control.markAsTouched();
       }
     })
 
@@ -212,7 +219,7 @@ export class ConsentComponent {
     const textAreasArray = this.formGroup.get('textAreas') as FormArray;
     const formGroupAtIndex = textAreasArray.at(i) as AbstractControl;
 
-    formGroupAtIndex.setErrors({'required': true})
+    formGroupAtIndex.setErrors({'required': true});
   }
 
   private defaultValuesForTextareas(value: any) {
