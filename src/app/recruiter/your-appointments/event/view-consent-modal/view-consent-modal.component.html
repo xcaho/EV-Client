@@ -26,6 +26,11 @@
   <div class="modal-footer px-0">
     <div class="w-100 row m-0 justify-content-between">
       <div class="col-6 col-sm-auto">
+        <button class="btn btn-outline-primary"
+                (click)="downloadConsents(eventId)"
+                type="button">
+          Pobierz zgody (.csv)
+        </button>
       </div>
       <div class="col-6 col-sm-auto">
         <button type="submit"

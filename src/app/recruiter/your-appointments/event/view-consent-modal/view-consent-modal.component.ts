@@ -4,6 +4,7 @@ import {SurveyDto} from "../../../../shared/dtos/SurveyDto";
 import {ConsentService} from "../../../../shared/services/consent.service";
 import {ConsentDto} from "../../../../shared/dtos/ConsentDto";
 import { HttpResponse } from '@angular/common/http';
+import {AlertService} from "../../../../common/alerts/service/alert.service";
 
 @Component({
   selector: 'app-view-consent-modal',
@@ -14,33 +15,39 @@ export class ViewConsentModalComponent {
   @ViewChild('content') content: ElementRef | undefined;
   modalRef: NgbModalRef = null!;
   survey: SurveyDto;
-  consentList: ConsentDto[] = []
+  consentList: ConsentDto[] = [];
+  public eventId: number | null = null;
 
-  constructor(private modalService: NgbModal, private consentService: ConsentService) {
+  constructor(private modalService: NgbModal,
+              private consentService: ConsentService,
+              private alertService: AlertService) {
 
     this.survey = {} as SurveyDto
   }
 
   open(content: any, survey: SurveyDto, eventId: number): void {
-
     this.survey = survey;
+    this.eventId = eventId;
 
     this.consentService.getConsentsForSurvey(this.survey.id).subscribe( consents => {
-
       this.consentList = consents;
-
-      this.consentService.getSurveysCsv(eventId).subscribe(response => {
-
-        this.downloadCsv(response);
-      })
-
-      this.consentService.getConsentsCsv(eventId).subscribe(response => {
-
-        this.downloadCsv(response)
-      })
 
       this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
     })
+  }
+
+  public downloadConsents(id: number | null) {
+    if (id !== null) {
+      this.consentService.getSurveysCsv(id).subscribe(response => {
+        this.downloadCsv(response);
+      });
+
+      this.consentService.getConsentsCsv(id).subscribe(response => {
+        this.downloadCsv(response)
+      });
+    } else {
+      this.alertService.showError('Błąd pobierania zgód.')
+    }
   }
 
   private downloadCsv(response: HttpResponse<string>) {
