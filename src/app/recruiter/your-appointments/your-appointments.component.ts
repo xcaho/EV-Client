@@ -21,7 +21,6 @@ export class YourAppointmentsComponent {
   private token: string | null = null;
   public filterAll: boolean = false;
   public filterDisabled: boolean = false;
-  public checkboxClicked: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -59,11 +58,6 @@ export class YourAppointmentsComponent {
       }
     });
   }
-
-    updateCheckboxClicked() {
-        this.checkboxClicked = this.filterAll || this.filterDisabled;
-        console.log(this.checkboxClicked)
-    }
 
     filterEvents(): EventDto[] {
         if (this.filterAll && this.filterDisabled) {

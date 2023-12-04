@@ -25,8 +25,7 @@
               <input class="form-check-input"
                      type="checkbox"
                      id="filterActive"
-                     [(ngModel)]="filterAll"
-                     (change)="updateCheckboxClicked()">
+                     [(ngModel)]="filterAll">
               <label class="form-check-label"
                      for="filterActive">
                 Pokaż wydarzenia wszystkich badaczy
@@ -36,8 +35,7 @@
               <input class="form-check-input"
                      type="checkbox"
                      id="filterDisabled"
-                     [(ngModel)]="filterDisabled"
-                     (change)="updateCheckboxClicked()">
+                     [(ngModel)]="filterDisabled">
               <label class="form-check-label"
                      for="filterDisabled">
                 Pokaż archiwalne wydarzenia
@@ -46,7 +44,7 @@
           </div>
         </div>
       </fieldset>
-      
+
       <ul class="list-group d-none d-md-block" aria-labelledby="pageTitle">
         <li class="list-group-item p-3 li-header d-block" aria-hidden="true">
           <div class="row">
