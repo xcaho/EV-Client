@@ -85,7 +85,7 @@
                         type="button"
                         [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
                         title="Przepisz wydarzenie do innego rekrutera"
-                        (click)="assignModalComponent.open(assignModalComponent.content, event, userId)">
+                        (click)="openAssignModal(event, userId)">
                   <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
                   <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
                 </button>
@@ -131,7 +131,7 @@
                         type="button"
                         [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
                         title="Przepisz wydarzenie do innego rekrutera"
-                        (click)="assignModalComponent.open(assignModalComponent.content, event, userId)">
+                        (click)="openAssignModal(event, userId)">
                   <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
                   <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
                 </button>

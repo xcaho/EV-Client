@@ -38,6 +38,8 @@ import { ViewConsentModalComponent } from './recruiter/your-appointments/event/v
 import {
   ShowNewPasswordModalComponent
 } from "./admin/preview/reset-password-modal/show-new-password-modal/show-new-password-modal.component";
+import { PreloaderComponent } from './common/preloader/preloader.component';
+import {PreloaderService} from "./shared/services/preloader.service";
 
 
 @NgModule({
@@ -69,6 +71,7 @@ import {
     NewUserDetailsComponent,
     ViewConsentModalComponent,
     ShowNewPasswordModalComponent,
+    PreloaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,12 +85,13 @@ import {
   ],
   providers: [
     AlertService,
+    PreloaderService,
     Title,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })

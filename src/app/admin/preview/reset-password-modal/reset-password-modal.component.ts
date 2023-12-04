@@ -3,6 +3,7 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {AlertService} from "../../../common/alerts/service/alert.service";
 import {AuthService} from "../../../shared/services/auth.service";
 import {ShowNewPasswordModalComponent} from "./show-new-password-modal/show-new-password-modal.component";
+import {PreloaderService} from "../../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-reset-password-modal',
@@ -18,6 +19,7 @@ export class ResetPasswordModalComponent {
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
               private authService: AuthService,
+              private preloader: PreloaderService,
   ) {
   }
 
@@ -31,13 +33,15 @@ export class ResetPasswordModalComponent {
   }
 
   public submit(): void {
+    this.preloader.show()
     this.generateNewPassword();
   }
 
   public generateNewPassword() {
     this.authService.resetPassword(this.userId).subscribe(passwordDto => {
       this.closeModal();
-      this.showNewPasswordModalComponent.open(this.showNewPasswordModalComponent.content, passwordDto.password)
+      this.showNewPasswordModalComponent.open(this.showNewPasswordModalComponent.content, passwordDto.password);
+      this.preloader.hide();
       this.alertService.showSuccess('Wygenerowano nowe tymczasowe hasło dla użytkownika.');
     });
   }

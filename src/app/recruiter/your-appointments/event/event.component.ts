@@ -17,6 +17,7 @@ import {AlertService} from "../../../common/alerts/service/alert.service";
 import {FormatDate} from "../../../shared/utils/format-date";
 import {AuthService} from "../../../shared/services/auth.service";
 import {ViewConsentModalComponent} from "./view-consent-modal/view-consent-modal.component";
+import {PreloaderService} from "../../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-event',
@@ -47,7 +48,8 @@ export class EventComponent {
               private clipboardService: ClipboardService,
               private alertService: AlertService,
               private titleService: TitleService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private preloader: PreloaderService,) {
     this.token = this.authService.token;
     this.event = {} as EventDto
   }
@@ -58,7 +60,7 @@ export class EventComponent {
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
     } else {
-
+      this.preloader.show();
       document.getElementById('focusReset')?.focus();
       this.route.params.subscribe(params => {
         this.eventId = params['id'];
@@ -84,7 +86,9 @@ export class EventComponent {
         this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
           this.surveyList = surveys;
         })
+        this.preloader.hide();
       }, (error) => {
+        this.preloader.hide();
         if (error.status === 403) {
           this.router.navigate(['/403'], {skipLocationChange: true})
         } else {

@@ -6,6 +6,7 @@ import {TitleService} from "../../shared/services/title.service";
 import {FormatDate} from "../../shared/utils/format-date";
 import {AuthService} from "../../shared/services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PreloaderService} from "../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-your-appointments',
@@ -15,7 +16,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class YourAppointmentsComponent {
   public allEvents: EventDto[] = [];
   public events: EventDto[] = [];
-  public isFetching: boolean = false;
   public formatDate = FormatDate;
   public userId: number = 0;
   private token: string | null = null;
@@ -27,7 +27,8 @@ export class YourAppointmentsComponent {
               private titleService: TitleService,
               public authService: AuthService,
               private router: Router,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private preloader: PreloaderService
   ) {
     this.token = this.authService.token;
   }
@@ -39,6 +40,7 @@ export class YourAppointmentsComponent {
       this.router.navigate(['/login']);
 
     } else {
+      this.preloader.show();
       document.getElementById('focusReset')?.focus();
       this.titleService.setTitle('Lista wydarzeń');
 
@@ -52,9 +54,14 @@ export class YourAppointmentsComponent {
 
       this.eventService.getEvents(this.userId).subscribe((events) => {
         this.events = this.eventSort(events);
+        this.preloader.hide();
       }, (err) => {
         if (err.status === 403) {
+          this.preloader.hide();
           this.router.navigate(['/403'], {skipLocationChange: true})
+        } else {
+          this.preloader.hide();
+          this.router.navigate(['/404'], {skipLocationChange: true})
         }
       });
     }
@@ -71,7 +78,6 @@ export class YourAppointmentsComponent {
       return this.events.filter((event) => event.active);
     }
   }
-
 
   goToCreate() {
     this.eventService.clearTemporaryEvent()

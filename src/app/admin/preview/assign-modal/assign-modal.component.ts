@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 import {User} from 'src/app/shared/dtos/User';
 import {AlertService} from "../../../common/alerts/service/alert.service";
@@ -6,6 +6,7 @@ import {AdminService} from "../../../shared/services/admin.service";
 import {EventDto} from "../../../shared/dtos/EventDto";
 import {FormControl, FormGroup} from "@angular/forms";
 import {EventService} from "../../../event.service";
+import {PreloaderService} from "../../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-assign-modal',
@@ -20,11 +21,13 @@ export class AssignModalComponent {
   public displayedUsers: User[] = [];
   private event!: EventDto;
   public formGroup!: FormGroup;
+  @Output() modalClosed: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private modalService: NgbModal,
               private alertService: AlertService,
               private adminService: AdminService,
-              private eventService: EventService) {
+              private eventService: EventService,
+              private preloader: PreloaderService,) {
   }
 
   ngOnInit() {
@@ -36,12 +39,14 @@ export class AssignModalComponent {
   public open(content: any, event: EventDto, eventOwner: number): void {
     this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
     this.event = event;
-    this.eventOwner = eventOwner;
+    this.eventOwner = Number(eventOwner);
+
     this.initFormGroup();
   }
 
   public closeModal(): void {
     this.modalRef?.dismiss();
+    this.modalClosed.emit();
   }
 
   private initFormGroup() {
@@ -51,20 +56,19 @@ export class AssignModalComponent {
   }
 
   public save(): void {
+    this.preloader.show();
     if (this.formGroup.get('users')?.value !== this.eventOwner) {
       this.adminService.getUser(this.formGroup.get('users')?.value).subscribe(selectedUser => {
 
         this.adminService.reassignUser(selectedUser.id, this.event.id).subscribe(eventDto => {
           this.closeModal();
           this.alertService.showSuccess('Przypisano wydarzenie ' + this.event.name + ' do użytkownika ' + selectedUser.name + '.');
-          // TODO: Refresh listy
-          // this.eventService.getEvents(this.eventOwner).subscribe(refreshedEvents => {
-          //   this.events = refreshedEvents;
-          // });
+          this.preloader.hide();
         })
       })
     } else {
       this.closeModal();
+      this.preloader.hide();
     }
   }
 }
