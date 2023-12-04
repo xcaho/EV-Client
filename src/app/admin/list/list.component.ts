@@ -4,6 +4,7 @@ import {AdminService} from "../../shared/services/admin.service";
 import {AuthService} from "../../shared/services/auth.service";
 import {Router} from "@angular/router";
 import {RoleToView} from "../../shared/enums/role-to-view";
+import {PreloaderService} from "../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-list',
@@ -18,6 +19,7 @@ export class ListComponent {
   constructor(private adminService: AdminService,
               private authService: AuthService,
               private router: Router,
+              private preloader: PreloaderService
               ) {
     this.token = this.authService.token;
   }
@@ -28,12 +30,15 @@ export class ListComponent {
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
     } else {
+      this.preloader.show();
 
       this.adminService.getAllUsers().subscribe({
         next: (users: User[]) => {
           this.users = users;
+          this.preloader.hide();
         },
         error: (error) => {
+          this.preloader.hide();
           if (error?.status === 403) {
             this.router.navigate(['/403'], {skipLocationChange: true})
           } else {

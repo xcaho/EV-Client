@@ -63,7 +63,7 @@ export class PreviewComponent implements AfterViewInit {
       this.authService.saveURL(this.router);
       this.router.navigate(['/login']);
     } else {
-
+      this.preloader.show();
       document.getElementById('focusReset')?.focus();
       this.titleService.setTitle('Definiowanie nowego użytkownika');
 
@@ -78,8 +78,10 @@ export class PreviewComponent implements AfterViewInit {
           this.eventService.getEvents(this.userId).subscribe(events => {
             this.events = events;
           })
+          this.preloader.hide();
         },
         error: (error) => {
+          this.preloader.hide();
           if (error?.status === 403) {
             this.router.navigate(['/403'], {skipLocationChange: true});
           } else {
