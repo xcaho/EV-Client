@@ -1,5 +1,6 @@
 import {ClientFunction, t, Selector} from "testcafe";
 import login from "../pageObjects/login";
+import { getPassword } from "../passwordHelper";
 
 const loginPage = login();
 
@@ -7,8 +8,8 @@ fixture('Codes')
   .page("http://localhost:4200/")
   .beforeEach(async t => {
     await t.maximizeWindow()
-    const login = "mail@domena.com"
-    const password = "password1"
+    const login = "test1@gmail.com"
+    const password = getPassword()
     await loginPage.typeLogin(login);
     await loginPage.typePassword(password);
     await loginPage.submit()
@@ -18,8 +19,7 @@ fixture('Codes')
 
 test
 ('Register to already used code', async () => {
-  await t
-    .maximizeWindow()
+  await t.maximizeWindow()
 
   const code = Selector('#kod1');
   const url = "http://localhost:4200/register/" + await code.innerText
@@ -32,12 +32,11 @@ test
 
 test
 ('Register to closed code', async () => {
-  await t
-    .maximizeWindow()
+  await t.maximizeWindow()
 
   const code = Selector('#kod2');
   const url = "http://localhost:4200/register/" + await code.innerText
-  await t.click(Selector('main .btn.btn-icon.btn-list').nth(3))
+  await t.click(Selector('main .btn.btn-icon.btn-list').nth(4))
   await t.wait(1000)
 
   await t.click(Selector('button').withText('Generuj kod'))
@@ -52,8 +51,7 @@ test
 
 test
 ('Register to non existing code', async () => {
-  await t
-    .maximizeWindow()
+  await t.maximizeWindow()
 
   const url = "http://localhost:4200/register/aaaaaaaaaaaa"
   await t.navigateTo(url)
