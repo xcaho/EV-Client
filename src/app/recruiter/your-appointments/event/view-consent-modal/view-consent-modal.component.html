@@ -11,32 +11,29 @@
     </button>
   </div>
   <div class="modal-body">
-    <ng-container *ngIf="consentList.length === 0">
-      <p class="mb-0">Użytkownik nie zaakceptował żadnych zgód.</p>
-    </ng-container>
-    <ng-container *ngIf="consentList.length > 0">
-      <p class="mb-0">Lista zgód, które użytkownik zaakceptował:</p>
-      <ul class="mb-0 ps-0">
-        <ng-container *ngFor="let consent of consentList">
-          <li class="ms-4 my-2">{{consent.content}}</li>
-        </ng-container>
-      </ul>
-    </ng-container>
+    <ol class="mb-0 ps-0">
+      <ng-container *ngFor="let consent of allConsents">
+        <li class="ms-4 my-2">
+          {{ consent.content }}<br>
+          <span class="text-success" *ngIf="isConsentInList(consent.content); else notPresent">
+            Użytkownik wyraził zgodę.
+          </span>
+          <ng-template #notPresent>
+            <span class="text-danger">
+              Użytkownik nie wyraził zgody.
+            </span>
+          </ng-template>
+        </li>
+      </ng-container>
+    </ol>
   </div>
   <div class="modal-footer px-0">
-    <div class="w-100 row m-0 justify-content-between">
-      <div class="col-6 col-sm-auto">
-        <button class="btn btn-outline-primary"
-                (click)="downloadConsents(eventId)"
-                type="button">
-          Pobierz zgody (.csv)
-        </button>
-      </div>
+    <div class="w-100 row m-0 justify-content-end">
       <div class="col-6 col-sm-auto">
         <button type="submit"
                 class="w-100 btn btn-primary"
                 (click)="closeModal()">
-          Zamknij modal
+          Zamknij
         </button>
       </div>
     </div>

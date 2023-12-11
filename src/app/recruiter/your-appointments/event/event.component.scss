@@ -1,3 +1,5 @@
+@import 'src/app/styles/variables';
+
 .gap div div {
   border-radius: 0.25rem;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -32,4 +34,22 @@
 
 .btn-list {
   margin: -1rem -0.75rem -0.75rem 0.5rem;
+}
+
+.sub-menu-wrapper {
+  width:calc(50% - 1.5rem);
+  z-index: 8888;
+  @media (max-width: 325px) {
+    width:calc(100% - 1.5rem);
+  }
+}
+
+.sub-menu {
+  border-radius: 0.25rem;
+  background: $bg-secondary;
+  border: 1px solid $border-color;
+  display: flex;
+  flex-flow: column;
+  gap: 0.75rem;
+  padding: 0.5rem;
 }

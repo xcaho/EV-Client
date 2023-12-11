@@ -200,7 +200,7 @@ export class ConsentComponent {
   public addConsent() {
     const textAreasArray = this.formGroup.get('textAreas') as FormArray;
 
-    if (textAreasArray.length < 6) {
+    if (textAreasArray.length < 10) {
       let value = this.defaultValuesForTextareas(this.formGroup.get('consentTemplate')?.value);
       const control = this.fb.control(value, Validators.required) as FormControl;
       textAreasArray.push(control);

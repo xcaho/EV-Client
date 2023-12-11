@@ -18,6 +18,8 @@ import {FormatDate} from "../../../shared/utils/format-date";
 import {AuthService} from "../../../shared/services/auth.service";
 import {ViewConsentModalComponent} from "./view-consent-modal/view-consent-modal.component";
 import {PreloaderService} from "../../../shared/services/preloader.service";
+import {HttpResponse} from "@angular/common/http";
+import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-event',
@@ -39,6 +41,7 @@ export class EventComponent {
   private token: string | null = null;
   private role: string | null = 'null';
   public canModify: boolean = false;
+  public showMore: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -49,7 +52,8 @@ export class EventComponent {
               private alertService: AlertService,
               private titleService: TitleService,
               private authService: AuthService,
-              private preloader: PreloaderService,) {
+              private preloader: PreloaderService,
+              private consentService: ConsentService,) {
     this.token = this.authService.token;
     this.event = {} as EventDto
   }
@@ -95,6 +99,29 @@ export class EventComponent {
           this.router.navigate(['/404'], {skipLocationChange: true})
         }
       })
+    }
+  }
+
+  public downloadConsents(id: number | null) {
+    if (id !== null) {
+      this.consentService.getConsentsCsv(id).subscribe(response => {
+        this.downloadCsv(response)
+      });
+      
+    } else {
+      this.alertService.showError('Błąd pobierania zgód.')
+    }
+  }
+
+  private downloadCsv(response: HttpResponse<string>) {
+    if (response.body) {
+      const blob = new Blob([response.body], {type: 'text/csv'});
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = <string>response.headers.get('Content-Disposition')?.substring(21);
+      a.click();
+      window.URL.revokeObjectURL(url);
     }
   }
 
