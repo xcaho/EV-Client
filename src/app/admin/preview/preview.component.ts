@@ -77,6 +77,7 @@ export class PreviewComponent implements AfterViewInit {
 
           this.eventService.getEvents(this.userId).subscribe(events => {
             this.events = events;
+            this.events = this.events.filter(event => event.active);
           })
           this.preloader.hide();
         },
