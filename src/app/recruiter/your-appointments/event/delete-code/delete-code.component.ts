@@ -19,7 +19,7 @@ export class DeleteCodeComponent {
   constructor(private modalService: NgbModal,
               private surveyService: SurveyService,
               private alertService: AlertService) {
-    this.survey = {} as SurveyDto
+    this.survey = {} as SurveyDto;
   }
 
   open(content: any, survey: SurveyDto, surveyList: SurveyDto[]): void {
@@ -32,10 +32,10 @@ export class DeleteCodeComponent {
     this.survey.surveyState = SurveyState.INACTIVE
 
     this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
-      this.survey.date = new Date(0)
+      this.survey.date = new Date(0);
 
-      this.generateNewCode()
-      this.closeModal()
+      this.generateNewCode();
+      this.closeModal();
 
       this.alertService.showSuccess('Dezaktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
     })
@@ -43,8 +43,8 @@ export class DeleteCodeComponent {
 
   generateNewCode() {
     this.surveyService.saveSurvey(this.survey.eventId).subscribe((survey) => {
-      survey.date = new Date(0)
-      this.surveyList.push(survey)
+      survey.date = new Date(0);
+      this.surveyList.push(survey);
     })
   }
 

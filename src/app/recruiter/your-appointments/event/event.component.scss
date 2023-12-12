@@ -8,8 +8,9 @@
 .list-group {
   box-shadow: 2px 2px 40px rgba(0, 0, 0, 0.1);
   .list-group-item:first-child {
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
+    //border-top-left-radius: 0.25rem;
+    //border-top-right-radius: 0.25rem;
+    border-top:0;
   }
   .list-group-item:last-child {
     border-bottom-left-radius: 0.25rem;
@@ -18,7 +19,8 @@
 }
 
 .list-group-item {
-  padding:1rem;
+  padding: 1rem;
+  display: flex;
 }
 
 .list-group-item:hover {

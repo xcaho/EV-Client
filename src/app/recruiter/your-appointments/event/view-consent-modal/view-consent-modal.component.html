@@ -16,11 +16,11 @@
         <li class="ms-4 my-2">
           {{ consent.content }}<br>
           <span class="text-success" *ngIf="isConsentInList(consent.content); else notPresent">
-            Użytkownik wyraził zgodę.
+            Tak
           </span>
           <ng-template #notPresent>
             <span class="text-danger">
-              Użytkownik nie wyraził zgody.
+              Nie
             </span>
           </ng-template>
         </li>

@@ -72,14 +72,14 @@ export class ConsentComponent {
       this.consentList = this.consentService.getTemporaryConsents();
 
       if (this.consentList) {
-        this.patchForm()
+        this.patchForm();
         return
       }
 
       if (this.isEdit) {
         this.consentService.getConsentsForEvent(this.event.id).subscribe(consents => {
           this.consentList = consents;
-          this.patchForm();
+          this.patchFormDisabled();
         })
       }
     }
@@ -97,6 +97,25 @@ export class ConsentComponent {
 
     this.consentList.forEach((consent: ConsentDto) => {
       let index = 0;
+      const control = this.fb.control(consent.content) as FormControl;
+      textAreasArray.push(control);
+      if (consent.mandatory) {
+        setTimeout(() => {
+          // @ts-ignore
+          let checkbox: HTMLInputElement = document.getElementById('isRequired' + index)!
+          checkbox.checked = true;
+
+        }, 50)
+      }
+      index = index + 1;
+    });
+  }
+
+  private patchFormDisabled() {
+    const textAreasArray = this.formGroup.get('textAreas') as FormArray;
+
+    this.consentList.forEach((consent: ConsentDto) => {
+      let index = 0;
       const control = this.fb.control({value: consent.content, disabled: true}) as FormControl;
       textAreasArray.push(control);
       if (consent.mandatory) {
@@ -107,6 +126,7 @@ export class ConsentComponent {
 
         }, 50)
       }
+      index = index + 1;
     });
   }
 
@@ -194,7 +214,9 @@ export class ConsentComponent {
   }
 
   public goBack() {
-    this.consentService.setTemporaryConsents(this.consentList)
+    this.setConsentsListWithTextAreas();
+    console.log(this.consentList);
+    this.consentService.setTemporaryConsents(this.consentList);
   }
 
   public addConsent() {
@@ -252,7 +274,7 @@ export class ConsentComponent {
       if (control?.errors?.['required'] === true) {
         isRequired = true;
       }
-      this.consentList.push(new ConsentDto(control.value, isRequired))
+      this.consentList.push(new ConsentDto(control.value, isRequired));
     });
   }
 

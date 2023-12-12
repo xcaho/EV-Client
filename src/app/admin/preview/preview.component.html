@@ -59,7 +59,7 @@
       <ng-container *ngIf="events.length > 0">
         <table class="list-group d-none d-md-block">
           <caption class="sr-only">Wydarzenia użytkownika</caption>
-          <thead class="list-group-item p-3 li-header d-block">
+          <thead class="list-group-item p-3 li-header d-block top-border-radius">
           <tr class="row">
             <th class="col-2 fw-medium" id="Status-Title">Status:</th>
             <th class="col-5 fw-medium" id="Nazwa-Title">Nazwa wydarzenia:</th>
@@ -67,39 +67,41 @@
             <th class="col-1 fw-medium text-end sr-only" id="Akcje-Title">Akcje:</th>
           </tr>
           </thead>
-          <tbody class="list-group-item d-block">
-          <tr class="row" *ngFor="let event of events">
-            <td class="col-2">
-              {{event.isActive()}}
-            </td>
-            <td class="col-5">
-              <span id="Nazwa-{{event.id}}">{{event.name}}</span>
-            </td>
-            <td class="col-4">
-              {{formatDate(event.researchStartDate)}} - {{formatDate(event.researchEndDate)}}
-            </td>
-            <td class="col-1">
-              <div class="d-flex justify-content-end h-100 align-items-start pe-1"
-                   style="gap: 0 0.75rem; padding-top:0.325rem;">
-                <button class="btn btn-icon btn-list"
-                        type="button"
-                        [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
-                        title="Przepisz wydarzenie do innego rekrutera"
-                        (click)="openAssignModal(event, userId)">
-                  <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
-                  <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
-                </button>
-                <a class="btn btn-icon btn-list"
-                   [routerLink]="['/event/'+event.id]"
-                   target="_blank"
-                   [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
-                   title="Otwórz szczegóły wydarzenia">
-                  <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
-                  <span class="sr-only">Otwórz szczegóły wydarzenia</span>
-                </a>
-              </div>
-            </td>
-          </tr>
+          <tbody class="row mx-0">
+          <ng-container *ngFor="let event of events">
+            <tr class="list-group-item">
+              <td class="col-2">
+                {{event.isActive()}}
+              </td>
+              <td class="col-5">
+                <span id="Nazwa-{{event.id}}">{{event.name}}</span>
+              </td>
+              <td class="col-4">
+                {{formatDate(event.researchStartDate)}} - {{formatDate(event.researchEndDate)}}
+              </td>
+              <td class="col-1">
+                <div class="d-flex justify-content-end h-100 align-items-start pe-1"
+                     style="gap: 0 0.75rem; padding-top:0.325rem;">
+                  <button class="btn btn-icon btn-list"
+                          type="button"
+                          [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
+                          title="Przepisz wydarzenie do innego rekrutera"
+                          (click)="openAssignModal(event, userId)">
+                    <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
+                    <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
+                  </button>
+                  <a class="btn btn-icon btn-list"
+                     [routerLink]="['/event/'+event.id]"
+                     target="_blank"
+                     [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
+                     title="Otwórz szczegóły wydarzenia">
+                    <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
+                    <span class="sr-only">Otwórz szczegóły wydarzenia</span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
           </tbody>
         </table>
         <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
