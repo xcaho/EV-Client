@@ -70,8 +70,10 @@ export class YourAppointmentsComponent {
   filterEvents(): EventDto[] {
     if (this.filterAll && this.filterDisabled) {
       return this.allEvents.filter((event) => !event.active);
+    } else if (this.filterDisabled && this.filterAll) {
+      return this.allEvents.filter((event) => !event.active);
     } else if (this.filterAll) {
-      return this.allEvents;
+      return this.allEvents.filter((event) => event.active);
     } else if (this.filterDisabled) {
       return this.events.filter((event) => !event.active);
     } else {

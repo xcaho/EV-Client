@@ -85,10 +85,15 @@ export class EventComponent {
 
         this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
           this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
+          this.sortAvailabilityList();
+          this.sortAvailabilityHours();
         });
 
         this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
-          this.surveyList = surveys;
+          this.surveyList = surveys.sort((a, b) => {
+            const stateOrder = ['USED', 'UNUSED', 'INACTIVE'];
+            return stateOrder.indexOf(a.surveyState) - stateOrder.indexOf(b.surveyState);
+          });
         })
         this.preloader.hide();
       }, (error) => {
@@ -102,12 +107,25 @@ export class EventComponent {
     }
   }
 
+  private sortAvailabilityList() {
+    this.availabilityList.sort((a, b) => {
+      const daysOrder = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela'];
+      return daysOrder.indexOf(a.dayOfWeek.toLowerCase()) - daysOrder.indexOf(b.dayOfWeek.toLowerCase());
+    });
+  }
+
+  private sortAvailabilityHours() {
+    this.availabilityList.forEach((availability) => {
+      availability.hoursList.sort();
+    });
+  }
+
   public downloadConsents(id: number | null) {
     if (id !== null) {
       this.consentService.getConsentsCsv(id).subscribe(response => {
         this.downloadCsv(response)
       });
-      
+
     } else {
       this.alertService.showError('Błąd pobierania zgód.')
     }
