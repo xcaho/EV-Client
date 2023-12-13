@@ -31,6 +31,8 @@ export class PreviewComponent implements AfterViewInit {
   public open = faArrowUpRightFromSquare;
   public showMore: boolean = false;
   private token: string | null = null;
+  public eventsToShow: number = 8;
+  public additionalEventsToShow: number = 5;
   @ViewChild(AssignModalComponent) assignModalComponent!: AssignModalComponent;
   @ViewChild(ResetPasswordModalComponent) resetPasswordModalComponent!: ResetPasswordModalComponent;
   @ViewChild(BlockUserModalComponent) blockUserModalComponent!: BlockUserModalComponent;
@@ -91,6 +93,14 @@ export class PreviewComponent implements AfterViewInit {
         }
       })
     }
+  }
+
+  showMoreEvents() {
+    this.eventsToShow += this.additionalEventsToShow;
+  }
+
+  displayEvents() {
+    return this.events.slice(0, Math.min(this.eventsToShow, this.events.length))
   }
 
   ngAfterViewInit() {

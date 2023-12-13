@@ -21,6 +21,9 @@ export class YourAppointmentsComponent {
   private token: string | null = null;
   public filterAll: boolean = false;
   public filterDisabled: boolean = false;
+  public eventsToShow: number = 8;
+  public additionalEventsToShow: number = 5;
+  public allEventsToShow: number = 0;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -67,17 +70,26 @@ export class YourAppointmentsComponent {
     }
   }
 
+  showMoreEvents() {
+    this.eventsToShow += this.additionalEventsToShow;
+  }
+
   filterEvents(): EventDto[] {
     if (this.filterAll && this.filterDisabled) {
-      return this.allEvents.filter((event) => !event.active);
+      this.allEventsToShow = this.allEvents.length;
+      return this.allEvents.filter((event) => !event.active).slice(0, Math.min(this.eventsToShow, this.allEvents.length));
     } else if (this.filterDisabled && this.filterAll) {
-      return this.allEvents.filter((event) => !event.active);
+      this.allEventsToShow = this.allEvents.length;
+      return this.allEvents.filter((event) => !event.active).slice(0, Math.min(this.eventsToShow, this.allEvents.length));
     } else if (this.filterAll) {
-      return this.allEvents.filter((event) => event.active);
+      this.allEventsToShow = this.allEvents.length;
+      return this.allEvents.filter((event) => event.active).slice(0, Math.min(this.eventsToShow, this.allEvents.length));
     } else if (this.filterDisabled) {
-      return this.events.filter((event) => !event.active);
+      this.allEventsToShow = this.events.length;
+      return this.events.filter((event) => !event.active).slice(0, Math.min(this.eventsToShow, this.events.length));
     } else {
-      return this.events.filter((event) => event.active);
+      this.allEventsToShow = this.events.length;
+      return this.events.filter((event) => event.active).slice(0, Math.min(this.eventsToShow, this.events.length));
     }
   }
 

@@ -68,7 +68,7 @@
           </tr>
           </thead>
           <tbody class="row mx-0">
-          <ng-container *ngFor="let event of events">
+          <ng-container *ngFor="let event of displayEvents()">
             <tr class="list-group-item">
               <td class="col-2">
                 {{event.isActive()}}
@@ -105,7 +105,7 @@
           </tbody>
         </table>
         <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
-          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
+          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of displayEvents()">
             <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
               <dt class="col-5 col-sm-4 text-end">
                 Status:
@@ -150,6 +150,9 @@
           </li>
         </ul>
       </ng-container>
+      <div class="text-center mt-3" *ngIf="this.events.length > eventsToShow">
+        <button class="btn btn-primary" (click)="showMoreEvents()">Pokaż więcej</button>
+      </div>
     </section>
   </section>
 </div>
