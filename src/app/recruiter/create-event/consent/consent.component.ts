@@ -95,38 +95,32 @@ export class ConsentComponent {
   private patchForm() {
     const textAreasArray = this.formGroup.get('textAreas') as FormArray;
 
-    this.consentList.forEach((consent: ConsentDto) => {
-      let index = 0;
+    this.consentList.forEach((consent: ConsentDto, i = 0) => {
       const control = this.fb.control(consent.content) as FormControl;
       textAreasArray.push(control);
       if (consent.mandatory) {
         setTimeout(() => {
           // @ts-ignore
-          let checkbox: HTMLInputElement = document.getElementById('isRequired' + index)!
+          let checkbox: HTMLInputElement = document.getElementById('isRequired' + i)
           checkbox.checked = true;
-
         }, 50)
       }
-      index = index + 1;
     });
   }
 
   private patchFormDisabled() {
     const textAreasArray = this.formGroup.get('textAreas') as FormArray;
 
-    this.consentList.forEach((consent: ConsentDto) => {
-      let index = 0;
+    this.consentList.forEach((consent: ConsentDto, i = 0) => {
       const control = this.fb.control({value: consent.content, disabled: true}) as FormControl;
       textAreasArray.push(control);
       if (consent.mandatory) {
         setTimeout(() => {
           // @ts-ignore
-          let checkbox: HTMLInputElement = document.getElementById('isRequired' + index)!
+          let checkbox: HTMLInputElement = document.getElementById('isRequired' + i)!
           checkbox.checked = true;
-
         }, 50)
       }
-      index = index + 1;
     });
   }
 
