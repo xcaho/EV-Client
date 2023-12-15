@@ -23,7 +23,10 @@
       </a>
     </section>
     <section class="col-12"
-             *ngIf="users[0]">
+             *ngIf="users[0]"
+             aria-live="polite"
+             aria-relevant="all"
+    >
       <ul class="list-group d-none d-md-block" aria-labelledby="pageTitle">
         <li class="list-group-item p-3 li-header d-block" aria-hidden="true">
           <div class="row">
@@ -73,7 +76,7 @@
         </li>
       </ul>
       <div class="text-center mt-3" *ngIf="this.users.length > usersToShow">
-        <button class="btn btn-outline-primary" (click)="showMoreUsers()">Pokaż więcej</button>
+        <button class="btn btn-outline-primary" (click)="showMoreUsers()" aria-label="Pokaż więcej użytkowników">Pokaż więcej</button>
       </div>
     </section>
   </div>

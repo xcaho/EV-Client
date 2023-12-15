@@ -16,11 +16,12 @@
                    formControlName="name"
                    aria-describedby="nameError"
                    required
+                   [attr.aria-invalid]="name.invalid ? true : null"
                    class="form-control"
                    [class.is-invalid]="name.invalid && (name.dirty || name.touched)">
             <label for="email"
                    class="form-label">
-              Nazwa użytkownika
+              Nazwa użytkownika <span class="d-none">(wymagane)</span>
             </label>
             <div *ngIf="name.invalid && (name.dirty || name.touched)" class="invalid-feedback">
               <p *ngIf="name.errors?.['required']"
@@ -39,11 +40,12 @@
                    formControlName="email"
                    aria-describedby="emailError emailError2 emailHelper"
                    required
+                   [attr.aria-invalid]="email.invalid ? true : null"
                    class="form-control input-mail"
                    [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
             <label for="email"
                    class="form-label">
-              E-mail
+              E-mail <span class="d-none">(wymagane)</span>
             </label>
             <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback">
               <p *ngIf="email.errors?.['required']"
@@ -66,12 +68,13 @@
                     formControlName="role"
                     aria-describedby="roleError"
                     required
+                    [attr.aria-invalid]="role.invalid ? true : null"
                     [class.is-invalid]="role.invalid && (role.dirty || role.touched)">
               <option value="administrator">Administrator</option>
               <option value="rekruter">Badacz</option>
               <option value="readonly">Obserwator</option>
             </select>
-            <label class="form-label" for="role">Rola użytkownika</label>
+            <label class="form-label" for="role">Rola użytkownika <span class="d-none">(wymagane)</span></label>
             <div *ngIf="role.invalid && (role.dirty || role.touched)" class="invalid-feedback">
               <p *ngIf="role.errors?.['required']"
                  id="roleError"

@@ -16,11 +16,12 @@
                    formControlName="login"
                    aria-describedby="loginError"
                    required
+                   [attr.aria-invalid]="login.invalid ? true : null"
                    class="form-control"
                    [class.is-invalid]="login.invalid && (login.dirty || login.touched)">
             <label for="login"
                    class="form-label">
-              Login
+              Login <span class="d-none">(wymagane)</span>
             </label>
             <div *ngIf="login.invalid && (login.dirty || login.touched)" class="invalid-feedback">
               <p *ngIf="login.errors?.['required']"
@@ -37,11 +38,12 @@
                    formControlName="password"
                    aria-describedby="passwdError"
                    required
+                   [attr.aria-invalid]="password.invalid ? true : null"
                    class="form-control input-with-button"
                    [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
             <label for="password"
                    class="form-label">
-              Hasło
+              Hasło <span class="d-none">(wymagane)</span>
               <span class="sr-only" *ngIf="passwdShown">widoczne</span>
             </label>
             <button class="btn btn-outline-primary show-passwd-btn"
@@ -50,7 +52,7 @@
                     (click)="passwordShowToggler()">
               <ng-container *ngIf="!passwdShown">
                 <fa-icon [icon]="eye" aria-hidden="true"></fa-icon>
-                <span class="sr-only">Pokaż hasło</span>
+                <span class="sr-only">Odkryj hasło</span>
               </ng-container>
               <ng-container *ngIf="passwdShown">
                 <fa-icon [icon]="eyeSlash" aria-hidden="true"></fa-icon>

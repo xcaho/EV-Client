@@ -16,7 +16,9 @@
 </div>
 <div class="main-content container-xxl mb-4">
   <div class="row justify-content-center">
-    <section class="col-12">
+    <section class="col-12"
+             aria-live="polite"
+             aria-relevant="all">
       <fieldset class="row mx-0">
         <div class="col-sm-12 col-md-auto border border-light border-bottom-0 px-3 py-3 d-flex flex-wrap">
           <legend class="font-rem mb-1 mb-md-0 w-auto me-3">Filtry: </legend>
@@ -112,7 +114,7 @@
         Brak wyników spełniających parametry filtrowania.
       </p>
       <div class="text-center mt-3" *ngIf="allEventsToShow > eventsToShow && filterEvents().length > 0">
-        <button class="btn btn-outline-primary" (click)="showMoreEvents()">Pokaż więcej</button>
+        <button class="btn btn-outline-primary" (click)="showMoreEvents()" aria-label="Pokaż więcej wydarzeń">Pokaż więcej</button>
       </div>
     </section>
   </div>
