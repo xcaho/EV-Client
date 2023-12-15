@@ -86,7 +86,7 @@
         </thead>
         <tbody class="list-group-item p-0">
         <ng-container *ngFor="let survey of surveyList; let i=index">
-          <tr class="row mx-0 py-3 item">
+          <tr class="row mx-0 py-3 px-1 item">
             <td class="col-3">
               <ng-container *ngIf="survey.surveyState === 'USED'">
                 Umówione
@@ -119,10 +119,10 @@
             </td>
             <td class="col-3"
                 *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date">
-            <span class="sr-only" title="Spotkanie nie zostało jeszcze umówione">
-              Spotkanie nie zostało jeszcze umówione
-            </span>
-              –
+              <span class="sr-only">
+                Spotkanie nie zostało jeszcze umówione
+              </span>
+              <span title="Spotkanie nie zostało jeszcze umówione">–</span>
             </td>
             <td class="col-2">
               <button type="button"
@@ -135,6 +135,12 @@
                 Pokaż zgody użytkownika
               </span>
               </button>
+              <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+                <span class="sr-only">
+                  Brak zgód użytkownika
+                </span>
+                <span title="Brak zgód użytkownika">–</span>
+              </ng-container>
             </td>
             <td class="col-1 text-end">
               <button type="button"

@@ -40,7 +40,7 @@
           <li class="nav-item d-flex"
               [routerLinkActive]="['active']"
               *ngIf="authService.isAdmin()">
-            <a class="nav-link px-2"
+            <a class="nav-link px-2 me-0 me-lg-2"
                routerLink="admin">
               Panel administratora
             </a>
@@ -60,7 +60,7 @@
         </p>
         <div class="d-flex justify-content-end">
           <a [routerLink]="['/change-password']"
-             class="log-out text-end"
+             class="log-out text-end me-0 me-lg-2"
              *ngIf="authService.isLoggedIn()">
             Zmień hasło
           </a>
