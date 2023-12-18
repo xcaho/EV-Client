@@ -12,7 +12,6 @@ export class UserUtils {
       case "readonly":
         return Role.READONLY;
       default:
-        console.log("Invalid role, choosing default")
         return Role.READONLY;
     }
   }

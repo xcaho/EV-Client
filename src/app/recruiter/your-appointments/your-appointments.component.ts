@@ -24,6 +24,7 @@ export class YourAppointmentsComponent {
   public eventsToShow: number = 8;
   public additionalEventsToShow: number = 5;
   public allEventsToShow: number = 0;
+  public role: string | null = null;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -50,6 +51,8 @@ export class YourAppointmentsComponent {
       this.route.params.subscribe(params => {
         this.userId = params['user-id'];
       });
+
+      this.role = this.authService.getRole();
 
       this.eventService.getAllEvents().subscribe((allEvents) => {
         this.allEvents = this.eventSort(allEvents)

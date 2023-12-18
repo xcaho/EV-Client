@@ -117,7 +117,7 @@ export class ConsentComponent {
       if (consent.mandatory) {
         setTimeout(() => {
           // @ts-ignore
-          let checkbox: HTMLInputElement = document.getElementById('isRequired' + i)!
+          let checkbox: HTMLInputElement = document.getElementById('isRequired' + i)
           checkbox.checked = true;
         }, 50)
       }
@@ -209,7 +209,6 @@ export class ConsentComponent {
 
   public goBack() {
     this.setConsentsListWithTextAreas();
-    console.log(this.consentList);
     this.consentService.setTemporaryConsents(this.consentList);
   }
 
@@ -241,17 +240,35 @@ export class ConsentComponent {
   private defaultValuesForTextareas(value: any) {
     switch (value) {
       case '1': {
-        return 'Wyrażam zgodę na przetwarzanie moich danych osobowych przez ' +
-          'Sieć Badawczą Łukasiewicz - Poznański Instytut Technologiczny w celu ' +
-          'udzielenia odpowiedzi na pytanie zadane przez formularz kontaktowy zgodnie z ' +
-          'wymogami RODO. Oświadczam, że zapoznałem się i akceptuję informacje o ochronie danych ' +
-          'osobowych oraz politykę prywatności.'
+        return 'Wyrażam zgodę na udział w wywiadzie prowadzonym przez pracowników ' +
+          'Sieć Badawcza Łukasiewicz – Poznańskiego Instytutu Technologicznego.'
       }
       case '2': {
-        return 'Wyrażam zgodę na nagrywanie spotkania.'
+        return 'Rozumiem, że udział w badaniu jest dobrowolny. ' +
+          'Mogę zgłosić swoje zastrzeżenia badaczowi lub zrezygnować z udziału w ' +
+          'wywiadzie w dowolnym momencie.'
       }
       case '3': {
-        return 'Wyrażam zgodę na udział w badaniach mających na celu ocenę jakości świadczonych usług.'
+        return 'Wyrażam zgodę na przetwarzanie moich danych osobowych ' +
+          '(imię, nazwisko, wizerunek, wykształcenie, wiek, zawód i branża, ' +
+          'inne dane osobowe podane podczas wywiadu.) w związku z moim udziałem w ' +
+          'wywiadzie.1 Rozumiem, że moje dane będą przetwarzane wyłącznie w celu ' +
+          'wyciągnięcia ogólnych wniosków z wywiadu.'
+      }
+      case '4': {
+        return '​Wyrażam zgodę na dzielenie się zanonimizowanymi danymi osobowymi ' +
+          'zebranymi podczas wywiadu z zespołem pracującym w projekcie. Rozumiem, ' +
+          'że członkowie zespołu projektowego nie będą przetwarzać danych, które ' +
+          'mogłyby umożliwić ustalenie mojej tożsamości.'
+      }
+      case '5': {
+        return 'Oświadczam, że zapoznałem/am się z Klauzulą Informacyjną dotyczącą przetwarzania danych osobowych.'
+      }
+      case '6': {
+        return 'Wyrażam zgodę na nieodpłatne nagrywanie przebiegu mojego wywiadu w zakresie audio mojej osoby.'
+      }
+      case '7': {
+        return 'Wyrażam zgodę na nieodpłatne nagrywanie przebiegu mojego wywiadu w zakresie wideo mojej osoby.'
       }
       default: {
         return '';
@@ -261,11 +278,14 @@ export class ConsentComponent {
 
   setConsentsListWithTextAreas() {
     this.consentList = [];
-    const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls;
+    const textAreasArray = (this.formGroup.get('textAreas') as FormArray).controls
 
-    textAreasArray.forEach((control: AbstractControl) => {
+    textAreasArray.forEach((control: AbstractControl, index) => {
+      // @ts-ignore
+      let checkbox: HTMLInputElement = document.getElementById('isRequired' + index)!
       let isRequired: boolean = false;
-      if (control?.errors?.['required'] === true) {
+
+      if (control?.errors?.['required'] === true || checkbox.checked) {
         isRequired = true;
       }
       this.consentList.push(new ConsentDto(control.value, isRequired));
