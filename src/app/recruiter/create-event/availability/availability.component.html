@@ -12,19 +12,36 @@
         <div class="col-12 col-sm-6 col-lg-4" id="day-{{i}}" *ngFor="let availability of availabilityList; let i=index">
           <div class="c-card">
             <div class="c-card-header">
-              <p class="mb-0 ps-2">{{availability.dayOfWeek}}<br><span class="smaller">{{ availability.dateFormatted }}</span></p>
-              <button type="button" class="btn btn-icon" id="availability-{{i}}" title="Dodaj dostępność" (click)="hoursAddComponent.open(hoursAddComponent.content, availability)"><fa-icon [icon]="plus"></fa-icon><span class="d-none">Dodaj dostępność</span></button>
+              <p class="mb-0 ps-2" [id]="'ava'+i">{{availability.dayOfWeek}}<br>
+                <span class="smaller">{{ availability.dateFormatted }}</span>
+              </p>
+              <button type="button"
+                      class="btn btn-icon"
+                      id="availability-{{i}}"
+                      [attr.aria-labelledby]="'ava'+i"
+                      title="Dodaj dostępność"
+                      (click)="hoursAddComponent.open(hoursAddComponent.content, availability)">
+                <fa-icon [icon]="plus"></fa-icon>
+                <span class="d-none">Dodaj dostępność</span>
+              </button>
             </div>
             <div class="c-card-body">
-              <div class="slot" *ngFor="let hours of availability.hoursList">
-                <p class="mb-0 ps-2">{{hours.toString()}}</p>
-                <button type="button" class="btn btn-icon" title="Usuń dostępność" (click)="removeHour(availability, hours)"><fa-icon [icon]="trash">Usuń</fa-icon><span class="d-none">Usuń dostępność</span></button>
+              <div class="slot" *ngFor="let hours of availability.hoursList; index as index">
+                <p class="mb-0 ps-2" [id]="'hour'+index">{{hours.toString()}}</p>
+                <button type="button"
+                        class="btn btn-icon"
+                        title="Usuń dostępność"
+                        [attr.aria-labelledby]="'ava'+i + ' ' + 'hour'+index"
+                        (click)="removeHour(availability, hours)">
+                  <fa-icon [icon]="trash">Usuń</fa-icon>
+                  <span class="d-none">Usuń dostępność</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="justify-content-between flex-wrap row">
+      <div class="justify-content-start flex-wrap row">
         <div class="col-6 col-md-auto">
           <button type="button"
                   class="w-100 my-2 my-md-0 btn btn-outline-primary"

@@ -44,7 +44,6 @@ export class InvalidCodeComponent {
       this.survey = surveyDto
       this.fetchEvent(this.survey.eventId);
     }, (error) => {
-      console.log(error)
       this.router.navigate(['/404'])
     })
   }

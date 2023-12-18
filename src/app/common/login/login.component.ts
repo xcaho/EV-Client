@@ -17,7 +17,7 @@ export class LoginComponent {
   public eye = faEye;
   public eyeSlash = faEyeSlash;
   public passwdShown: boolean = false;
-  public buttonTitle: string = "Pokaż hasło";
+  public buttonTitle: string = "Odkryj hasło";
   private token: string | null = '';
 
   constructor(
@@ -90,7 +90,7 @@ export class LoginComponent {
   public passwordShowToggler() {
     this.passwdShown = !this.passwdShown;
     if (!this.passwdShown) {
-      this.buttonTitle = 'Pokaż hasło';
+      this.buttonTitle = 'Odkryj hasło';
     } else {
       this.buttonTitle = 'Ukryj hasło';
     }

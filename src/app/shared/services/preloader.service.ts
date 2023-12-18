@@ -13,6 +13,8 @@ export class PreloaderService {
   }
 
   hide(): void {
-    this.showSubject.next(false);
+    setTimeout(() => {
+      this.showSubject.next(false);
+    }, 200);
   }
 }

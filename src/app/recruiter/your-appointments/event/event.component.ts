@@ -18,6 +18,8 @@ import {FormatDate} from "../../../shared/utils/format-date";
 import {AuthService} from "../../../shared/services/auth.service";
 import {ViewConsentModalComponent} from "./view-consent-modal/view-consent-modal.component";
 import {PreloaderService} from "../../../shared/services/preloader.service";
+import {HttpResponse} from "@angular/common/http";
+import {ConsentService} from "../../../shared/services/consent.service";
 
 @Component({
   selector: 'app-event',
@@ -39,6 +41,7 @@ export class EventComponent {
   private token: string | null = null;
   private role: string | null = 'null';
   public canModify: boolean = false;
+  public showMore: boolean = false;
 
   constructor(private eventService: EventService,
               private availabilityService: AvailabilityService,
@@ -49,7 +52,8 @@ export class EventComponent {
               private alertService: AlertService,
               private titleService: TitleService,
               private authService: AuthService,
-              private preloader: PreloaderService,) {
+              private preloader: PreloaderService,
+              private consentService: ConsentService,) {
     this.token = this.authService.token;
     this.event = {} as EventDto
   }
@@ -81,10 +85,15 @@ export class EventComponent {
 
         this.availabilityService.getAvailabilityList(this.eventId).subscribe((availabilityDtoList) => {
           this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
+          this.sortAvailabilityList();
+          this.sortAvailabilityHours();
         });
 
         this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
-          this.surveyList = surveys;
+          this.surveyList = surveys.sort((a, b) => {
+            const stateOrder = ['USED', 'UNUSED', 'INACTIVE'];
+            return stateOrder.indexOf(a.surveyState) - stateOrder.indexOf(b.surveyState);
+          });
         })
         this.preloader.hide();
       }, (error) => {
@@ -95,6 +104,42 @@ export class EventComponent {
           this.router.navigate(['/404'], {skipLocationChange: true})
         }
       })
+    }
+  }
+
+  private sortAvailabilityList() {
+    this.availabilityList.sort((a, b) => {
+      const daysOrder = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela'];
+      return daysOrder.indexOf(a.dayOfWeek.toLowerCase()) - daysOrder.indexOf(b.dayOfWeek.toLowerCase());
+    });
+  }
+
+  private sortAvailabilityHours() {
+    this.availabilityList.forEach((availability) => {
+      availability.hoursList.sort();
+    });
+  }
+
+  public downloadConsents(id: number | null) {
+    if (id !== null) {
+      this.consentService.getConsentsCsv(id).subscribe(response => {
+        this.downloadCsv(response)
+      });
+
+    } else {
+      this.alertService.showError('Błąd pobierania zgód.')
+    }
+  }
+
+  private downloadCsv(response: HttpResponse<string>) {
+    if (response.body) {
+      const blob = new Blob([response.body], {type: 'text/csv'});
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = <string>response.headers.get('Content-Disposition')?.substring(21);
+      a.click();
+      window.URL.revokeObjectURL(url);
     }
   }
 

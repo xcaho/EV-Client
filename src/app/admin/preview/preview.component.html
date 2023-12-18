@@ -57,53 +57,58 @@
         Użytkownik nie ma żadnych wydarzeń
       </ng-container>
       <ng-container *ngIf="events.length > 0">
-        <table class="list-group d-none d-md-block">
-          <caption class="sr-only">Wydarzenia użytkownika</caption>
-          <thead class="list-group-item p-3 li-header d-block">
-          <tr class="row">
-            <th class="col-2 fw-medium" id="Status-Title">Status:</th>
-            <th class="col-5 fw-medium" id="Nazwa-Title">Nazwa wydarzenia:</th>
-            <th class="col-4 fw-medium" id="Okres-Title">Okres badań:</th>
-            <th class="col-1 fw-medium text-end sr-only" id="Akcje-Title">Akcje:</th>
-          </tr>
-          </thead>
-          <tbody class="list-group-item d-block">
-          <tr class="row" *ngFor="let event of events">
-            <td class="col-2">
-              {{event.isActive()}}
-            </td>
-            <td class="col-5">
-              <span id="Nazwa-{{event.id}}">{{event.name}}</span>
-            </td>
-            <td class="col-4">
-              {{formatDate(event.researchStartDate)}} - {{formatDate(event.researchEndDate)}}
-            </td>
-            <td class="col-1">
-              <div class="d-flex justify-content-end h-100 align-items-start pe-1"
-                   style="gap: 0 0.75rem; padding-top:0.325rem;">
-                <button class="btn btn-icon btn-list"
-                        type="button"
-                        [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
-                        title="Przepisz wydarzenie do innego rekrutera"
-                        (click)="openAssignModal(event, userId)">
-                  <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
-                  <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
-                </button>
-                <a class="btn btn-icon btn-list"
-                   [routerLink]="['/event/'+event.id]"
-                   target="_blank"
-                   [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
-                   title="Otwórz szczegóły wydarzenia">
-                  <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
-                  <span class="sr-only">Otwórz szczegóły wydarzenia</span>
-                </a>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
-          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of events">
+        <div
+          aria-live="polite"
+          aria-relevant="all">
+          <table class="list-group d-none d-md-block">
+            <caption class="sr-only">Wydarzenia użytkownika</caption>
+            <thead class="list-group-item p-3 li-header d-block top-border-radius">
+              <tr class="row">
+                <th class="col-2 fw-medium" id="Status-Title">Status:</th>
+                <th class="col-5 fw-medium" id="Nazwa-Title">Nazwa wydarzenia:</th>
+                <th class="col-4 fw-medium" id="Okres-Title">Okres badań:</th>
+                <th class="col-1 fw-medium text-end sr-only" id="Akcje-Title">Akcje:</th>
+              </tr>
+            </thead>
+            <tbody class="list-group-item p-0">
+            <ng-container *ngFor="let event of displayEvents()">
+              <tr class="row mx-0 py-3 px-1 item">
+                <td class="col-2">
+                  {{event.isActive()}}
+                </td>
+                <td class="col-5">
+                  <span id="Nazwa-{{event.id}}">{{event.name}}</span>
+                </td>
+                <td class="col-4">
+                  {{formatDate(event.researchStartDate)}} - {{formatDate(event.researchEndDate)}}
+                </td>
+                <td class="col-1">
+                  <div class="d-flex justify-content-end h-100 align-items-start pe-1"
+                       style="gap: 0 0.75rem; padding-top:0.325rem;">
+                    <button class="btn btn-icon btn-list"
+                            type="button"
+                            [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
+                            title="Przepisz wydarzenie do innego rekrutera"
+                            (click)="openAssignModal(event, userId)">
+                      <fa-icon [icon]="edit" aria-hidden="true"></fa-icon>
+                      <span class="sr-only">Przypisz wydarzenie do innego rekrutera</span>
+                    </button>
+                    <a class="btn btn-icon btn-list"
+                       [routerLink]="['/event/'+event.id]"
+                       target="_blank"
+                       [attr.aria-describedby]="'Nazwa-Title ' + 'Nazwa-'+event.id"
+                       title="Otwórz szczegóły wydarzenia">
+                      <fa-icon [icon]="open" aria-hidden="true"></fa-icon>
+                      <span class="sr-only">Otwórz szczegóły wydarzenia</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+          <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
+          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of displayEvents()">
             <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
               <dt class="col-5 col-sm-4 text-end">
                 Status:
@@ -147,7 +152,11 @@
             </dl>
           </li>
         </ul>
+        </div>
       </ng-container>
+      <div class="text-center mt-3" *ngIf="this.events.length > eventsToShow">
+        <button class="btn btn-outline-primary" (click)="showMoreEvents()" aria-label="Pokaż więcej wydarzeń">Pokaż więcej</button>
+      </div>
     </section>
   </section>
 </div>

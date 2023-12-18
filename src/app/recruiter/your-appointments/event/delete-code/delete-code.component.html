@@ -2,13 +2,13 @@
   <div class="modal-header">
     <h3 class="modal-title" id="modalTitle">
       <ng-container *ngIf="this.survey.surveyState === 'USED'">Odwołaj spotkanie</ng-container>
-      <ng-container *ngIf="this.survey.surveyState === 'UNUSED'">Dezaktywuj kod</ng-container>
+      <ng-container *ngIf="this.survey.surveyState === 'UNUSED'">Wyłącz kod</ng-container>
     </h3>
     <button type="button"
             class="btn-close"
-            aria-label="Zamknij modal"
+            aria-label="Zamknij"
             (click)="closeModal()">
-      <span class="d-none">Zamknij modal</span>
+      <span class="d-none">Zamknij</span>
     </button>
   </div>
   <div class="modal-body">
@@ -16,7 +16,7 @@
       <ng-container *ngIf="this.survey.surveyState === 'USED'">Odwołanie spotkania spowoduje wygenerowanie nowego
         kodu.
       </ng-container>
-      <ng-container *ngIf="this.survey.surveyState === 'UNUSED'">Dezaktywacja kodu spowoduje wygenerowanie nowego
+      <ng-container *ngIf="this.survey.surveyState === 'UNUSED'">Wyłączenie kodu spowoduje wygenerowanie nowego
         kodu.
       </ng-container>
     </p>

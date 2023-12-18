@@ -1,20 +1,30 @@
 <ng-template #content>
-  <div aria-labelledby="modalTitle">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalTitle">Dodaj dostępność</h3>
-      <button type="button" class="btn-close" aria-label="Zamknij modal" (click)="closeModal()"><span class="d-none">Zamknij modal</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="hoursAddForm">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modalTitle">Dodaj dostępność</h3>
+    <button type="button"
+            class="btn-close"
+            aria-label="Zamknij"
+            (click)="closeModal()">
+      <span class="d-none">Zamknij</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="hoursAddForm">
+      <fieldset>
+        <legend style="font-size:1rem;" class="sr-only">
+          Formularz dodawania dostępności na: {{availability.dateFormatted}}
+        </legend>
         <div class="row">
           <div class="col-6">
             <div class="mb-3 form-outline">
-              <input type="time" id="startHour" name="startHour" formControlName="startHour"
-                     aria-describedby="startHourHelper" aria-labelledby="startHourError"
+              <input type="time"
+                     id="startHour"
+                     name="startHour"
+                     formControlName="startHour"
+                     aria-describedby="startHourError startHourHelper"
                      required class="form-control"
                      [class.is-invalid]="startHour.invalid && (startHour.dirty || startHour.touched)">
-              <label for="startHour" class="form-label">Godzina od</label>
+              <label for="startHour" class="form-label">Godzina od <span class="d-none">(wymagane)</span></label>
               <div *ngIf="startHour.invalid && (startHour.dirty || startHour.touched)" class="invalid-feedback">
                 <p *ngIf="startHour.errors?.['required']" id="startHourError" class="mb-0">Podaj początkowy zakres</p>
               </div>
@@ -22,38 +32,41 @@
             </div>
           </div>
           <div class="col-6">
-            <div class="mb-3 form-outline">
-              <input type="time" id="endHour" name="endHour" formControlName="endHour"
-                     aria-describedby="endHourHelper" aria-labelledby="endHourError"
-                     required class="form-control"
-                     [class.is-invalid]="endHour.invalid && (endHour.dirty || endHour.touched)">
-              <label for="endHour" class="form-label">Godzina do</label>
-              <div *ngIf="endHour.invalid && (endHour.dirty || endHour.touched)" class="invalid-feedback">
-                <p *ngIf="endHour.errors?.['required']" id="endHourError" class="mb-0">Podaj końcowy zakres</p>
-              </div>
-              <p id="endHourHelper" class="form-text">Format hh:mm</p>
+          <div class="mb-3 form-outline">
+            <input type="time"
+                   id="endHour"
+                   name="endHour"
+                   formControlName="endHour"
+                   aria-describedby="endHourError endHourHelper"
+                   required class="form-control"
+                   [class.is-invalid]="endHour.invalid && (endHour.dirty || endHour.touched)">
+            <label for="endHour" class="form-label">Godzina do <span class="d-none">(wymagane)</span></label>
+            <div *ngIf="endHour.invalid && (endHour.dirty || endHour.touched)" class="invalid-feedback">
+              <p *ngIf="endHour.errors?.['required']" id="endHourError" class="mb-0">Podaj końcowy zakres</p>
             </div>
+            <p id="endHourHelper" class="form-text">Format hh:mm</p>
           </div>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer px-0">
-      <div class="w-100 row m-0 justify-content-between">
-        <div class="col-6 col-sm-auto">
-          <button type="button"
-                  class="w-100 btn btn-outline-primary"
-                  (click)="closeModal()">
-            Anuluj
-          </button>
-        </div>
-        <div class="col-6 col-sm-auto">
-          <button type="submit"
-                  class="w-100 btn btn-primary"
-                  (click)="saveAvailability()"
-                  id="saveHours">
-            Zapisz
-          </button>
-        </div>
+      </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="modal-footer px-0">
+    <div class="w-100 row m-0 justify-content-between">
+      <div class="col-6 col-sm-auto">
+        <button type="button"
+                class="w-100 btn btn-outline-primary"
+                (click)="closeModal()">
+          Anuluj
+        </button>
+      </div>
+      <div class="col-6 col-sm-auto">
+        <button type="submit"
+                class="w-100 btn btn-primary"
+                (click)="saveAvailability()"
+                id="saveHours">
+          Zapisz
+        </button>
       </div>
     </div>
   </div>
