@@ -33,6 +33,7 @@ export class SurveyRegistrationComponent {
   public filteredHoursList: any[] = [];
   private updatedAvailabilityList: any[] = [];
   private endHours: any[] = [];
+  private today: Date = new Date;
   public formEventName: string = "";
   public formSurveyDuration: number = 0;
   public formEventEndDate: string = "";
@@ -63,7 +64,7 @@ export class SurveyRegistrationComponent {
     this.form = new FormGroup({
       dayChoice: new FormControl(null, [Validators.required]),
       hourChoice: new FormControl(null, [Validators.required])
-    })
+    });
   }
 
   private fetchSurvey() {
@@ -95,9 +96,13 @@ export class SurveyRegistrationComponent {
       this.formEventName = event.name
       this.formSurveyDuration = event.surveyDuration
       this.formEventEndDate = event.endDate
+      let eventDate: Date = new Date(event.endDate);
+
+      this.today.setHours(0, 0, 0, 0);
+      eventDate.setHours(0, 0, 0, 0);
 
       if (shouldNavigate && this.survey.surveyState !== SurveyState.UNUSED
-        || this.event.slotsTaken === this.event.maxUsers || new Date() > new Date(this.event.endDate)) {
+        || this.event.slotsTaken === this.event.maxUsers || this.today > eventDate) {
         this.router.navigate(['register/' + this.surveyCode + '/invalid-code'])
       }
 
@@ -107,7 +112,15 @@ export class SurveyRegistrationComponent {
 
   private fetchAvailabilityList(): void {
     this.availabilityService.getAvailabilityList(this.event.id).subscribe((availabilityDtoList) => {
-      this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList)
+      this.availabilityList = this.availabilityService.mapFromDto(availabilityDtoList);
+      this.sortAvailabilityList();
+    });
+  }
+
+  private sortAvailabilityList() {
+    this.availabilityList.sort((a, b) => {
+      const daysOrder = ['poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota', 'niedziela'];
+      return daysOrder.indexOf(a.dayOfWeek.toLowerCase()) - daysOrder.indexOf(b.dayOfWeek.toLowerCase());
     });
   }
 

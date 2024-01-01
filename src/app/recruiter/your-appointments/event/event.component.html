@@ -10,15 +10,55 @@
     </div>
     <div class="col-12 col-md-6 mb-2 mb-md-0">
       <div class="row flex-nowrap justify-content-end mt-2 mt-md-0" *ngIf="event.active === true">
-        <div class="col-6 col-md-auto">
-          <button class="w-100 btn btn-outline-primary"
+        <div class="col-4 col-md-auto d-none d-sm-block">
+          <button class="w-100 h-100 btn btn-outline-primary"
                   *ngIf="canModify"
+                  type="button"
                   (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
             Zamknij wydarzenie
           </button>
         </div>
-        <div class="col-6 col-md-auto">
-          <a class="w-100 btn btn-primary"
+        <div class="col-4 col-md-auto d-none d-sm-block">
+          <button class="w-100 h-100 btn btn-outline-primary"
+                  *ngIf="canModify"
+                  type="button"
+                  (click)="downloadConsents(eventId)">
+            Pobierz (.csv)
+          </button>
+        </div>
+        <div class="col-6 col-md-auto d-block d-sm-none">
+          <button class="w-100 h-100 btn btn-outline-primary"
+                  *ngIf="canModify"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#more"
+                  aria-expanded="false"
+                  aria-controls="more"
+                  (click)="showMore = !showMore">
+            Więcej
+          </button>
+          <div id="more"
+               class="collapse position-absolute sub-menu-wrapper"
+               [ngClass]="{'show': showMore}"
+               *ngIf="showMore">
+            <div class="sub-menu">
+              <button class="w-100 h-100 btn btn-outline-primary"
+                      *ngIf="canModify"
+                      type="button"
+                      (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
+                Zamknij wydarzenie
+              </button>
+              <button class="w-100 h-100 btn btn-outline-primary"
+                      *ngIf="canModify"
+                      type="button"
+                      (click)="downloadConsents(eventId)">
+                Pobierz (.csv)
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-sm-4 col-md-auto">
+          <a class="w-100 h-100 btn btn-primary"
              (click)="goToEdit()"
              *ngIf="canModify"
              [routerLink]="['/edit/', this.event.id]">
@@ -35,88 +75,97 @@
       <h2 class="h5 mb-3" id="listTitle">Lista spotkań</h2>
       <table class="list-group d-none d-md-block" aria-labelledby="listTitle">
         <caption class="sr-only">Lista spotkań</caption>
-        <thead class="list-group-item p-3 li-header d-block">
+        <thead class="list-group-item p-3 li-header d-block top-border-radius">
         <tr class="row">
           <th class="col-3 fw-medium">Status:</th>
-          <th class="col-4 fw-medium">Kod do spotkania:</th>
-          <th class="col-4 fw-medium">Data spotkania:</th>
+          <th class="col-3 fw-medium">Kod do spotkania:</th>
+          <th class="col-3 fw-medium">Data spotkania:</th>
+          <th class="col-2 fw-medium">Zgody użytkownika:</th>
           <th class="col-1 fw-medium text-end sr-only">Akcje:</th>
         </tr>
         </thead>
-        <tbody class="list-group-item d-block"
-               *ngFor="let survey of surveyList; let i=index">
-        <tr class="row">
-          <td class="col-3">
-            <ng-container *ngIf="survey.surveyState === 'USED'">
-              Umówione
-            </ng-container>
-            <ng-container *ngIf="survey.surveyState === 'UNUSED'">
-              Nieumówione
-            </ng-container>
-            <ng-container *ngIf="survey.surveyState === 'INACTIVE'">
-              Wyłączone
-            </ng-container>
-          </td>
-          <td class="col-4">
-            <span id="kod{{survey.id}}"
-                  style="display:inline-block;
-                  min-width: 125px;">
-              {{survey.code}}
-            </span>
-            <button type="button"
-                    class="btn btn-icon btn-list fa-solid fa-copy"
-                    title="Skopiuj link do spotkania - {{survey.code}}"
-                    (click)="copyToClipboard(survey.code)">
-              <span class="sr-only">
-                Skopiuj link do spotkania - {{survey.code}}
+        <tbody class="list-group-item p-0">
+        <ng-container *ngFor="let survey of surveyList; let i=index">
+          <tr class="row mx-0 py-3 px-1 item">
+            <td class="col-3">
+              <ng-container *ngIf="survey.surveyState === 'USED'">
+                Umówione
+              </ng-container>
+              <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+                Nieumówione
+              </ng-container>
+              <ng-container *ngIf="survey.surveyState === 'INACTIVE'">
+                Wyłączone
+              </ng-container>
+            </td>
+            <td class="col-3">
+              <span id="kod{{survey.id}}"
+                    style="display:inline-block;
+                    min-width: 125px;">
+                {{survey.code}}
               </span>
-            </button>
-            <button type="button"
-                    *ngIf="survey.surveyState === 'USED'"
-                    class="btn btn-icon btn-list fa-solid"
-                    title="Zgody użytkownika"
-                    (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey, eventId)">
-              <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
+              <button type="button"
+                      class="btn btn-icon btn-list fa-solid fa-copy"
+                      title="Skopiuj link do spotkania - {{survey.code}}"
+                      (click)="copyToClipboard(survey.code)">
+                <span class="sr-only">
+                  Skopiuj link do spotkania - {{survey.code}}
+                </span>
+              </button>
+            </td>
+            <td class="col-3"
+                *ngIf="survey.date.toISOString() !== '1970-01-01T00:00:00.000Z' && survey.date">
+              {{getDateFormatted(survey)}}
+            </td>
+            <td class="col-3"
+                *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date">
               <span class="sr-only">
-                Zgody użytkownika
+                Spotkanie nie zostało jeszcze umówione
               </span>
-            </button>
-          </td>
-          <td class="col-4"
-              *ngIf="survey.date.toISOString() !== '1970-01-01T00:00:00.000Z' && survey.date">
-            {{getDateFormatted(survey)}}
-          </td>
-          <td class="col-4"
-              *ngIf="survey.date.toISOString() === '1970-01-01T00:00:00.000Z' || !survey.date"
-              title="Spotkanie nie zostało jeszcze umówione">
-            <span class="sr-only">
-              Spotkanie nie zostało jeszcze umówione
-            </span>
-            –
-          </td>
-          <td class="col-1 text-end">
-            <button type="button"
-                    class="btn btn-icon btn-list"
-                    title="Odwołaj spotkanie"
-                    (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
-                    *ngIf="canModify && survey.surveyState === 'USED'">
-              <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
-              <span class="d-none">
+              <span title="Spotkanie nie zostało jeszcze umówione">–</span>
+            </td>
+            <td class="col-2">
+              <button type="button"
+                      *ngIf="survey.surveyState !== 'UNUSED'"
+                      class="btn btn-icon btn-list fa-solid ms-0"
+                      title="Pokaż zgody użytkownika"
+                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey, eventId)">
+                <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
+                <span class="sr-only">
+                Pokaż zgody użytkownika
+              </span>
+              </button>
+              <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+                <span class="sr-only">
+                  Brak zgód użytkownika
+                </span>
+                <span title="Brak zgód użytkownika">–</span>
+              </ng-container>
+            </td>
+            <td class="col-1 text-end">
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Odwołaj spotkanie"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
+                      *ngIf="canModify && survey.surveyState === 'USED'">
+                <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+                <span class="d-none">
                 Odwołaj spotkanie
               </span>
-            </button>
-            <button type="button"
-                    class="btn btn-icon btn-list"
-                    title="Dezaktywuj kod"
-                    (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
-                    *ngIf="canModify && survey.surveyState === 'UNUSED'">
-              <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
-              <span class="d-none">
-                Dezaktywuj kod
+              </button>
+              <button type="button"
+                      class="btn btn-icon btn-list"
+                      title="Wyłącz kod"
+                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)"
+                      *ngIf="canModify && survey.surveyState === 'UNUSED'">
+                <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+                <span class="d-none">
+                Wyłącz kod
               </span>
-            </button>
-          </td>
-        </tr>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
         </tbody>
       </table>
       <ul class="list-group d-block d-md-none" aria-labelledby="listTitle">
@@ -143,7 +192,7 @@
               </span>
               –
             </dd>
-            <dt class="col-5 col-sm-4 text-end">Akcje:</dt>
+            <dt class="col-5 col-sm-4 text-end">Skopiuj link do spotkania:</dt>
             <dd class="col-7 col-sm-8">
               <button type="button"
                       class="btn btn-icon fa-solid fa-copy"
@@ -151,33 +200,47 @@
                       (click)="copyToClipboard(survey.code)">
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
-              <button type="button"
-                      class="btn btn-icon fa-solid"
-                      *ngIf="survey.surveyState === 'USED'"
-                      title="Zgody użytkownika"
-                      (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey, eventId)">
-                <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
-                <span class="sr-only">
-                Zgody użytkownika
-              </span>
-              </button>
-              <button type="button"
-                      class="btn btn-icon"
-                      title="Odwołaj spotkanie"
-                      *ngIf="canModify && survey.surveyState === 'USED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
-                <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
-                <span class="d-none">Odwołaj spotkanie</span>
-              </button>
-              <button type="button"
-                      class="btn btn-icon"
-                      title="Dezaktywuj kod"
-                      *ngIf="canModify && survey.surveyState === 'UNUSED'"
-                      (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
-                <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
-                <span class="d-none">Dezaktywuj kod</span>
-              </button>
             </dd>
+            <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+              <dt class="col-5 col-sm-4 text-end">Zgody użytkownika:</dt>
+              <dd class="col-7 col-sm-8">
+                <button type="button"
+                        class="btn btn-icon fa-solid"
+                        title="Zgody użytkownika"
+                        (click)="viewConsentModalComponent.open(viewConsentModalComponent.content, survey, eventId)">
+                  <fa-icon [icon]="listCheck" aria-hidden="true"></fa-icon>
+                  <span class="sr-only">
+                    Zgody użytkownika
+                  </span>
+                </button>
+              </dd>
+            </ng-container>
+            <ng-container *ngIf="survey.surveyState === 'USED'">
+              <dt class="col-5 col-sm-4 text-end">Odwołaj spotkanie:</dt>
+              <dd class="col-7 col-sm-8">
+                <button type="button"
+                        class="btn btn-icon"
+                        title="Odwołaj spotkanie"
+                        *ngIf="canModify && survey.surveyState === 'USED'"
+                        (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
+                  <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+                  <span class="d-none">Odwołaj spotkanie</span>
+                </button>
+              </dd>
+            </ng-container>
+            <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+              <dt class="col-5 col-sm-4 text-end">Wyłącz kod:</dt>
+              <dd class="col-7 col-sm-8">
+                <button type="button"
+                        class="btn btn-icon"
+                        title="Wyłącz kod"
+                        *ngIf="canModify && survey.surveyState === 'UNUSED'"
+                        (click)="deleteCodeComponent.open(deleteCodeComponent.content, survey, surveyList)">
+                  <fa-icon [icon]="trash" aria-hidden="true"></fa-icon>
+                  <span class="d-none">Wyłącz kod</span>
+                </button>
+              </dd>
+            </ng-container>
           </dl>
         </li>
       </ul>
@@ -232,7 +295,8 @@
     </section>
     <section class="col-12 mt-4">
       <h2 class="h5 mb-3">Dostępność</h2>
-      <p *ngIf="availabilityList.length === 0">Twoja dostępność jest pusta. Aby zobaczyć listę dni swojej dostępności, uzupełnij ją poprzez edytowanie wydarzenia.</p>
+      <p *ngIf="availabilityList.length === 0">Twoja dostępność jest pusta. Aby zobaczyć listę dni swojej dostępności,
+        uzupełnij ją poprzez edytowanie wydarzenia.</p>
       <div *ngIf="availabilityList.length !== 0" class="row calendar">
         <div class="col-12 col-sm-6 col-lg-4" *ngFor="let availability of availabilityList; let i=index">
           <div class="c-card">

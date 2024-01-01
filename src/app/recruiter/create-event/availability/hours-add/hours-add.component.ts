@@ -12,7 +12,7 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
 export class HoursAddComponent {
   @ViewChild('content') content: ElementRef | undefined;
-  private availability: any;
+  public availability: any;
   public hoursAddForm: FormGroup;
   private hours: AvailabilityHours;
   private modalRef: NgbModalRef = null!;
@@ -33,7 +33,7 @@ export class HoursAddComponent {
   }
 
   open(content: any, availability: Availability): void {
-    this.modalRef = this.modalService.open(content);
+    this.modalRef = this.modalService.open(content, {ariaLabelledBy: 'modalTitle'});
     this.availability = availability;
   }
 

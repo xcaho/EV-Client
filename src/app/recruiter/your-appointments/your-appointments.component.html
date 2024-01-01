@@ -1,7 +1,8 @@
 <div class="h64 flex-center border-bottom border-secondary mb-5">
   <div class="container-xxl d-flex flex-column flex-sm-row justify-content-between">
     <h1 class="h2 mb-0" id="pageTitle">Lista wydarzeń</h1>
-    <div class="row mt-2 mt-md-0">
+    <div class="row mt-2 mt-md-0"
+         *ngIf="this.role !== 'UkVBRE9OTFk='">
       <div class="col-12 col-sm-auto">
         <a class="w-100 btn btn-primary"
            (click)="goToCreate()"
@@ -16,16 +17,20 @@
 </div>
 <div class="main-content container-xxl mb-4">
   <div class="row justify-content-center">
-    <section class="col-12">
+    <section class="col-12"
+             aria-live="polite"
+             aria-relevant="all">
       <fieldset class="row mx-0">
-        <div class="col-sm-12 col-md-auto border border-light border-bottom-0 px-3 py-2">
-          <legend class="font-rem mb-1 w-auto">Filtry:</legend>
+        <div class="col-sm-12 col-md-auto border border-light border-bottom-0 px-3 py-3 d-flex flex-wrap">
+          <legend class="font-rem mb-1 mb-md-0 w-auto me-3">Filtry:</legend>
           <div class="d-flex flex-wrap">
-            <div class="form-check form-check-inline mb-2 mb-md-0">
+            <div class="form-check form-check-inline mb-2 mb-md-0"
+                 *ngIf="this.role !== 'UkVBRE9OTFk='">
               <input class="form-check-input"
                      type="checkbox"
                      id="filterActive"
-                     [(ngModel)]="filterAll">
+                     [(ngModel)]="filterAll"
+                     >
               <label class="form-check-label"
                      for="filterActive">
                 Pokaż wydarzenia wszystkich badaczy
@@ -87,31 +92,35 @@
       </ul>
 
       <ul class="list-group d-block d-md-none" aria-labelledby="pageTitle">
-          <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of filterEvents()">
-            <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
-              <dt class="col-5 col-sm-4 text-end">Status:</dt>
-              <dd class="col-7 col-sm-8">{{ event.isActive() }}</dd>
-              <dt class="col-5 col-sm-4 text-end">Nazwa wydarzenia:</dt>
-              <dd class="col-7 col-sm-8">{{ event.name }}</dd>
-              <dt class="col-5 col-sm-4 text-end">Czas trwania:</dt>
-              <dd class="col-7 col-sm-8">{{ formatDate(event.researchStartDate) }}
-                - {{ formatDate(event.researchEndDate) }}</dd>
-              <dt class="col-5 col-sm-4 text-end">Data zakończenia zapisów:</dt>
-              <dd class="col-7 col-sm-8">{{ formatDate(event.endDate) }}</dd>
-              <dt class="col-5 col-sm-4 text-end">Sloty:</dt>
-              <dd class="col-7 col-sm-8">{{ event.slotsTaken }}/{{ event.maxUsers }}</dd>
-            </dl>
-            <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
-              <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0"
-                 [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
-            </div>
-          </li>
-        </ul>
-
+        <li class="list-group-item d-flex p-3 flex-column pb-1 pb-sm-3" *ngFor="let event of filterEvents()">
+          <dl class="row align-items-center mb-0" style="gap: 0.5rem 0;">
+            <dt class="col-5 col-sm-4 text-end">Status:</dt>
+            <dd class="col-7 col-sm-8">{{ event.isActive() }}</dd>
+            <dt class="col-5 col-sm-4 text-end">Nazwa wydarzenia:</dt>
+            <dd class="col-7 col-sm-8">{{ event.name }}</dd>
+            <dt class="col-5 col-sm-4 text-end">Czas trwania:</dt>
+            <dd class="col-7 col-sm-8">{{ formatDate(event.researchStartDate) }}
+              - {{ formatDate(event.researchEndDate) }}</dd>
+            <dt class="col-5 col-sm-4 text-end">Data zakończenia zapisów:</dt>
+            <dd class="col-7 col-sm-8">{{ formatDate(event.endDate) }}</dd>
+            <dt class="col-5 col-sm-4 text-end">Sloty:</dt>
+            <dd class="col-7 col-sm-8">{{ event.slotsTaken }}/{{ event.maxUsers }}</dd>
+          </dl>
+          <div class="row justify-content-end mb-2 mt-1 px-3 mb-sm-0 mt-sm-0 px-sm-0">
+            <a class="col-12 col-sm-auto bg-white col-auto btn btn-outline-primary me-0 me-sm-2 mt-2 mt-sm-0"
+               [routerLink]="['/event/', event.id]">Szczegoły wydarzenia</a>
+          </div>
+        </li>
+      </ul>
       <p *ngIf="filterEvents().length === 0"
          class="bg-white border border-light border-top-0 text-center py-3">
         Brak wyników spełniających parametry filtrowania.
       </p>
+      <div class="text-center mt-3" *ngIf="allEventsToShow > eventsToShow && filterEvents().length > 0">
+        <button class="btn btn-outline-primary" (click)="showMoreEvents()" aria-label="Pokaż więcej wydarzeń">Pokaż
+          więcej
+        </button>
+      </div>
     </section>
   </div>
 </div>

@@ -22,9 +22,9 @@ export class ChangePasswordComponent {
   public oldPasswdShown: boolean = false;
   public newPasswdShown: boolean = false;
   public repeatNewPasswdShown: boolean = false;
-  public buttonTitle1: string = "Pokaż hasło";
-  public buttonTitle2: string = "Pokaż hasło";
-  public buttonTitle3: string = "Pokaż hasło";
+  public buttonTitle1: string = "Odkryj stare hasło";
+  public buttonTitle2: string = "Odkryj nowe hasło";
+  public buttonTitle3: string = "Odkryj powtórzone nowe hasło";
   private token: string | null = null;
 
   constructor(
@@ -95,27 +95,27 @@ export class ChangePasswordComponent {
   public passwordShowToggler() {
     this.oldPasswdShown = !this.oldPasswdShown;
     if (!this.oldPasswdShown) {
-      this.buttonTitle1 = 'Pokaż hasło';
+      this.buttonTitle1 = 'Odkryj stare hasło';
     } else {
-      this.buttonTitle1 = 'Ukryj hasło';
+      this.buttonTitle1 = 'Ukryj stare hasło';
     }
   }
 
   public passwordShowToggler2() {
     this.newPasswdShown = !this.newPasswdShown;
     if (!this.newPasswdShown) {
-      this.buttonTitle2 = 'Pokaż hasło';
+      this.buttonTitle2 = 'Odkryj nowe hasło';
     } else {
-      this.buttonTitle2 = 'Ukryj hasło';
+      this.buttonTitle2 = 'Ukryj nowe hasło';
     }
   }
 
   public passwordShowToggler3() {
     this.repeatNewPasswdShown = !this.repeatNewPasswdShown;
     if (!this.repeatNewPasswdShown) {
-      this.buttonTitle3 = 'Pokaż hasło';
+      this.buttonTitle3 = 'Odkryj powtórzone nowe hasło';
     } else {
-      this.buttonTitle3 = 'Ukryj hasło';
+      this.buttonTitle3 = 'Ukryj powtórzone nowe hasło';
     }
   }
 

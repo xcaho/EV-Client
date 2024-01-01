@@ -15,6 +15,8 @@ export class ListComponent {
   public users: User[] = [];
   private token: string | null = null;
   public roleToView = RoleToView;
+  public usersToShow: number = 8;
+  public additionalUsersToShow: number = 5;
 
   constructor(private adminService: AdminService,
               private authService: AuthService,
@@ -47,5 +49,13 @@ export class ListComponent {
         }
       })
     }
+  }
+
+  showMoreUsers() {
+    this.usersToShow += this.additionalUsersToShow;
+  }
+
+  displayUsers() {
+    return this.users.slice(0, Math.min(this.usersToShow, this.users.length))
   }
 }

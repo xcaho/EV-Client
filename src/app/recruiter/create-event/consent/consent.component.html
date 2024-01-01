@@ -12,7 +12,67 @@
       <p class="mb-0">Możesz posłużyć się szablonem zgody, który możesz edytować lub wybrać pusty szablon.</p>
       <p>Zgód nie można edytować po zapisaniu wydarzenia.</p>
       <form [formGroup]="formGroup">
-        <div class="row">
+        <fieldset>
+          <legend class="sr-only">Formularz dodawania zgód</legend>
+          <div formArrayName="textAreas" aria-live="polite" aria-relevant="all">
+            <div *ngFor="let control of textAreas; let i = index">
+              <div class="row mt-3">
+                <div class="col">
+                  <div class="w-100 mb-3 form-outline">
+                      <textarea type="text"
+                                [id]="'consent'+i"
+                                [name]="'consent'+i"
+                                formControlName="{{i}}"
+                                rows="3"
+                                class="form-control active w-100"
+                                [attr.aria-describedby]="getConsent(i)+'Error'">
+                      </textarea>
+                    <label [for]="'consent'+i"
+                           class="form-label"
+                           [id]="'consentLabel'+i"
+                    >
+                      Treść zgody {{i+1}}
+                    </label>
+                    <div *ngIf="getConsent(i).touched"
+                         class="invalid-feedback">
+                      <p [id]="getConsent(i)+'Error'"
+                         class="mb-0">
+                        Podaj treść zgody
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button type="button"
+                          [disabled]="isEdit"
+                          class="btn btn-outline-primary"
+                          [title]="'Usuń zgodę nr ' + (i+1)"
+                          [attr.aria-describedby]="'consent'+i"
+                          (click)="deleteConsent(i)">
+                    <fa-icon [icon]="trash"></fa-icon>
+                    <span class="sr-only">Usuń zgodę nr {{i+1}}</span>
+                  </button>
+                </div>
+                <div class="col-12 mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           [id]="'isRequired'+i"
+                           [name]="'isRequired'+i"
+                           [checked]="isRequired[i]"
+                           [attr.aria-describedby]="'consentLabel'+i"
+                           [disabled]="isEdit"
+                           (click)="markAsRequired(i)">
+                    <label class="form-check-label text-dark"
+                           [for]="'isRequired'+i">
+                      Zgoda wymagana
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
           <div class="col-6 col-sm-4 col-md-3">
             <div class="form-outline mb-3">
               <select class="form-select"
@@ -21,9 +81,13 @@
                       [disabled]="isEdit"
                       formControlName="consentTemplate">
                 <option value="" selected>Pusty szablon</option>
-                <option value="1">Zgoda na przetwarzanie danych</option>
-                <option value="2">Zgoda na nagrywanie</option>
-                <option value="3">Zgoda na udział w badaniach</option>
+                <option value="1">Zgoda na udział w wywiadzie</option>
+                <option value="2">Udział w badaniu jest dobrowolny</option>
+                <option value="3">Zgoda na przetwarzanie danych osobowych</option>
+                <option value="4">Zgoda na dzielenie się zanonimizowanymi danymi osobowymi</option>
+                <option value="5">Oświadczenie o zapoozaniu się z Klauzulą Informacyjną</option>
+                <option value="6">Zgoda na nieodpłatne nagrywanie audio</option>
+                <option value="7">Zgoda na nieodpłatne nagrywanie wideo</option>
               </select>
               <label class="form-label" for="consentTemplate">Szablon zgody</label>
             </div>
@@ -37,62 +101,10 @@
             </button>
           </div>
         </div>
-        <div formArrayName="textAreas" aria-live="polite" aria-relevant="all">
-          <div *ngFor="let control of textAreas; let i = index">
-            <div class="row mt-3">
-              <div class="col">
-                <div class="w-100 mb-3 form-outline">
-                    <textarea type="text"
-                              [id]="'consent'+i"
-                              [name]="'consent'+i"
-                              formControlName="{{i}}"
-                              rows="3"
-                              class="form-control active w-100"
-                              [attr.aria-describedby]="getConsent(i)+'Error'">
-                    </textarea>
-                  <label [for]="'consent'+i" class="form-label">
-                    Treść zgody
-                  </label>
-                  <div *ngIf="getConsent(i).touched"
-                       class="invalid-feedback">
-                    <p [id]="getConsent(i)+'Error'"
-                       class="mb-0">
-                      Podaj treść zgody
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-auto">
-                <button type="button"
-                        [disabled]="isEdit"
-                        class="btn btn-outline-primary"
-                        title="Usuń zgodę"
-                        (click)="deleteConsent(i)">
-                  <fa-icon [icon]="trash"></fa-icon>
-                  <span class="sr-only">Usuń zgodę</span>
-                </button>
-              </div>
-              <div class="col-12 mb-3">
-                <div class="form-check">
-                  <input class="form-check-input"
-                         type="checkbox"
-                         [id]="'isRequired'+i"
-                         [name]="'isRequired'+i"
-                         [checked]="isRequired[i]"
-                         [disabled]="isEdit"
-                         (click)="markAsRequired(i)">
-                  <label class="form-check-label text-dark"
-                         [for]="'isRequired'+i">
-                    Czy zgoda ma być wymagana
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </fieldset>
       </form>
-      <div class="justify-content-between flex-wrap row">
-        <div class="col-6 col-md-auto mt-1">
+      <div class="justify-content-start flex-wrap row">
+        <div class="col-6 col-md-auto">
           <button type="button"
                   class="w-100 my-2 my-md-0 btn btn-outline-primary"
                   (click)="goBack()"
