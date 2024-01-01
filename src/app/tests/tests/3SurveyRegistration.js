@@ -1,6 +1,7 @@
 import {t, Selector} from "testcafe";
 import surveyRegistration from "../pageObjects/surveyRegistration"
 import login from "../pageObjects/login";
+import { getPassword } from "../passwordHelper";
 
 const surveyRegistrationPage = surveyRegistration();
 const loginPage = login();
@@ -11,11 +12,10 @@ fixture('Sign up page')
 
 test
 ('Correctly register to event', async () => {
-  await t
-    .maximizeWindow()
+  await t.maximizeWindow()
 
-  const login = "mail@domena.com"
-  const password = "password1"
+  const login = "test1@gmail.com"
+  const password = getPassword()
 
   await loginPage.typeLogin(login);
   await loginPage.typePassword(password);

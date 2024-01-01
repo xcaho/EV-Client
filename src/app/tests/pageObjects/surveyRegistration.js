@@ -5,7 +5,7 @@ const selectHour = Selector("#hourChoice")
 const signUpBtn = Selector('[type="submit"]')
 const dayOption = Selector("#dayChoice option")
 const hourOption = Selector("#hourChoice option")
-const terms = Selector("#consents")
+const terms = Selector('main [class^="form-check-input ng-untouched ng-pristine ng-inval"]')
 
 const surveyRegistration = () => ({
 
