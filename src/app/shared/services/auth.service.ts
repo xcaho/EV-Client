@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   register(user: User): Observable<AuthDto> {
-    return this.http.post<AuthDto>('http://localhost:8080/auth/register', user)
+    return this.http.post<AuthDto>('https://easy-visit-a531d1dc0dd3.herokuapp.com/auth/register', user)
       .pipe(
         catchError((error: any) => {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   login(user: LoginDto): Observable<AuthDto> {
-    return this.http.post<AuthDto>('http://localhost:8080/auth/login', user)
+    return this.http.post<AuthDto>('https://easy-visit-a531d1dc0dd3.herokuapp.com/auth/login', user)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {
@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   resetPassword(userId: number): Observable<AuthDto> {
-    return this.http.patch<AuthDto>('http://localhost:8080/admin/users/' + userId + '/resetPassword', null)
+    return this.http.patch<AuthDto>('https://easy-visit-a531d1dc0dd3.herokuapp.com/admin/users/' + userId + '/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {
