@@ -4,6 +4,7 @@ import {SurveyService} from "../../../../survey.service";
 import {SurveyDto} from "../../../../shared/dtos/SurveyDto";
 import {AlertService} from "../../../../common/alerts/service/alert.service";
 import {SurveyState} from "../../../../shared/enums/survey-state";
+import {PreloaderService} from "../../../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-delete-code',
@@ -18,7 +19,8 @@ export class DeleteCodeComponent {
 
   constructor(private modalService: NgbModal,
               private surveyService: SurveyService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private preloader: PreloaderService) {
     this.survey = {} as SurveyDto;
   }
 
@@ -30,12 +32,13 @@ export class DeleteCodeComponent {
 
   deactivateCode() {
     this.survey.surveyState = SurveyState.INACTIVE
-
+    this.preloader.show();
+    this.closeModal();
     this.surveyService.modifySurvey(this.survey).subscribe((survey) => {
       this.survey.date = new Date(0);
+      this.preloader.hide();
 
       this.generateNewCode();
-      this.closeModal();
 
       this.alertService.showSuccess('Dezaktywowano kod: ' + this.survey.code + '. Nowy kod został wygenerowany.');
     })

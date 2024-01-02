@@ -45,13 +45,13 @@
               <button class="w-100 h-100 btn btn-outline-primary"
                       *ngIf="canModify"
                       type="button"
-                      (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList)">
+                      (click)="deleteEventComponent.open(deleteEventComponent.content, event, surveyList); showMore = false;">
                 Zamknij wydarzenie
               </button>
               <button class="w-100 h-100 btn btn-outline-primary"
                       *ngIf="canModify"
                       type="button"
-                      (click)="downloadConsents(eventId)">
+                      (click)="downloadConsents(eventId); showMore = false;">
                 Pobierz (.csv)
               </button>
             </div>
@@ -201,7 +201,7 @@
                 <span class="d-none">Skopiuj link do spotkania - {{survey.code}}</span>
               </button>
             </dd>
-            <ng-container *ngIf="survey.surveyState === 'UNUSED'">
+            <ng-container *ngIf="survey.surveyState !== 'UNUSED'">
               <dt class="col-5 col-sm-4 text-end">Zgody użytkownika:</dt>
               <dd class="col-7 col-sm-8">
                 <button type="button"
