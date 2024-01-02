@@ -7,6 +7,8 @@ import {User} from "../dtos/User";
 import {AuthDto} from "../dtos/AuthDto";
 import {Router} from "@angular/router";
 import {LoginDto} from "../dtos/LoginDto";
+import {environment} from "../../../environments/environment";
+import {PreloaderService} from "./preloader.service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +19,12 @@ export class AuthService {
   private userId: string | null;
   public userName: string | null = null;
   public role: string | null = null;
+  apiUrl: string = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
+    private preloader: PreloaderService
   ) {
     this.token = localStorage.getItem('token');
     this.url = localStorage.getItem('token_url');
@@ -30,7 +34,7 @@ export class AuthService {
   }
 
   register(user: User): Observable<AuthDto> {
-    return this.http.post<AuthDto>('https://easy-visit-a531d1dc0dd3.herokuapp.com/auth/register', user)
+    return this.http.post<AuthDto>(this.apiUrl + '/auth/register', user)
       .pipe(
         catchError((error: any) => {
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
@@ -40,21 +44,23 @@ export class AuthService {
   }
 
   login(user: LoginDto): Observable<AuthDto> {
-    return this.http.post<AuthDto>('https://easy-visit-a531d1dc0dd3.herokuapp.com/auth/login', user)
+    return this.http.post<AuthDto>(this.apiUrl + '/auth/login', user)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {
             this.alertService.showError('Błędne dane logowania.');
+            this.preloader.hide();
             return throwError(error);
           }
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
+          this.preloader.hide();
           return throwError(error);
         })
       )
   }
 
   resetPassword(userId: number): Observable<AuthDto> {
-    return this.http.patch<AuthDto>('https://easy-visit-a531d1dc0dd3.herokuapp.com/admin/users/' + userId + '/resetPassword', null)
+    return this.http.patch<AuthDto>(this.apiUrl + '/admin/users/' + userId + '/resetPassword', null)
       .pipe(
         catchError((error: any) => {
           if (error.status === 403) {

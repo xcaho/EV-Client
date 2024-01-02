@@ -2,6 +2,12 @@
   padding-top: 2.75rem;
 }
 
+@media (max-width: 576px) {
+  .modal {
+    margin-top: 1.25rem;
+  }
+}
+
 .modal-content {
   background-color: $bg-secondary !important;
 }

@@ -92,10 +92,10 @@ export class EventComponent {
         this.surveyService.getSurveys(this.event.id).subscribe((surveys) => {
           this.surveyList = surveys.sort((a, b) => {
             const stateOrder = ['USED', 'UNUSED', 'INACTIVE'];
+            this.preloader.hide();
             return stateOrder.indexOf(a.surveyState) - stateOrder.indexOf(b.surveyState);
           });
         })
-        this.preloader.hide();
       }, (error) => {
         this.preloader.hide();
         if (error.status === 403) {

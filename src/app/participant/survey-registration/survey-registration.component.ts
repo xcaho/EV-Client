@@ -14,6 +14,7 @@ import {AlertService} from "../../common/alerts/service/alert.service";
 import {FormatDate} from "../../shared/utils/format-date";
 import {ConsentService} from "../../shared/services/consent.service";
 import {ConsentDto} from "../../shared/dtos/ConsentDto";
+import {PreloaderService} from "../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-survey-registration',
@@ -46,7 +47,8 @@ export class SurveyRegistrationComponent {
               private router: Router,
               private alertService: AlertService,
               private titleService: TitleService,
-              private consentService: ConsentService) {
+              private consentService: ConsentService,
+              private preloader: PreloaderService) {
 
     this.route.params.subscribe(params => {
       this.surveyCode = params['code'];
@@ -68,17 +70,20 @@ export class SurveyRegistrationComponent {
   }
 
   private fetchSurvey() {
+    this.preloader.show();
     this.surveyService.getSurvey(this.surveyCode).subscribe((surveyDto) => {
       this.survey = surveyDto;
       this.fetchEvent(this.survey.eventId, true);
       this.fetchConsents();
     }, (error) => {
+      this.preloader.hide();
       this.router.navigate(['/404'])
     })
   }
 
   private fetchConsents() {
     this.consentService.getConsentsForEvent(this.survey.eventId).subscribe(consents => {
+      this.preloader.hide();
       this.consentList = consents;
       this.consentList.forEach(consent => {
         if (consent.mandatory) {
@@ -126,6 +131,7 @@ export class SurveyRegistrationComponent {
 
   save() {
     if (this.validate()) {
+      this.preloader.show();
       let date: Date = new Date(this.selectedDay);
       let consentsChecked: number[] = [];
       const [hours, minutes] = this.selectedHour.split(':').map(Number);
@@ -145,14 +151,17 @@ export class SurveyRegistrationComponent {
         this.consentService.saveConsentsForSurvey(consentsChecked, survey.id).subscribe( consentDtos => {
 
           this.surveyService.setTemporaryConfirmation(new ConfirmationDto(this.event.name, date));
+          this.preloader.hide();
           this.router.navigate(['register/' + this.surveyCode + '/confirmation']);
         })
 
       }, (exception) => {
 
         if (exception.status === 409) {
+          this.preloader.hide();
           this.handleHttp409();
         }
+        this.preloader.hide();
       })
     } else {
       this.alertService.showError('Uzupełnij wymagane pola.');

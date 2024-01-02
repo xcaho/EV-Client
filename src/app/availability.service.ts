@@ -12,9 +12,9 @@ import {environment} from "../environments/environment";
 })
 export class AvailabilityService {
 
-  temporaryAvailabilities?: Availability[]
+  temporaryAvailabilities?: Availability[];
 
-  apiUrl: string = environment.apiUrl
+  apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {
   }

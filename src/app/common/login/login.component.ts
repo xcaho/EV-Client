@@ -6,6 +6,7 @@ import {faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import {AlertService} from "../alerts/service/alert.service";
 import {Router} from "@angular/router";
 import {LoginDto} from "../../shared/dtos/LoginDto";
+import {PreloaderService} from "../../shared/services/preloader.service";
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent {
     private titleService: TitleService,
     private alertService: AlertService,
     private router: Router,
+    private preloader: PreloaderService,
   ) {
     this.token = this.authService.token;
   }
@@ -62,22 +64,27 @@ export class LoginComponent {
 
   public loginSubmit() {
     if (this.validateForm()) {
+      this.preloader.show();
       let formGroupValue = this.formGroup.value;
       let user = new LoginDto(formGroupValue.login, formGroupValue.password, '');
 
       this.authService.login(user).subscribe(result => {
         if (result.token) {
+          this.preloader.hide();
           this.authService.saveAuthData(result.token, result.userId, result.name, btoa(result.role));
 
           if (this.authService.url) {
+            this.preloader.hide();
             this.router.navigate([this.authService.url]);
             this.authService.removeURL();
 
           } else {
+            this.preloader.hide();
             this.router.navigate(['/users/'+ result.userId +'/appointments']);
           }
 
         } else {
+          this.preloader.hide();
           this.alertService.showError('Wystąpił błąd, spróbuj ponownie.');
         }
       })

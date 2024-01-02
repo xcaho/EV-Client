@@ -41,13 +41,15 @@
               [routerLinkActive]="['active']"
               *ngIf="authService.isAdmin()">
             <a class="nav-link px-2 me-0 me-lg-2"
-               routerLink="admin">
+               routerLink="admin"
+               (click)="hideMenu()">
               Panel administratora
             </a>
           </li>
           <li class="nav-item d-flex"
               [routerLinkActive]="['active']">
             <a class="nav-link px-2"
+               (click)="hideMenu()"
                routerLink="users/{{this.authService.getUserId()}}/appointments">
               Lista wydarzeń
             </a>
@@ -61,11 +63,12 @@
         <div class="d-flex justify-content-end">
           <a [routerLink]="['/change-password']"
              class="log-out text-end me-0 me-lg-2"
+             (click)="hideMenu()"
              *ngIf="authService.isLoggedIn()">
             Zmień hasło
           </a>
           <a [routerLink]="['/login']"
-             (click)="deleteToken()"
+             (click)="deleteToken(); hideMenu();"
              class="log-out text-end"
              *ngIf="authService.isLoggedIn()">
             Wyloguj się

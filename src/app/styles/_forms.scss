@@ -12,6 +12,10 @@
   border-radius: 0.25rem;
 }
 
+input::-webkit-date-and-time-value {
+  text-align: center;
+}
+
 .form-outline {
   position: relative;
   .form-label{
