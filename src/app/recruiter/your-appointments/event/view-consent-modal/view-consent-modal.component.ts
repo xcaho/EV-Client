@@ -50,32 +50,6 @@ export class ViewConsentModalComponent {
     return this.consentList.some(userConsent => userConsent.content === content);
   }
 
-  public downloadConsents(id: number | null) {
-    if (id !== null) {
-      this.consentService.getSurveysCsv(id).subscribe(response => {
-        this.downloadCsv(response);
-      });
-
-      this.consentService.getConsentsCsv(id).subscribe(response => {
-        this.downloadCsv(response)
-      });
-    } else {
-      this.alertService.showError('Błąd pobierania zgód.')
-    }
-  }
-
-  private downloadCsv(response: HttpResponse<string>) {
-    if (response.body) {
-      const blob = new Blob([response.body], {type: 'text/csv'});
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = <string>response.headers.get('Content-Disposition')?.substring(21);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }
-  }
-
   closeModal(): void {
     this.modalRef.dismiss();
   }

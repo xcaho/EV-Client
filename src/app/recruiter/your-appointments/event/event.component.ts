@@ -122,7 +122,7 @@ export class EventComponent {
 
   public downloadConsents(id: number | null) {
     if (id !== null) {
-      this.consentService.getConsentsCsv(id).subscribe(response => {
+      this.consentService.getSurveysAndConsentsCsv(id).subscribe(response => {
         this.downloadCsv(response)
       });
 
