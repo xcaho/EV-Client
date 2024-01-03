@@ -67,19 +67,9 @@ export class ConsentService {
       )
   }
 
-  getSurveysCsv(eventId: number) {
+  getSurveysAndConsentsCsv(eventId: number) {
 
     return this.http.get(this.apiUrl + '/surveys/export/' + eventId, {responseType: "text",  observe: "response"})
-      .pipe(
-        catchError((error: any) => {
-          return throwError(error);
-        })
-      )
-  }
-
-  getConsentsCsv(eventId: number) {
-
-    return this.http.get(this.apiUrl + '/consents/export/' + eventId, {responseType: "text",  observe: "response"})
       .pipe(
         catchError((error: any) => {
           return throwError(error);
