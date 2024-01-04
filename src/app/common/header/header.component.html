@@ -64,7 +64,7 @@
           <a [routerLink]="['/change-password']"
              class="log-out text-end me-0 me-lg-2"
              (click)="hideMenu()"
-             *ngIf="authService.isLoggedIn()">
+             *ngIf="authService.isLoggedIn() && authService.userName !== 'admin'">
             Zmień hasło
           </a>
           <a [routerLink]="['/login']"
